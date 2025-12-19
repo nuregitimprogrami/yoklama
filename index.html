@@ -9,45 +9,62 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        body { background-color: #ecf0f1; font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
         
         .card { 
-            background: white; padding: 50px; width: 100%; 
-            /* MASAÜSTÜ İÇİN DEVASA GENİŞLİK */
-            max-width: 900px; 
+            background: white; padding: 50px; width: 90%; max-width: 900px; 
             text-align: center; border-radius: 25px; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2); 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1); 
             transition: all 0.3s ease; 
         }
         
-        /* LOGO BÜYÜTÜLDÜ */
-        .logo { max-width: 250px; margin: 0 auto 30px auto; display: block; }
+        .logo { max-width: 220px; margin: 0 auto 30px auto; display: block; }
 
-        /* SAYAÇ TASARIMI - DEVASA FONT */
+        /* YENİ MODERN SAYAÇ TASARIMI */
         #countdown-view { display: none; flex-direction: column; align-items: center; justify-content: center; }
         
         .info-text { 
-            font-size: 20px; color: #95a5a6; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 3px;
+            font-size: 18px; color: #7f8c8d; font-weight: 600; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px;
         }
 
-        .timer-text { 
-            /* BİLGİSAYARDA OKUNAKLI OLSUN DİYE ÇOK BÜYÜK FONT */
-            font-size: 65px; font-weight: 900; color: #2c3e50; 
-            margin: 10px 0; line-height: 1.1;
-            font-family: 'Segoe UI', sans-serif;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px; /* Kutular arası boşluk */
         }
 
-        /* SON 3 SANİYE: ALTIN VURUŞ (GOLD PULSE) */
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-number {
+            font-size: 80px; /* Devasa rakamlar */
+            font-weight: 900;
+            color: #2c3e50;
+            line-height: 1;
+            font-variant-numeric: tabular-nums; /* Rakamların genişliği eşit olsun */
+        }
+
+        .time-label {
+            font-size: 18px;
+            color: #95a5a6;
+            text-transform: uppercase;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* SON 3 SANİYE: ALTIN NABIZ */
         .pulse-mode {
             animation: goldPulse 0.8s infinite ease-in-out;
-            color: #f39c12 !important; /* Altın/Turuncu */
-            transform: scale(1.1);
+            color: #f39c12 !important;
         }
 
         @keyframes goldPulse {
             0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; text-shadow: 0 0 20px rgba(243, 156, 18, 0.6); }
+            50% { transform: scale(1.05); opacity: 0.8; text-shadow: 0 0 30px rgba(243, 156, 18, 0.5); }
             100% { transform: scale(1); opacity: 1; }
         }
 
@@ -63,14 +80,22 @@
         .loader { border: 5px solid #f3f3f3; border-top: 5px solid #1877f2; border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; display: none; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* MOBİL UYUM (TELEFONDA PATLAMASIN DİYE KÜÇÜLTME) */
-        @media screen and (max-width: 600px) {
-            body { background-color: white; }
-            .card { transform: scale(1); height: 100vh; max-width: 100%; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; justify-content: center; padding: 20px; }
-            .timer-text { font-size: 32px; } /* Mobilde sığacak kadar küçük */
-            .logo { max-width: 180px; }
+        /* MOBİL UYUM */
+        @media screen and (max-width: 768px) {
+            .card { padding: 30px; width: 95%; }
+            .logo { max-width: 180px; margin-bottom: 20px; }
+            .info-text { font-size: 16px; margin-bottom: 20px; }
+            .countdown-container { gap: 15px; } /* Boşluğu azalt */
+            .time-number { font-size: 40px; } /* Rakamları küçült */
+            .time-label { font-size: 14px; margin-top: 5px; }
             input, button { padding: 20px; font-size: 18px; }
             h3 { font-size: 24px; }
+        }
+
+        /* Çok küçük ekranlar için */
+        @media screen and (max-width: 400px) {
+             .time-number { font-size: 32px; }
+             .countdown-container { gap: 10px; }
         }
         
         #success-view { display: none; text-align: center; }
@@ -85,7 +110,24 @@
         
         <div id="countdown-view">
             <div class="info-text">DERSE KALAN SÜRE</div>
-            <div class="timer-text" id="timer">HESAPLANIYOR...</div>
+            <div class="countdown-container">
+                <div class="time-box" id="box-days">
+                    <div class="time-number" id="days">00</div>
+                    <div class="time-label">Gün</div>
+                </div>
+                <div class="time-box" id="box-hours">
+                    <div class="time-number" id="hours">00</div>
+                    <div class="time-label">Saat</div>
+                </div>
+                <div class="time-box" id="box-minutes">
+                    <div class="time-number" id="minutes">00</div>
+                    <div class="time-label">Dakika</div>
+                </div>
+                <div class="time-box" id="box-seconds">
+                    <div class="time-number" id="seconds">00</div>
+                    <div class="time-label">Saniye</div>
+                </div>
+            </div>
         </div>
 
         <div id="form-view">
@@ -136,7 +178,16 @@
         const btn = document.getElementById('btn');
         const countdownView = document.getElementById('countdown-view');
         const formView = document.getElementById('form-view');
-        const timerElement = document.getElementById('timer');
+        
+        const boxDays = document.getElementById('box-days');
+        const boxHours = document.getElementById('box-hours');
+        const boxMinutes = document.getElementById('box-minutes');
+        const boxSeconds = document.getElementById('box-seconds');
+
+        const elDays = document.getElementById('days');
+        const elHours = document.getElementById('hours');
+        const elMinutes = document.getElementById('minutes');
+        const elSeconds = document.getElementById('seconds');
 
         setInterval(updateTimer, 1000);
         updateTimer();
@@ -154,22 +205,24 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                // AKILLI ZİNCİRLEME METİN (BOŞLUKLU)
-                let timeString = "";
+                // RAKAMLARI YAZDIR (Çift haneli format)
+                elDays.innerText = days < 10 ? "0" + days : days;
+                elHours.innerText = hours < 10 ? "0" + hours : hours;
+                elMinutes.innerText = minutes < 10 ? "0" + minutes : minutes;
+                elSeconds.innerText = seconds < 10 ? "0" + seconds : seconds;
+
+                // AKILLI GİZLEME (0 olan kutuları gizle)
                 let hasUpper = false;
+                if (days > 0) { boxDays.style.display = "flex"; hasUpper = true; } else { boxDays.style.display = "none"; }
+                if (hours > 0 || hasUpper) { boxHours.style.display = "flex"; hasUpper = true; } else { boxHours.style.display = "none"; }
+                if (minutes > 0 || hasUpper) { boxMinutes.style.display = "flex"; hasUpper = true; } else { boxMinutes.style.display = "none"; }
+                boxSeconds.style.display = "flex"; // Saniye her zaman görünür
 
-                if (days > 0) { timeString += days + " GÜN  "; hasUpper = true; }
-                if (hours > 0 || hasUpper) { timeString += hours + " SAAT  "; hasUpper = true; }
-                if (minutes > 0 || hasUpper) { timeString += minutes + " DAKİKA  "; }
-                timeString += seconds + " SANİYE";
-
-                timerElement.innerText = timeString;
-
-                // SON 3 SANİYE: ALTIN NABIZ
+                // SON 3 SANİYE: ALTIN NABIZ (Sadece saniye kutusuna)
                 if (days === 0 && hours === 0 && minutes === 0 && seconds <= 3) {
-                    timerElement.classList.add("pulse-mode");
+                    elSeconds.classList.add("pulse-mode");
                 } else {
-                    timerElement.classList.remove("pulse-mode");
+                    elSeconds.classList.remove("pulse-mode");
                 }
             } else {
                 countdownView.style.display = "none";
