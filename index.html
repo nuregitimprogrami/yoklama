@@ -26,11 +26,11 @@
             transition: all 0.5s ease;
         }
         
-        /* BÜYÜTÜLMÜŞ LOGO VE BAŞLIK */
+        /* LOGO VE BAŞLIK */
         .logo { max-width: 350px; margin-bottom: 3vh; display: block; }
         .lesson-header { font-size: 4vh; font-weight: 800; color: #2c3e50; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 4vh; }
 
-        /* --- DAİRESEL SAYAÇ (BÜYÜTÜLMÜŞ) --- */
+        /* --- DAİRESEL SAYAÇ --- */
         .countdown-container { 
             display: flex; justify-content: center; gap: 3vw; width: 100%; 
             transition: all 0.5s ease;
@@ -38,7 +38,7 @@
 
         .circle-box { 
             position: relative; 
-            width: 25vh; height: 25vh; /* DAHA BÜYÜK DAİRELER */
+            width: 25vh; height: 25vh;
             max-width: 280px; max-height: 280px;
             transition: all 0.3s ease;
         }
@@ -60,11 +60,10 @@
             display: flex; flex-direction: column; align-items: center;
         }
         
-        /* DAHA BÜYÜK RAKAMLAR */
         .time-number { font-size: 7vh; font-weight: 800; color: #34495e; line-height: 1; }
         .time-label { font-size: 1.8vh; color: #7f8c8d; font-weight: 700; text-transform: uppercase; margin-top: 0.8vh; }
 
-        /* --- GİRİŞ FORMU (BÜYÜTÜLMÜŞ) --- */
+        /* --- GİRİŞ FORMU --- */
         #form-view { 
             display: none; width: 90%; max-width: 550px; margin-top: 3vh; 
             animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -77,13 +76,13 @@
         .main-container.form-active .logo { max-width: 250px; margin-bottom: 2vh; }
         
         input { 
-            width: 100%; padding: 3vh; margin-bottom: 2.5vh; background: #f7f9fa; /* DAHA BÜYÜK INPUT */
+            width: 100%; padding: 3vh; margin-bottom: 2.5vh; background: #f7f9fa;
             border: 3px solid #e2e6ea; border-radius: 22px; text-align: center; font-size: 3vh; font-weight: bold; color: #2c3e50;
         }
         input:focus { border-color: #3498db; outline: none; background: white; }
         
         button { 
-            width: 100%; padding: 3vh; background: #e2e6ea; color: #bdc3c7; border: none; /* DAHA BÜYÜK BUTON */
+            width: 100%; padding: 3vh; background: #e2e6ea; color: #bdc3c7; border: none;
             border-radius: 22px; font-size: 3vh; font-weight: bold; cursor: not-allowed; transition: 0.3s; 
         }
         button.active { background: #3498db; color: white; cursor: pointer; box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3); }
@@ -92,31 +91,25 @@
         .pulse-text { animation: pulse 1.5s infinite; color: #e67e22; font-weight: bold; font-size: 4vh; margin-top: 3vh; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* --- MOBİL AYARLAR (DİKEY 9:16) - DAHA YAKIN PLAN --- */
+        /* --- MOBİL AYARLAR (DİKEY 9:16) --- */
         @media screen and (max-width: 600px) {
             .logo { max-width: 65vw; margin-bottom: 3vh; }
             .lesson-header { font-size: 8vw; margin-bottom: 3vh; }
 
-            /* 2x2 GRID DÜZENİ (DAHA GENİŞ) */
             .countdown-container { 
-                flex-wrap: wrap; 
-                gap: 3vw; 
-                width: 90%; /* Kenarlara daha yakın */
+                flex-wrap: wrap; gap: 3vw; width: 90%;
             }
             
             .circle-box { 
-                width: 42vw; height: 42vw; /* Daireler ekranı daha çok dolduruyor */
-                max-width: none; max-height: none;
+                width: 42vw; height: 42vw; max-width: none; max-height: none;
             }
 
-            .time-number { font-size: 13vw; } /* Rakamlar kocaman */
-            .time-label { font-size: 3.5vw; }
+            .time-number { font-size: 13vw; } .time-label { font-size: 3.5vw; }
             
-            /* Form açılınca */
             .main-container.form-active .countdown-container { width: 95%; gap: 2vw; transform: scale(0.85); }
             
             input, button { padding: 22px; font-size: 22px; }
-            #form-view p { font-size: 20px; }
+            #form-view p { font-size: 20px; } /* Mobilde yazı boyutu sabitleme */
         }
     </style>
 </head>
@@ -127,26 +120,14 @@
         <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
         <div id="countdown-view" class="countdown-container">
-            <div class="circle-box" id="box-days">
-                <svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-days" class="circle-progress c-day" cx="50%" cy="50%" r="45%"></circle></svg>
-                <div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div>
-            </div>
-            <div class="circle-box" id="box-hours">
-                <svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50%" cy="50%" r="45%"></circle></svg>
-                <div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div>
-            </div>
-            <div class="circle-box" id="box-minutes">
-                <svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50%" cy="50%" r="45%"></circle></svg>
-                <div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div>
-            </div>
-            <div class="circle-box" id="box-seconds">
-                <svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50%" cy="50%" r="45%"></circle></svg>
-                <div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div>
-            </div>
+            <div class="circle-box" id="box-days"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-days" class="circle-progress c-day" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div></div>
+            <div class="circle-box" id="box-hours"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div></div>
+            <div class="circle-box" id="box-minutes"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div></div>
+            <div class="circle-box" id="box-seconds"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div></div>
         </div>
 
         <div id="form-view">
-            <p style="color:#34495e; font-weight:bold; margin-bottom:20px; font-size:2.5vh; text-align:center;">Kapılar açıldı! Giriş yapabilirsiniz.</p>
+            <p style="color:#34495e; font-weight:bold; margin-bottom:20px; font-size:2.5vh; text-align:center;">NEP sistemine kayıtlı bilgilerinizi giriniz.</p>
             <input type="text" id="name" placeholder="AD SOYAD" onkeyup="checkLogic()" autocomplete="off">
             <button id="btn" onclick="processEntry()" disabled>GİRİŞ YAP</button>
         </div>
