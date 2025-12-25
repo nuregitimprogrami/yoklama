@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body { 
             background-color: #f4f7f6; 
             font-family: 'Segoe UI', Roboto, sans-serif; 
@@ -18,90 +19,129 @@
 
         /* --- ANA KART --- */
         .card { 
-            background: white; padding: 40px; width: 90%; max-width: 900px; 
-            text-align: center; border-radius: 40px; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08); 
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            background: white; padding: 50px; width: 90%; max-width: 1000px; 
+            text-align: center; border-radius: 50px; 
+            box-shadow: 0 25px 70px rgba(0,0,0,0.1); 
+            transition: all 0.5s ease;
             position: relative;
         }
         
-        .logo { max-width: 200px; margin: 0 auto 30px auto; display: block; }
-        .lesson-header { font-size: 28px; font-weight: 800; color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 40px; }
+        .logo { max-width: 240px; margin: 0 auto 30px auto; display: block; }
+        .lesson-header { font-size: 32px; font-weight: 800; color: #2c3e50; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px; }
 
-        /* --- DAİRESEL SAYAÇ (CIRCLE PROGRESS) --- */
+        /* --- DAİRESEL SAYAÇ (MİMARİ) --- */
         .countdown-container { 
-            display: flex; justify-content: center; gap: 30px; width: 100%; flex-wrap: wrap;
+            display: flex; 
+            justify-content: center; 
+            gap: 40px; 
+            width: 100%; 
             transition: all 0.5s ease;
         }
 
-        .circle-box { position: relative; width: 160px; height: 160px; }
+        .circle-box { 
+            position: relative; width: 180px; height: 180px; 
+            transition: all 0.3s ease; /* Silinirken yumuşak geçiş */
+        }
         
         svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         
-        .circle-bg { fill: none; stroke: #eee; stroke-width: 10; }
+        .circle-bg { fill: none; stroke: #ecf0f1; stroke-width: 8; }
         
         .circle-progress { 
-            fill: none; stroke-width: 10; stroke-linecap: round; 
-            stroke-dasharray: 440; stroke-dashoffset: 440; 
+            fill: none; stroke-width: 8; stroke-linecap: round; 
+            stroke-dasharray: 283; /* 2*pi*45 */
+            stroke-dashoffset: 283; 
             transition: stroke-dashoffset 1s linear;
         }
 
-        /* RENKLER (Gamer/Modern Palette) */
-        .c-day { stroke: #27ae60; } /* Yeşil */
-        .c-hour { stroke: #c0392b; } /* Kırmızı */
-        .c-min { stroke: #f1c40f; } /* Sarı */
-        .c-sec { stroke: #2980b9; } /* Mavi */
+        /* RENKLER (Canlı & Modern) */
+        .c-day { stroke: #27ae60; }
+        .c-hour { stroke: #c0392b; }
+        .c-min { stroke: #f39c12; }
+        .c-sec { stroke: #2980b9; }
 
         .inner-text {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             display: flex; flex-direction: column; align-items: center;
         }
         
-        .time-number { font-size: 42px; font-weight: 800; color: #2c3e50; line-height: 1; }
-        .time-label { font-size: 14px; color: #7f8c8d; font-weight: 600; text-transform: uppercase; margin-top: 5px; }
+        .time-number { font-size: 50px; font-weight: 800; color: #34495e; line-height: 1; }
+        .time-label { font-size: 14px; color: #7f8c8d; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
 
         /* --- GİRİŞ FORMU --- */
         #form-view { 
             display: none; width: 100%; max-width: 500px; margin: 30px auto 0; 
-            opacity: 0; transform: translateY(20px); 
-            transition: all 0.5s ease;
+            animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* FORM GÖRÜNÜR OLDUĞUNDA SAYAÇ KÜÇÜLSÜN (COMPACT MODE) */
-        .card.form-active .countdown-container { transform: scale(0.7); gap: 10px; margin-bottom: -20px; }
-        .card.form-active .lesson-header { display: none; } /* Başlığı gizle yer aç */
+        /* FORM AÇILINCA SAYAÇ KÜÇÜLSÜN */
+        .card.form-active .countdown-container { transform: scale(0.8); margin-bottom: -30px; gap: 20px; }
+        .card.form-active .lesson-header { display: none; }
         
         input { 
-            width: 100%; padding: 20px; margin-bottom: 20px; background: #f8f9fa; 
-            border: 3px solid #e9ecef; border-radius: 15px; text-align: center; font-size: 20px; font-weight: bold; color: #2c3e50;
+            width: 100%; padding: 22px; margin-bottom: 20px; background: #f7f9fa; 
+            border: 3px solid #e2e6ea; border-radius: 18px; text-align: center; font-size: 22px; font-weight: bold; color: #2c3e50;
         }
-        input:focus { border-color: #2980b9; outline: none; background: white; }
+        input:focus { border-color: #3498db; outline: none; background: white; }
         
         button { 
-            width: 100%; padding: 20px; background: #e9ecef; color: #bdc3c7; border: none; 
-            border-radius: 15px; font-size: 20px; font-weight: bold; cursor: not-allowed; transition: 0.3s; 
+            width: 100%; padding: 22px; background: #e2e6ea; color: #bdc3c7; border: none; 
+            border-radius: 18px; font-size: 22px; font-weight: bold; cursor: not-allowed; transition: 0.3s; 
         }
-        button.active { background: #2980b9; color: white; cursor: pointer; box-shadow: 0 10px 25px rgba(41, 128, 185, 0.3); }
+        button.active { background: #3498db; color: white; cursor: pointer; box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3); }
 
         #waiting-room, #end-term-view { display: none; }
-        .pulse-text { animation: pulse 1.5s infinite; color: #e67e22; font-weight: bold; font-size: 20px; margin-top: 20px; }
+        .pulse-text { animation: pulse 1.5s infinite; color: #e67e22; font-weight: bold; font-size: 22px; margin-top: 20px; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* --- MOBİL AYARLAR --- */
+        /* ========================================= */
+        /* --- CİHAZ MİMARİSİ (YATAY/DİKEY) --- */
+        /* ========================================= */
+
+        /* 💻 BİLGİSAYAR (YATAY 16:9) - %50 ZOOM */
+        @media screen and (min-width: 1025px) {
+            .card { 
+                transform: scale(1.5); /* PATRON EMRİ: %50 BÜYÜT */
+                margin-top: 5%; 
+            }
+        }
+
+        /* 📱 TELEFON (DİKEY 9:16) - 2x2 GRID & HAFİF YAKINLAŞTIRMA */
         @media screen and (max-width: 600px) {
-            .card { width: 95%; padding: 30px 15px; border-radius: 30px; }
-            .countdown-container { gap: 15px; }
-            .circle-box { width: 75px; height: 75px; } /* Mobilde daha küçük halkalar */
-            .circle-bg, .circle-progress { stroke-width: 6; }
-            .time-number { font-size: 24px; }
-            .time-label { font-size: 9px; }
+            .card { 
+                width: 95%; 
+                padding: 30px 15px; 
+                border-radius: 35px;
+                /* Hafif bir 'yakınlaşma' hissi için kenarlara dayıyoruz */
+            }
             
-            /* Form açılınca mobilde halkalar daha da küçülsün */
-            .card.form-active .countdown-container { transform: scale(0.9); margin-bottom: 0; }
+            .logo { max-width: 180px; margin-bottom: 20px; }
+            .lesson-header { font-size: 22px; margin-bottom: 25px; }
+
+            /* MOBİLDE YAN YANA SIĞMAZ, 2x2 KARE YAPALIM (KILÇIKSIZ) */
+            .countdown-container { 
+                flex-wrap: wrap; /* Aşağı atmasına izin ver */
+                gap: 15px; 
+            }
+            
+            .circle-box { 
+                width: 38vw; /* Ekranın yarısından biraz az, tam sığar */
+                height: 38vw; /* Kare olması için */
+                flex: 0 0 auto; /* Esnemesin */
+            }
+
+            .time-number { font-size: 10vw; } /* Rakamlar mobil ekranın %10'u kadar */
+            .time-label { font-size: 3vw; }
+            
+            /* Form açılınca biraz daha sıkılaşsın */
+            .card.form-active .countdown-container { transform: scale(0.9); gap: 10px; margin-bottom: 0; }
         }
         
-        /* PC Zoom */
-        @media screen and (min-width: 1025px) { .card { transform: scale(1.3); } }
+        /* TABLET - ARA ÇÖZÜM */
+        @media screen and (min-width: 601px) and (max-width: 1024px) {
+            .card { transform: scale(1.1); width: 85%; }
+        }
     </style>
 </head>
 <body>
@@ -130,7 +170,7 @@
         </div>
 
         <div id="form-view">
-            <p style="color:#34495e; font-weight:bold; margin-bottom:20px;">Kapılar açıldı! Adını yazıp derse katıl.</p>
+            <p style="color:#34495e; font-weight:bold; margin-bottom:20px; font-size:18px;">Kapılar açıldı! Giriş yapabilirsiniz.</p>
             <input type="text" id="name" placeholder="AD SOYAD" onkeyup="checkLogic()" autocomplete="off">
             <button id="btn" onclick="processEntry()" disabled>GİRİŞ YAP</button>
         </div>
@@ -154,20 +194,21 @@
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
         
-        // SVG DAİRE ÇEVRESİ HESABI (r=45%)
-        // Tam çevre yaklaşık 283 birimdir (width 100px ise). CSS'te dasharray 440 (tahmini) kullandık ama dinamik yapacağız.
-        // Mobilde ve PC'de stroke-dasharray aynı çalışır (orantısal).
-        const FULL_DASH = 283; // 2 * pi * 45 (approx)
+        // Daire Çevresi (r=45% -> 2*pi*45 ~ 283)
+        const FULL_DASH = 283; 
 
+        // DAİRE AYARLAYICI (Matematiksel Hesap)
         function setCircle(id, current, max) {
             const circle = document.getElementById(id);
-            // Mobilde width değiştiği için CSS'teki stroke-dasharray'i eziyoruz.
-            // Ama SVG viewbox mantığıyla 45% radius standarttır.
-            // SVG coordinate system: 100x100. r=45 -> C = 2*PI*45 = ~282.7
-            const circumference = 282.7;
+            // Daireyi ters yönde tüketmek için offset hesabı
+            // 0 olduğunda offset = circumference (tam boş)
+            // max olduğunda offset = 0 (tam dolu)
             
-            circle.style.strokeDasharray = circumference;
-            const offset = circumference - (current / max) * circumference;
+            // Eğer current max'tan büyükse (örn 8 gün kaldı ama max 7), tam dolu göster
+            let val = current > max ? max : current;
+            
+            // Oran hesabı
+            const offset = FULL_DASH - (val / max) * FULL_DASH;
             circle.style.strokeDashoffset = offset;
         }
 
@@ -189,7 +230,7 @@
             const now = new Date().getTime();
             if (isWaiting && now >= startTime) { window.location.href = getZoomLink(); return; }
 
-            if (now < startTime) { // Ders başlayana kadar sayaç döner
+            if (now < startTime) { 
                 let diff = startTime - now;
                 const d = Math.floor(diff/86400000);
                 const h = Math.floor((diff%86400000)/3600000);
@@ -201,26 +242,33 @@
                 document.getElementById('minutes').innerText = m;
                 document.getElementById('seconds').innerText = s;
 
-                // Animasyonlar
-                setCircle('ring-days', d, 7); // Max 7 gün gibi düşünelim
-                setCircle('ring-hours', h, 24);
+                // --- MATEMATİKSEL GÖRSELLEŞTİRME ---
+                setCircle('ring-days', d, 7);   // 7 Gün üzerinden hesapla
+                setCircle('ring-hours', h, 24); // 24 Saat üzerinden hesapla
                 setCircle('ring-minutes', m, 60);
                 setCircle('ring-seconds', s, 60);
 
-                // GİZLEME MANTIĞI
+                // --- AKILLI GİZLEME ---
+                // Gün bitti mi? Gizle.
                 document.getElementById('box-days').style.display = d > 0 ? "block" : "none";
-                document.getElementById('box-hours').style.display = (d > 0 || h > 0) ? "block" : "none";
+                
+                // Gün bitti VE Saat bitti mi? Saati de gizle.
+                if (d === 0 && h === 0) {
+                    document.getElementById('box-hours').style.display = "none";
+                } else {
+                    document.getElementById('box-hours').style.display = "block";
+                }
 
-                // FORM AÇILMA ZAMANI (18:55)
+                // KAPILAR AÇILDI MI? (18:55)
                 if (now >= gatesOpenTime) {
                     document.getElementById('main-card').classList.add('form-active');
                     const form = document.getElementById('form-view');
                     form.style.display = "block";
+                    // Animasyon için minik gecikme
                     setTimeout(() => { form.style.opacity = 1; form.style.transform = "translateY(0)"; }, 50);
                 }
 
             } else if (now < endTime) {
-                // Ders saati içinde normal form görünümü (Sayaç gizli)
                 if (!isWaiting) { 
                     document.getElementById('countdown-view').style.display = "none"; 
                     const form = document.getElementById('form-view');
@@ -234,7 +282,7 @@
         
         function processEntry() {
             const btn = document.getElementById('btn'); btn.style.display = "none"; document.getElementById('name').style.display = "none";
-            const fd = new FormData(); fd.append("entry.1545633020", finalMatchedName); fd.append("entry.1443001544", "TESPİT EDİLEMEDİ");
+            const fd = new FormData(); fd.append("entry.1545633020", finalMatchedName); fd.append("entry.1443001544", "TESPİT EDİLDİ");
             fetch("https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse", { method: "POST", mode: "no-cors", body: fd }).then(() => {
                 if (new Date().getTime() < startTime) { isWaiting = true; document.getElementById('form-view').style.display = "none"; document.getElementById('waiting-room').style.display = "block"; } 
                 else { window.location.href = getZoomLink(); }
