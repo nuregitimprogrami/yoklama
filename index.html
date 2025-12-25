@@ -28,11 +28,9 @@
         .logo { max-width: 350px; margin-bottom: 3vh; display: block; position: relative; z-index: 2; }
         .lesson-header { font-size: 4vh; font-weight: 800; color: #2c3e50; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 4vh; }
 
-        /* --- CANLI İKONU (DÜZELTİLDİ) --- */
         #live-badge {
             display: none;
-            background-color: #27ae60; /* Yeşilimsi ton daha şık */
-            color: white;
+            background-color: #27ae60; color: white;
             padding: 8px 20px; border-radius: 30px;
             font-weight: 800; font-size: 16px; letter-spacing: 1px;
             box-shadow: 0 0 20px rgba(39, 174, 96, 0.4);
@@ -40,7 +38,6 @@
             text-transform: uppercase;
         }
 
-        /* --- DAİRESEL SAYAÇ --- */
         .countdown-container { 
             display: flex; justify-content: center; gap: 3vw; width: 100%; 
             transition: all 0.5s ease;
@@ -76,14 +73,8 @@
         .final-countdown .time-number { color: #e74c3c !important; }
         .final-countdown .circle-progress { stroke: #e74c3c !important; }
         .final-countdown { animation: heartbeat 1s infinite; }
-        
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
+        @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        /* --- GİRİŞ FORMU --- */
         #form-view { 
             display: none; width: 90%; max-width: 550px; margin-top: 3vh; 
             animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -106,17 +97,12 @@
         }
         button.active { background: #3498db; color: white; cursor: pointer; box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3); }
 
-        /* --- BEKLEME ODASI (SAYAÇLI) --- */
-        #waiting-room { 
-            display: none; 
-            margin-top: 2vh; text-align: center;
-            animation: fadeIn 0.5s ease;
-        }
+        #waiting-room { display: none; margin-top: 2vh; text-align: center; animation: fadeIn 0.5s ease; }
         .success-msg { color: #27ae60; font-size: 4vh; font-weight: 800; margin-top: 1vh; }
         .sub-msg { color: #7f8c8d; font-size: 2.5vh; margin-top: 1vh; font-weight: 600; }
-
         #end-term-view { display: none; }
 
+        /* MOBİL VE PC UYUMU (DÜZELTİLDİ) */
         @media screen and (max-width: 600px) {
             .logo { max-width: 65vw; margin-bottom: 3vh; }
             .lesson-header { font-size: 8vw; margin-bottom: 3vh; }
@@ -127,7 +113,9 @@
             input, button { padding: 22px; font-size: 22px; }
             #form-view p { font-size: 20px; }
         }
-        @media screen and (min-width: 1025px) { .main-container { transform: scale(1.5); } }
+        
+        /* PC - SCALE %20 (1.2) - Daha dengeli */
+        @media screen and (min-width: 1025px) { .main-container { transform: scale(1.2); } }
     </style>
 </head>
 <body>
@@ -205,8 +193,6 @@
 
         function updateTimer() {
             const now = new Date().getTime();
-            
-            // Eğer bekliyorsa ve vakit geldiyse (00:00:00) UÇUR!
             if (isWaiting && now >= startTime) { window.location.href = getZoomLink(); return; }
 
             if (now < startTime) { 
@@ -229,19 +215,11 @@
                 document.getElementById('box-days').style.display = d > 0 ? "block" : "none";
                 document.getElementById('box-hours').style.display = (d === 0 && h === 0) ? "none" : "block";
 
-                // SON 3 SANİYE EFEKTİ (HEARTBEAT)
-                if (diff <= 3500) {
-                    const boxes = document.querySelectorAll('.circle-box');
-                    boxes.forEach(box => box.classList.add('final-countdown'));
-                } else {
-                    const boxes = document.querySelectorAll('.circle-box');
-                    boxes.forEach(box => box.classList.remove('final-countdown'));
-                }
+                if (diff <= 3500) { document.querySelectorAll('.circle-box').forEach(box => box.classList.add('final-countdown')); } 
+                else { document.querySelectorAll('.circle-box').forEach(box => box.classList.remove('final-countdown')); }
 
-                // KAPILAR AÇILDI MI? (18:55)
                 if (now >= gatesOpenTime) {
                     document.getElementById('main-container').classList.add('form-active');
-                    // Eğer bekleme modunda değilse formu göster
                     if (!isWaiting) {
                         const form = document.getElementById('form-view');
                         form.style.display = "block";
@@ -250,7 +228,6 @@
                 }
 
             } else if (now < endTime) {
-                // DERS BAŞLADI (19:00 - 20:00)
                 if (!isWaiting) { 
                     document.getElementById('countdown-view').style.display = "none"; 
                     const form = document.getElementById('form-view');
@@ -271,17 +248,61 @@
                     isWaiting = true; 
                     document.getElementById('form-view').style.display = "none"; 
                     document.getElementById('waiting-room').style.display = "block"; 
-                    // SAYAÇ EKRANDA KALMAYA DEVAM EDECEK (display:block dokunmadık)
                 } 
                 else { window.location.href = getZoomLink(); }
             });
         }
 
+        // --- YENİ NESİL AKILLI İSİM DOĞRULAMA MOTORU ---
+        function normalizeTR(str) { 
+            return str.replace(/Ğ/g, "G").replace(/ğ/g, "g").replace(/Ü/g, "U").replace(/ü/g, "u")
+                      .replace(/Ş/g, "S").replace(/ş/g, "s").replace(/İ/g, "I").replace(/ı/g, "i")
+                      .replace(/Ö/g, "O").replace(/ö/g, "o").replace(/Ç/g, "C").replace(/ç/g, "c")
+                      .toUpperCase().trim();
+        }
+
+        function levenshtein(a, b) {
+            const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j;
+            for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i][j-1]+1,m[i-1][j]+1));
+            return m[b.length][a.length];
+        }
+
         function checkLogic() {
-            let raw = document.getElementById('name').value.trim(); if (raw.length < 3) return;
-            let match = STUDENTS.find(s => s.n.toUpperCase().includes(raw.toUpperCase()));
+            let raw = document.getElementById('name').value;
+            let norm = normalizeTR(raw);
+            if (raw.length < 2) return;
+
+            let match = null;
+            let bestScore = 999;
+
+            for (let s of STUDENTS) {
+                let dbName = normalizeTR(s.n);
+                
+                // 1. TAM İÇERME (Örn: "BÜNYAMİN" yazınca "BÜNYAMİN ÇAĞRI AKBOYUN" bulsun)
+                if (dbName.startsWith(norm) || dbName.includes(" " + norm)) {
+                    match = s; break;
+                }
+
+                // 2. LEVENSHTEIN (Harf hatası toleransı)
+                let tolerance = dbName.length > 10 ? 3 : 2; // Uzun isimde 3 harf, kısada 2 harf hatası
+                let score = levenshtein(norm, dbName);
+                
+                if (score <= tolerance && score < bestScore) {
+                    bestScore = score;
+                    match = s;
+                }
+            }
+
             const btn = document.getElementById('btn');
-            if (match) { finalMatchedName = match.n; btn.disabled = false; btn.className = "active"; } else { btn.disabled = true; btn.className = ""; }
+            if (match) { 
+                finalMatchedName = match.n; 
+                btn.disabled = false; 
+                btn.className = "active";
+                // Otomatik düzeltme efekti yapılabilir ama kullanıcıyı bozmayalım
+            } else { 
+                btn.disabled = true; 
+                btn.className = ""; 
+            }
         }
         initSystem();
     </script>
