@@ -28,13 +28,10 @@
             transition: all 0.5s ease;
         }
         
-        /* LOGO */
         .logo { max-width: 350px; margin-bottom: 3vh; display: block; position: relative; z-index: 2; }
-        
-        /* BAŞLIK */
         .lesson-header { font-size: 4vh; font-weight: 800; color: #2c3e50; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 4vh; }
 
-        /* CANLI ROZETİ */
+        /* CANLI DERS ROZETİ */
         #live-badge {
             display: none;
             background-color: #27ae60; color: white;
@@ -43,25 +40,24 @@
             box-shadow: 0 0 20px rgba(39, 174, 96, 0.4);
             margin-bottom: 20px;
             text-transform: uppercase;
-            animation: pulse-live 2s infinite;
+            animation: pulse-green 2s infinite;
         }
-        @keyframes pulse-live { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* SAYAÇ ALANI */
+        /* SAYAÇ */
         .countdown-container { display: flex; justify-content: center; gap: 3vw; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; width: 25vh; height: 25vh; max-width: 280px; max-height: 280px; transition: all 0.3s ease; }
         svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .circle-bg { fill: none; stroke: #ecf0f1; stroke-width: 7; }
         .circle-progress { fill: none; stroke-width: 7; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
         
-        /* Sayaç Renkleri */
         .c-day { stroke: #27ae60; } .c-hour { stroke: #c0392b; } .c-min { stroke: #f39c12; } .c-sec { stroke: #2980b9; }
         
         .inner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
         .time-number { font-size: 7vh; font-weight: 800; color: #34495e; line-height: 1; transition: color 0.3s; }
         .time-label { font-size: 1.8vh; color: #7f8c8d; font-weight: 700; text-transform: uppercase; margin-top: 0.8vh; }
         
-        /* Son 3 Saniye Efekti */
+        /* Son 3 Saniye Kalp Atışı */
         .final-countdown .time-number { color: #e74c3c !important; }
         .final-countdown .circle-progress { stroke: #e74c3c !important; }
         .final-countdown { animation: heartbeat 1s infinite; }
@@ -71,7 +67,6 @@
         #form-view { display: none; width: 90%; max-width: 550px; margin-top: 3vh; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Form açılınca sayaç küçülür */
         .main-container.form-active .countdown-container { transform: scale(0.7); margin-bottom: -1vh; gap: 1.5vw; }
         .main-container.form-active .lesson-header { display: none; }
         .main-container.form-active .logo { max-width: 250px; margin-bottom: 2vh; }
@@ -83,7 +78,7 @@
         }
         input:focus { border-color: #3498db; outline: none; background: white; }
         
-        /* İsim Doğrulama İpucu */
+        /* Yeşil İsim Teyidi */
         #match-hint {
             height: 3vh; margin-bottom: 2vh; 
             font-size: 2vh; font-weight: bold; color: #27ae60;
@@ -94,14 +89,13 @@
         button { width: 100%; padding: 3vh; background: #e2e6ea; color: #bdc3c7; border: none; border-radius: 22px; font-size: 3vh; font-weight: bold; cursor: not-allowed; transition: 0.3s; }
         button.active { background: #3498db; color: white; cursor: pointer; box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3); }
 
-        /* BEKLEME EKRANI */
+        /* BEKLEME ODASI */
         #waiting-room { display: none; margin-top: 2vh; text-align: center; animation: fadeIn 0.5s ease; }
         .success-msg { color: #27ae60; font-size: 4vh; font-weight: 800; margin-top: 1vh; }
         .sub-msg { color: #7f8c8d; font-size: 2.5vh; margin-top: 1vh; font-weight: 600; }
-        
         #end-term-view { display: none; }
 
-        /* MOBİL UYUM */
+        /* MOBİL VE PC UYUMU */
         @media screen and (max-width: 600px) {
             .logo { max-width: 65vw; margin-bottom: 3vh; }
             .lesson-header { font-size: 8vw; margin-bottom: 3vh; }
@@ -113,17 +107,13 @@
             #form-view p { font-size: 20px; }
             #match-hint { font-size: 16px; margin-bottom: 20px; }
         }
-        
-        /* PC UYUM (Hafif Zoom) */
         @media screen and (min-width: 1025px) { .main-container { transform: scale(1.2); } }
     </style>
 </head>
 <body>
     <div class="main-container" id="main-container">
         <img src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
-        
         <div id="live-badge">DERS BAŞLADI</div>
-        
         <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
         <div id="countdown-view" class="countdown-container">
@@ -135,7 +125,7 @@
 
         <div id="form-view">
             <p style="color:#34495e; font-weight:bold; margin-bottom:20px; font-size:2.5vh; text-align:center;">NEP sistemine kayıtlı bilgilerinizi giriniz.</p>
-            <input type="text" id="name" name="nep_student_fullname" autocomplete="name" placeholder="AD SOYAD" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
+            <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="AD SOYAD" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
             <div id="match-hint"></div>
             <button id="btn" onclick="processEntry()" disabled>GİRİŞ YAP</button>
         </div>
@@ -150,35 +140,34 @@
     </div>
 
     <script>
-        // --- AYARLAR ---
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
         const ENTRY_NAME = "entry.1545633020";
         const ENTRY_LOC = "entry.1443001544";
         const ZOOM_LINK = "https://us06web.zoom.us/j/81331199971?pwd=wEBSZPJcBJg3MbV4FqGMO7ggJ3onM8.1";
         
-        [cite_start]// --- 2. DÖNEM DERS PROGRAMI (PDF'ten Çıkarıldı [cite: 1]) ---
-        // Tarihler 2026 Yılı Perşembe Günlerine Ayarlandı
+        // --- 2. DÖNEM DERS PROGRAMI (PDF'ten Çıkarıldı) ---
+        // Sadece DERS 1 - DERS 15 arası. Tatiller ve Kahootlar atlandı.
+        // Tarihler 2026 yılı Perşembe günleri baz alınmıştır.
         const LESSONS = [ 
-            { id: 1, date: "2026-02-05" },  // 1. DERS (2-8 Şubat) -> 5 Şubat Perşembe
-            { id: 2, date: "2026-02-12" },  // 2. DERS (9-15 Şubat)
-            { id: 3, date: "2026-02-19" },  // 3. DERS (16-22 Şubat)
-            { id: 4, date: "2026-02-26" },  // 4. DERS (23 Şubat-1 Mart)
-            { id: 5, date: "2026-03-05" },  // 5. DERS (2-8 Mart)
-            // 9-15 Mart (Yoklamasız) ve 16-22 Mart (Ara Tatil) atlandı
-            { id: 6, date: "2026-03-26" },  // 6. DERS (23-29 Mart)
-            { id: 7, date: "2026-04-02" },  // 7. DERS (30 Mart-5 Nisan)
-            { id: 8, date: "2026-04-09" },  // 8. DERS (6-12 Nisan)
-            { id: 9, date: "2026-04-16" },  // 9. DERS (13-19 Nisan)
-            { id: 10, date: "2026-04-23" }, // 10. DERS (20-26 Nisan)
-            { id: 11, date: "2026-04-30" }, // 11. DERS (27 Nisan-3 Mayıs)
-            { id: 12, date: "2026-05-07" }, // 12. DERS (4-10 Mayıs)
-            { id: 13, date: "2026-05-14" }, // 13. DERS (11-17 Mayıs)
-            { id: 14, date: "2026-05-21" }, // 14. DERS (18-24 Mayıs)
-            // 25-31 Mayıs (Bayram) atlandı
-            { id: 15, date: "2026-06-04" }  // 15. DERS (1-7 Haziran) - SON DERS
+            { id: 1, date: "2026-02-05" },  // 1. Ders (2-8 Şubat)
+            { id: 2, date: "2026-02-12" },  // 2. Ders (9-15 Şubat)
+            { id: 3, date: "2026-02-19" },  // 3. Ders (16-22 Şubat)
+            { id: 4, date: "2026-02-26" },  // 4. Ders (23 Şubat-1 Mart)
+            { id: 5, date: "2026-03-05" },  // 5. Ders (2-8 Mart)
+            // 9-15 Mart (Boş) ve 16-22 Mart (Ara Tatil) ATLANDI
+            { id: 6, date: "2026-03-26" },  // 6. Ders (23-29 Mart)
+            { id: 7, date: "2026-04-02" },  // 7. Ders (30 Mart-5 Nisan)
+            { id: 8, date: "2026-04-09" },  // 8. Ders (6-12 Nisan)
+            { id: 9, date: "2026-04-16" },  // 9. Ders (13-19 Nisan)
+            { id: 10, date: "2026-04-23" }, // 10. Ders (20-26 Nisan)
+            { id: 11, date: "2026-04-30" }, // 11. Ders (27 Nisan-3 Mayıs)
+            { id: 12, date: "2026-05-07" }, // 12. Ders (4-10 Mayıs)
+            { id: 13, date: "2026-05-14" }, // 13. Ders (11-17 Mayıs)
+            { id: 14, date: "2026-05-21" }, // 14. Ders (18-24 Mayıs)
+            // 25-31 Mayıs (Bayram) ATLANDI
+            { id: 15, date: "2026-06-04" }  // 15. Ders (1-7 Haziran) - SON DERS
         ];
         
-        // --- ÖĞRENCİ LİSTESİ ---
         const STUDENTS = [
             { n: "MUHAMMED SAID", c: "İSTANBUL" }, { n: "BÜNYAMİN ÇAĞRI AKBOYUN", c: "BURSA" },
             { n: "ÖMER EYMEN ÇETİNTAŞ", c: "DİYARBAKIR" }, { n: "MUSTAFA YUSUF ÖZBAKIR", c: "İZMİR" },
@@ -194,7 +183,6 @@
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
         const FULL_DASH = 283; 
 
-        // --- DAİRESEL SAYAÇ FONKSİYONU ---
         function setCircle(id, current, max) {
             const circle = document.getElementById(id);
             let val = current > max ? max : current;
@@ -202,162 +190,99 @@
             circle.style.strokeDashoffset = offset;
         }
 
-        // --- SİSTEMİ BAŞLAT ---
         function initSystem() {
             const now = new Date();
-            // Gelecekteki ilk dersi bul
+            // Sıradaki ilk dersi bul
             activeLesson = LESSONS.find(l => now.getTime() < new Date(l.date + "T20:00:00+03:00").getTime());
             
             if (activeLesson) {
-                // Ders saati: O günün 19:00'ı
                 startTime = new Date(activeLesson.date + "T19:00:00+03:00").getTime();
                 endTime = new Date(activeLesson.date + "T20:00:00+03:00").getTime();
-                gatesOpenTime = startTime - 300000; // 5 dakika önce kapılar açılır (18:55)
+                gatesOpenTime = startTime - 300000; // 5 Dakika önce kapı açılır
                 
                 document.getElementById('lesson-title').innerText = activeLesson.id + ". DERS BAŞLIYOR";
                 setInterval(updateTimer, 1000); updateTimer(); 
                 
-                // BENİ HATIRLA (Local Storage Kontrolü)
+                // BENİ HATIRLA (Local Storage)
                 const savedName = localStorage.getItem('NEP_STUDENT_NAME');
                 if (savedName) {
                     const input = document.getElementById('name');
-                    // Eğer tarayıcı otomatik doldurmadıysa biz dolduralım
                     if (!input.value) { input.value = savedName; } 
                     checkLogic();
                 }
             } else {
-                // Ders yoksa dönem bitti
+                // Ders Yoksa
                 document.getElementById('countdown-view').style.display = "none"; 
                 document.getElementById('end-term-view').style.display = "block"; 
                 confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 } });
             }
         }
 
-        // --- ZAMANLAYICI VE YÖNLENDİRME ---
         function updateTimer() {
             const now = new Date().getTime();
             
-            // 1. OTOMATİK YÖNLENDİRME (Ders saati geldiyse ve bekliyorsa)
+            // OTOMATİK YÖNLENDİRME (19:00'da bekleyenleri uçur)
             if (isWaiting && now >= startTime) { window.location.href = getZoomLink(); return; }
 
             if (now < startTime) { 
-                // Geri Sayım Modu
                 let diff = startTime - now;
-                const d = Math.floor(diff/86400000); const h = Math.floor((diff%86400000)/3600000); 
-                const m = Math.floor((diff%3600000)/60000); const s = Math.floor((diff%60000)/1000);
-                
-                document.getElementById('days').innerText = d; document.getElementById('hours').innerText = h; 
-                document.getElementById('minutes').innerText = m; document.getElementById('seconds').innerText = s;
-                
-                setCircle('ring-days', d, 7); setCircle('ring-hours', h, 24); 
-                setCircle('ring-minutes', m, 60); setCircle('ring-seconds', s, 60);
-                
-                // Gün ve Saat 0 ise gizle
+                const d = Math.floor(diff/86400000); const h = Math.floor((diff%86400000)/3600000); const m = Math.floor((diff%3600000)/60000); const s = Math.floor((diff%60000)/1000);
+                document.getElementById('days').innerText = d; document.getElementById('hours').innerText = h; document.getElementById('minutes').innerText = m; document.getElementById('seconds').innerText = s;
+                setCircle('ring-days', d, 7); setCircle('ring-hours', h, 24); setCircle('ring-minutes', m, 60); setCircle('ring-seconds', s, 60);
                 document.getElementById('box-days').style.display = d > 0 ? "block" : "none";
                 document.getElementById('box-hours').style.display = (d === 0 && h === 0) ? "none" : "block";
                 
-                // Son 3 saniye efekti
-                if (diff <= 3500) { document.querySelectorAll('.circle-box').forEach(box => box.classList.add('final-countdown')); } 
-                else { document.querySelectorAll('.circle-box').forEach(box => box.classList.remove('final-countdown')); }
+                // Son 3 Saniye Efekti
+                if (diff <= 3500) { document.querySelectorAll('.circle-box').forEach(box => box.classList.add('final-countdown')); } else { document.querySelectorAll('.circle-box').forEach(box => box.classList.remove('final-countdown')); }
                 
-                // 18:55 oldu mu? Formu aç
+                // Kapılar Açıldı mı? (18:55)
                 if (now >= gatesOpenTime) {
                     document.getElementById('main-container').classList.add('form-active');
-                    if (!isWaiting) { 
-                        document.getElementById('form-view').style.display = "block"; 
-                        setTimeout(() => { 
-                            document.getElementById('form-view').style.opacity = 1; 
-                            document.getElementById('form-view').style.transform = "translateY(0)"; 
-                        }, 50); 
-                    }
+                    if (!isWaiting) { document.getElementById('form-view').style.display = "block"; setTimeout(() => { document.getElementById('form-view').style.opacity = 1; document.getElementById('form-view').style.transform = "translateY(0)"; }, 50); }
                 }
             } else if (now < endTime) {
-                // Ders Başladı Modu (19:00 - 20:00 arası)
+                // Ders Başladı (19:00 - 20:00)
                 if (!isWaiting) { 
                     document.getElementById('countdown-view').style.display = "none"; 
-                    const form = document.getElementById('form-view'); 
-                    form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
-                    document.getElementById('lesson-title').style.display = "none"; 
-                    document.getElementById('live-badge').style.display = "inline-block";
+                    const form = document.getElementById('form-view'); form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
+                    document.getElementById('lesson-title').style.display = "none"; document.getElementById('live-badge').style.display = "inline-block";
                 }
             } else { 
-                // Ders bitti, sayfayı yenile (Bir sonraki dersi bulsun)
+                // Ders Bitti, sayfayı yenile ki sonraki dersi bulsun
                 location.reload(); 
             }
         }
 
-        // --- ZOOM LİNK OLUŞTURUCU ---
-        function getZoomLink() { 
-            let link = ZOOM_LINK; 
-            if (finalMatchedName) link += "&un=" + btoa(unescape(encodeURIComponent(finalMatchedName))); 
-            return link; 
-        }
+        function getZoomLink() { let link = ZOOM_LINK; if (finalMatchedName) link += "&un=" + btoa(unescape(encodeURIComponent(finalMatchedName))); return link; }
         
-        // --- KAYIT VE GİRİŞ İŞLEMİ ---
         function processEntry() {
-            const btn = document.getElementById('btn'); 
-            btn.style.display = "none"; document.getElementById('name').style.display = "none"; document.getElementById('match-hint').style.display = "none";
-            
-            // İsmi tarayıcıya kaydet (Beni Hatırla)
+            const btn = document.getElementById('btn'); btn.style.display = "none"; document.getElementById('name').style.display = "none"; document.getElementById('match-hint').style.display = "none";
             localStorage.setItem('NEP_STUDENT_NAME', finalMatchedName);
-
-            // Google Form'a Gönder
-            const fd = new FormData(); 
-            fd.append("entry.1545633020", finalMatchedName); 
-            fd.append("entry.1443001544", "TESPİT EDİLDİ");
-            
+            const fd = new FormData(); fd.append("entry.1545633020", finalMatchedName); fd.append("entry.1443001544", "TESPİT EDİLDİ");
             fetch("https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse", { method: "POST", mode: "no-cors", body: fd }).then(() => {
-                if (new Date().getTime() < startTime) { 
-                    // Erken gelen -> Bekleme Odası
-                    isWaiting = true; 
-                    document.getElementById('form-view').style.display = "none"; 
-                    document.getElementById('waiting-room').style.display = "block"; 
-                } 
-                else { 
-                    // Geç gelen -> Direkt Zoom
-                    window.location.href = getZoomLink(); 
-                }
+                if (new Date().getTime() < startTime) { isWaiting = true; document.getElementById('form-view').style.display = "none"; document.getElementById('waiting-room').style.display = "block"; } 
+                else { window.location.href = getZoomLink(); }
             });
         }
 
-        // --- TÜRKÇE KARAKTER VE EŞLEŞTİRME ---
         function normalizeTR(str) { return str.replace(/Ğ/g, "G").replace(/ğ/g, "g").replace(/Ü/g, "U").replace(/ü/g, "u").replace(/Ş/g, "S").replace(/ş/g, "s").replace(/İ/g, "I").replace(/ı/g, "i").replace(/Ö/g, "O").replace(/ö/g, "o").replace(/Ç/g, "C").replace(/ç/g, "c").toUpperCase().trim(); }
-        
-        // Levenshtein (Harf Hatası Hesaplama)
-        function levenshtein(a, b) { const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j; for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i][j-1]+1,m[i-1][j]+1)); return m[b.length][a.length]; }
+        function levenshtein(a, b) { const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j; for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i-1][j-1]+1,m[i-1][j]+1)); return m[b.length][a.length]; }
 
-        // Mantık Kontrolü
         function checkLogic() {
             let raw = document.getElementById('name').value; let norm = normalizeTR(raw); 
             const hintBox = document.getElementById('match-hint');
             const btn = document.getElementById('btn');
-
-            if (raw.length < 2) { 
-                btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0; return; 
-            }
-
+            if (raw.length < 2) { btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0; return; }
             let match = null; let bestScore = 999;
             for (let s of STUDENTS) {
                 let dbName = normalizeTR(s.n);
-                // 1. İçerme Kontrolü (BÜNYAMİN -> BÜNYAMİN ÇAĞRI...)
                 if (dbName.startsWith(norm) || dbName.includes(" " + norm)) { match = s; break; }
-                
-                // 2. Harf Hatası Toleransı
                 let tolerance = dbName.length > 10 ? 3 : 2; 
                 let score = levenshtein(norm, dbName);
                 if (score <= tolerance && score < bestScore) { bestScore = score; match = s; }
             }
-
-            if (match) { 
-                finalMatchedName = match.n; 
-                btn.disabled = false; btn.className = "active";
-                hintBox.innerText = "✅ " + match.n; hintBox.style.opacity = 1;
-            } else { 
-                btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0;
-            }
+            if (match) { finalMatchedName = match.n; btn.disabled = false; btn.className = "active"; hintBox.innerText = "✅ " + match.n; hintBox.style.opacity = 1; } else { btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0; }
         }
-        
-        // Başlat
         initSystem();
     </script>
 </body>
