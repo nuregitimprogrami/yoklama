@@ -145,26 +145,28 @@
         const ENTRY_LOC = "entry.1443001544";
         const ZOOM_LINK = "https://us06web.zoom.us/j/81331199971?pwd=wEBSZPJcBJg3MbV4FqGMO7ggJ3onM8.1";
         
-        // --- 2. DÖNEM DERS PROGRAMI (PDF'ten Çıkarıldı) ---
+        // --- 2. DÖNEM DERS PROGRAMI ---
         const LESSONS = [ 
-            { id: 1, date: "2026-02-05" },  // 1. Ders
-            { id: 2, date: "2026-02-12" },  // 2. Ders
-            { id: 3, date: "2026-02-19" },  // 3. Ders
-            { id: 4, date: "2026-02-26" },  // 4. Ders
-            { id: 5, date: "2026-03-05" },  // 5. Ders
-            { id: 6, date: "2026-03-26" },  // 6. Ders (Ara Tatil Sonrası)
-            { id: 7, date: "2026-04-02" },  // 7. Ders
-            { id: 8, date: "2026-04-09" },  // 8. Ders
-            { id: 9, date: "2026-04-16" },  // 9. Ders
-            { id: 10, date: "2026-04-23" }, // 10. Ders
-            { id: 11, date: "2026-04-30" }, // 11. Ders
-            { id: 12, date: "2026-05-07" }, // 12. Ders
-            { id: 13, date: "2026-05-14" }, // 13. Ders
-            { id: 14, date: "2026-05-21" }, // 14. Ders
-            { id: 15, date: "2026-06-04" }  // 15. Ders (Bayram Sonrası)
+            { id: 1, date: "2026-02-05" },  // Perşembe 19:00
+            { id: 2, date: "2026-02-12" },  // Perşembe 19:00
+            { id: 3, date: "2026-02-21", time: "10:00" }, // CUMARTESİ 10:00 (ÖZEL)
+            { id: 4, date: "2026-02-28", time: "10:00" }, // CUMARTESİ 10:00 (ÖZEL)
+            { id: 5, date: "2026-03-07", time: "10:00" }, // CUMARTESİ 10:00 (ÖZEL)
+            // 9-15 Mart Yoklamasız (Atlandı)
+            // 16-22 Mart Ara Tatil (Atlandı)
+            { id: 6, date: "2026-03-26" },  // Perşembe 19:00
+            { id: 7, date: "2026-04-02" },  
+            { id: 8, date: "2026-04-09" },  
+            { id: 9, date: "2026-04-16" },  
+            { id: 10, date: "2026-04-23" }, 
+            { id: 11, date: "2026-04-30" }, 
+            { id: 12, date: "2026-05-07" }, 
+            { id: 13, date: "2026-05-14" }, 
+            { id: 14, date: "2026-05-21" }, 
+            // 25-31 Mayıs Bayram (Atlandı)
+            { id: 15, date: "2026-06-04" }  
         ];
         
-        // --- GÜNCELLENMİŞ ÖĞRENCİ LİSTESİ ---
         const STUDENTS = [
             { n: "MUHAMMED SAID", c: "İSTANBUL" }, { n: "BÜNYAMİN ÇAĞRI AKBOYUN", c: "BURSA" },
             { n: "ÖMER EYMEN ÇETİNTAŞ", c: "DİYARBAKIR" }, { n: "MUSTAFA YUSUF ÖZBAKIR", c: "İZMİR" },
@@ -175,13 +177,16 @@
             { n: "MUSAB METİN MUTLU", c: "KONYA" }, { n: "KEREM ALİ ÇAKIR", c: "ERZİNCAN" },
             { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" }, { n: "MUSA BOYACI", c: "İSTANBUL" },
             { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "AHMET AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "YUSUF AĞLAMIŞ", c: "ŞANLIURFA" },
-            // --- YENİ EKLENEN ÖĞRENCİLER ---
             { n: "KEREM KÜÇÜK", c: "YENİ KAYIT" },
             { n: "İBRAHİM SARAYDEMİR", c: "YENİ KAYIT" },
             { n: "YAHYA SELİM EKŞİ", c: "YENİ KAYIT" },
             { n: "SEFA METE", c: "YENİ KAYIT" },
             { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "YENİ KAYIT" },
-            { n: "MUHAMMED ALİ ARAS", c: "YENİ KAYIT" }
+            { n: "MUHAMMED ALİ ARAS", c: "YENİ KAYIT" },
+            // Son Eklenenler
+            { n: "MUHAMMED ARİF KURTKAYA", c: "YENİ KAYIT" },
+            { n: "MUHAMMED TAHA SAYIN", c: "YENİ KAYIT" },
+            { n: "FATİH SELİM OCAK", c: "YENİ KAYIT" }
         ];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
@@ -196,17 +201,33 @@
 
         function initSystem() {
             const now = new Date();
-            activeLesson = LESSONS.find(l => now.getTime() < new Date(l.date + "T20:00:00+03:00").getTime());
+            // Sıradaki Dersi Bul
+            activeLesson = LESSONS.find(l => {
+                let endH = l.time ? parseInt(l.time.split(':')[0]) + 1 : 20; // Özel saatse +1, yoksa 20:00
+                let endT = new Date(l.date + "T" + (endH < 10 ? '0'+endH : endH) + ":00:00+03:00").getTime();
+                return now.getTime() < endT;
+            });
             
             if (activeLesson) {
-                startTime = new Date(activeLesson.date + "T19:00:00+03:00").getTime();
-                endTime = new Date(activeLesson.date + "T20:00:00+03:00").getTime();
-                gatesOpenTime = startTime - 300000; 
+                // Varsayılan: 19:00 - 20:00
+                let startH = 19;
+                let endH = 20;
+
+                // Özel Saat Ayarı (10:00 gibi)
+                if (activeLesson.time) {
+                    startH = parseInt(activeLesson.time.split(':')[0]);
+                    endH = startH + 1; // 1 saat sürer
+                }
+
+                // Zamanları Oluştur
+                startTime = new Date(activeLesson.date + "T" + (startH < 10 ? '0'+startH : startH) + ":00:00+03:00").getTime();
+                endTime = new Date(activeLesson.date + "T" + (endH < 10 ? '0'+endH : endH) + ":00:00+03:00").getTime();
+                gatesOpenTime = startTime - 300000; // 5 dk önce
                 
                 document.getElementById('lesson-title').innerText = activeLesson.id + ". DERS BAŞLIYOR";
                 setInterval(updateTimer, 1000); updateTimer(); 
                 
-                // BENİ HATIRLA
+                // Beni Hatırla
                 const savedName = localStorage.getItem('NEP_STUDENT_NAME');
                 if (savedName) {
                     const input = document.getElementById('name');
@@ -261,7 +282,7 @@
         }
 
         function normalizeTR(str) { return str.replace(/Ğ/g, "G").replace(/ğ/g, "g").replace(/Ü/g, "U").replace(/ü/g, "u").replace(/Ş/g, "S").replace(/ş/g, "s").replace(/İ/g, "I").replace(/ı/g, "i").replace(/Ö/g, "O").replace(/ö/g, "o").replace(/Ç/g, "C").replace(/ç/g, "c").toUpperCase().trim(); }
-        function levenshtein(a, b) { const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j; for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i][j-1]+1,m[i-1][j]+1)); return m[b.length][a.length]; }
+        function levenshtein(a, b) { const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j; for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i-1][j-1]+1,m[i-1][j]+1)); return m[b.length][a.length]; }
 
         function checkLogic() {
             let raw = document.getElementById('name').value; let norm = normalizeTR(raw); 
