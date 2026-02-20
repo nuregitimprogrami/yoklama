@@ -14,20 +14,21 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
+        /* SAF VE PROFESYONEL CSS DEĞİŞKENLERİ */
         :root {
-            --bg-color: #f8f7fa;
+            --bg-color: #ffffff;
             --text-main: #4b465c;
             --text-muted: #a8a3b5;
             --border-color: #dbdade;
-            --input-bg: #ffffff;
+            --input-bg: #f8f7fa;
             --primary: #7367f0;
             --primary-hover: #655bd3;
             --success: #28c76f;
             --danger: #ea5455;
-            --circle-bg: #eae8f0;
-            --toggle-hover: rgba(75, 70, 92, 0.08);
-            /* Aydınlık modda logoda filtre yok */
-            --logo-filter: none; 
+            --circle-bg: #f0f0f0;
+            --toggle-bg: #f8f7fa;
+            --toggle-hover: #e0def0;
+            --logo-filter: none;
         }
 
         [data-theme="dark"] {
@@ -37,9 +38,10 @@
             --border-color: #434968;
             --input-bg: #2f3349;
             --circle-bg: #2f3349;
-            --toggle-hover: rgba(207, 204, 228, 0.08);
-            /* Karanlık modda logoya özel parlama ve belirginleştirme efekti */
-            --logo-filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.7)) brightness(1.1);
+            --toggle-bg: #2f3349;
+            --toggle-hover: #434968;
+            /* Karanlık modda logoyu jilet gibi saf beyaz (Monochrome) yapar */
+            --logo-filter: brightness(0) invert(1) opacity(0.95);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Public Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -53,15 +55,14 @@
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
+        /* TEMA DEĞİŞTİRME BUTONU */
         .theme-toggle {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: transparent;
-            border: none;
+            top: 25px;
+            right: 25px;
+            background: var(--toggle-bg);
+            border: 1px solid var(--border-color);
             color: var(--text-main);
-            width: 45px;
-            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -74,46 +75,38 @@
         .theme-toggle svg { transition: transform 0.3s ease; }
         .theme-toggle:hover svg { transform: scale(1.1); }
 
+        /* KUTUSUZ (ADA OLMAYAN) TAM EKRAN İSKELETİ */
         .main-container { 
-            width: 100%; height: 100%;
+            width: 100%; max-width: 900px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-
-        .content-wrapper {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
             transition: all 0.4s ease;
         }
         
         .logo { 
             width: auto;
-            margin-bottom: 2vh; 
             display: block; 
             filter: var(--logo-filter);
-            transition: filter 0.4s ease;
+            transition: filter 0.4s ease, opacity 0.3s ease;
         }
         
         .lesson-header { 
             font-weight: 800; text-transform: uppercase; 
-            letter-spacing: 3px; margin-bottom: 4vh; text-align: center; 
+            letter-spacing: 4px; text-align: center; 
         }
 
         #live-badge {
             display: none;
             background-color: var(--success); color: white;
-            padding: 8px 20px; border-radius: 30px;
-            font-weight: 700; font-size: 15px; letter-spacing: 1px;
+            padding: 8px 24px; border-radius: 30px;
+            font-weight: 700; font-size: 16px; letter-spacing: 1px;
             box-shadow: 0 0 15px rgba(40, 199, 111, 0.4);
-            margin-bottom: 15px; text-transform: uppercase;
+            margin-bottom: 20px; text-transform: uppercase;
             animation: pulse-green 2s infinite;
         }
         @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
+        /* SAYAÇ */
         .countdown-container { display: flex; justify-content: center; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; transition: all 0.3s ease; }
         svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
@@ -122,30 +115,28 @@
         
         .c-day { stroke: var(--success); } .c-hour { stroke: var(--danger); } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
         
-        .inner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
-        .time-number { font-weight: 800; line-height: 1.1; transition: color 0.3s; }
-        .time-label { color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 0.2vh; }
+        .inner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .time-number { font-weight: 800; line-height: 1; transition: color 0.3s; }
+        .time-label { color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 5px; }
         
         .final-countdown .time-number { color: var(--danger) !important; }
         .final-countdown .circle-progress { stroke: var(--danger) !important; }
         .final-countdown { animation: heartbeat 1s infinite; }
         @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        #form-view { display: none; width: 100%; max-width: 450px; margin-top: 3vh; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        /* GİRİŞ FORMU */
+        #form-view { display: none; width: 100%; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .content-wrapper.form-active .countdown-container { transform: scale(0.65); margin-bottom: -3vh; }
-        .content-wrapper.form-active .lesson-header { display: none; }
-        .content-wrapper.form-active .logo { max-width: 250px; margin-bottom: 1vh; }
+        .main-container.form-active .countdown-container { transform: scale(0.75); margin-bottom: -2vh; }
+        .main-container.form-active .lesson-header { display: none; }
         
         .input-group { position: relative; width: 100%; margin-bottom: 15px; }
-        .input-group i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; }
+        .input-group i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); transition: 0.3s; }
         
         input { 
-            width: 100%; padding: 18px 20px 18px 50px; 
-            background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 8px; 
-            font-size: 1.1rem; font-weight: 600; color: var(--text-main);
-            transition: all 0.3s ease; outline: none;
+            width: 100%; background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 8px; 
+            font-weight: 600; color: var(--text-main); transition: all 0.3s ease; outline: none;
         }
         input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(115, 103, 240, 0.1); }
         input:focus + i { color: var(--primary); }
@@ -158,8 +149,8 @@
         }
         
         button.action-btn { 
-            width: 100%; padding: 18px; background-color: var(--border-color); color: var(--text-muted); 
-            border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; 
+            width: 100%; background-color: var(--border-color); color: var(--text-muted); 
+            border: none; border-radius: 8px; font-weight: 700; 
             cursor: not-allowed; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
@@ -175,85 +166,98 @@
         #end-term-view { display: none; text-align: center; }
         #end-term-view i { font-size: 8vh; color: var(--danger); margin-bottom: 2vh; }
 
-        /* MASAÜSTÜ BÜYÜK EKRANLAR */
+        /* CİHAZA GÖRE OTOMATİK DİZAYN (BİLGİSAYAR / TABLET / TELEFON) */
+        
+        /* BİLGİSAYAR (Desktop) */
         @media screen and (min-width: 1025px) {
-            .logo { height: 120px; }
-            .lesson-header { font-size: 36px; }
-            .countdown-container { gap: 40px; }
-            .circle-box { width: 200px; height: 200px; }
-            .circle-bg, .circle-progress { stroke-width: 10; }
-            .time-number { font-size: 64px; }
-            .time-label { font-size: 16px; }
+            .logo { height: 140px; margin-bottom: 6vh; }
+            .main-container.form-active .logo { height: 90px; }
+            .lesson-header { font-size: 38px; margin-bottom: 6vh; }
+            .countdown-container { gap: 50px; }
+            .circle-box { width: 230px; height: 230px; }
+            .circle-bg, .circle-progress { stroke-width: 12; }
+            .time-number { font-size: 75px; }
+            .time-label { font-size: 18px; }
+            #form-view { max-width: 500px; margin-top: 4vh; }
+            input, button.action-btn { font-size: 1.2rem; padding: 20px 20px 20px 55px; }
+            .input-group i { left: 22px; font-size: 1.3rem; }
+            button.action-btn { padding: 20px; }
+            .theme-toggle { width: 50px; height: 50px; font-size: 26px; }
         }
 
-        /* TABLET EKRANLAR */
+        /* TABLET */
         @media screen and (min-width: 601px) and (max-width: 1024px) {
-            .logo { height: 90px; }
-            .lesson-header { font-size: 28px; }
-            .countdown-container { gap: 20px; }
-            .circle-box { width: 150px; height: 150px; }
-            .circle-bg, .circle-progress { stroke-width: 8; }
-            .time-number { font-size: 48px; }
-            .time-label { font-size: 14px; }
-            input, button.action-btn { font-size: 1.1rem; padding: 16px; }
+            .logo { height: 110px; margin-bottom: 5vh; }
+            .main-container.form-active .logo { height: 75px; }
+            .lesson-header { font-size: 32px; margin-bottom: 5vh; }
+            .countdown-container { gap: 35px; }
+            .circle-box { width: 170px; height: 170px; }
+            .circle-bg, .circle-progress { stroke-width: 10; }
+            .time-number { font-size: 55px; }
+            .time-label { font-size: 15px; }
+            #form-view { max-width: 450px; margin-top: 3vh; }
+            input, button.action-btn { font-size: 1.1rem; padding: 18px 18px 18px 50px; }
+            .input-group i { left: 20px; font-size: 1.2rem; }
+            button.action-btn { padding: 18px; }
+            .theme-toggle { width: 45px; height: 45px; font-size: 24px; }
         }
 
-        /* MOBİL EKRANLAR */
+        /* TELEFON (Mobil) - Daireler tek satırda sığsın diye daraltıldı */
         @media screen and (max-width: 600px) {
-            .logo { max-width: 70vw; height: auto; }
-            .lesson-header { font-size: 6vw; margin-bottom: 3vh; }
-            .countdown-container { flex-wrap: wrap; gap: 4vw; }
-            .circle-box { width: 35vw; height: 35vw; }
-            .circle-bg, .circle-progress { stroke-width: 6; }
-            .time-number { font-size: 10vw; } 
-            .time-label { font-size: 3.5vw; }
-            .content-wrapper.form-active .countdown-container { gap: 2vw; transform: scale(0.85); margin-bottom: 0; }
-            input, button.action-btn { padding: 16px 16px 16px 45px; font-size: 1rem; }
-            .input-group i { left: 15px; }
-            button.action-btn { padding: 16px; }
-            .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; }
+            .logo { max-width: 75vw; height: auto; margin-bottom: 4vh; }
+            .main-container.form-active .logo { max-width: 50vw; }
+            .lesson-header { font-size: 24px; margin-bottom: 4vh; letter-spacing: 2px; }
+            .countdown-container { gap: 3vw; flex-wrap: nowrap; }
+            .circle-box { width: 28vw; height: 28vw; max-width: 130px; max-height: 130px; }
+            .circle-bg, .circle-progress { stroke-width: 8; }
+            .time-number { font-size: 8vw; } 
+            .time-label { font-size: 2.8vw; }
+            #form-view { max-width: 90vw; margin-top: 2vh; }
+            input, button.action-btn { font-size: 1rem; padding: 15px 15px 15px 45px; }
+            .input-group i { left: 16px; font-size: 1.1rem; }
+            button.action-btn { padding: 15px; }
+            .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 22px; }
         }
     </style>
 </head>
 <body>
-    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()"></button>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Temayı Değiştir"></button>
 
     <div class="main-container" id="main-container">
-        <div class="content-wrapper" id="content-wrapper">
-            <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
-            
-            <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
-            <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
+        
+        <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
+        
+        <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
+        <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
-            <div id="countdown-view" class="countdown-container">
-                <div class="circle-box" id="box-days"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-days" class="circle-progress c-day" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div></div>
-                <div class="circle-box" id="box-hours"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div></div>
-                <div class="circle-box" id="box-minutes"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div></div>
-                <div class="circle-box" id="box-seconds"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div></div>
-            </div>
+        <div id="countdown-view" class="countdown-container">
+            <div class="circle-box" id="box-days"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-days" class="circle-progress c-day" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div></div>
+            <div class="circle-box" id="box-hours"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div></div>
+            <div class="circle-box" id="box-minutes"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div></div>
+            <div class="circle-box" id="box-seconds"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div></div>
+        </div>
 
-            <div id="form-view">
-                <p style="text-align:center; margin-bottom:20px; font-size:1.1rem;"><i class="fas fa-id-card" style="color:var(--primary); margin-right:5px;"></i> Lütfen sisteme kayıtlı bilgilerinizi giriniz.</p>
-                <div class="input-group">
-                    <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="Ad Soyad" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div id="match-hint"></div>
-                <button class="action-btn" id="btn" onclick="processEntry()" disabled>
-                    Sisteme Giriş Yap <i class="fas fa-arrow-right"></i>
-                </button>
+        <div id="form-view">
+            <p style="text-align:center; margin-bottom:20px; font-size:1.1rem;"><i class="fas fa-id-card" style="color:var(--primary); margin-right:5px;"></i> Lütfen sisteme kayıtlı bilgilerinizi giriniz.</p>
+            <div class="input-group">
+                <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="Ad Soyad" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
+                <i class="fas fa-user"></i>
             </div>
+            <div id="match-hint"></div>
+            <button class="action-btn" id="btn" onclick="processEntry()" disabled>
+                Sisteme Giriş Yap <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
 
-            <div id="waiting-room">
-                <i class="fas fa-check-circle success-icon"></i>
-                <div class="success-msg">KAYIT BAŞARILI</div>
-                <div class="sub-msg">Dersin başlaması bekleniyor...</div>
-            </div>
+        <div id="waiting-room">
+            <i class="fas fa-check-circle success-icon"></i>
+            <div class="success-msg">KAYIT BAŞARILI</div>
+            <div class="sub-msg">Dersin başlaması bekleniyor...</div>
+        </div>
 
-            <div id="end-term-view">
-                <i class="fas fa-graduation-cap"></i>
-                <h1 style="color:var(--danger); font-size:4vh; text-transform:uppercase;">Tüm Dersler Tamamlandı</h1>
-            </div>
+        <div id="end-term-view">
+            <i class="fas fa-graduation-cap"></i>
+            <h1 style="color:var(--danger); font-size:4vh; text-transform:uppercase;">Tüm Dersler Tamamlandı</h1>
         </div>
     </div>
 
@@ -261,8 +265,9 @@
         const themeBtn = document.getElementById('theme-btn');
         const htmlEl = document.documentElement;
         
-        const iconMoon = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" tag="i" class="v-icon notranslate v-theme--dark iconify iconify--tabler" width="1em" height="1em" viewBox="0 0 24 24" style="font-size: 26px; height: 26px; width: 26px;"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z"></path></svg>`;
-        const iconSun = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" tag="i" class="v-icon notranslate v-theme--light iconify iconify--tabler" width="1em" height="1em" viewBox="0 0 24 24" style="font-size: 26px; height: 26px; width: 26px;"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 1 0-5.656-5.656a4 4 0 0 0 5.656 5.656zm-8.485 2.829l-1.414 1.414M6.343 6.343L4.929 4.929m12.728 1.414l1.414-1.414m-1.414 12.728l1.414 1.414M4 12H2m10-8V2m8 10h2m-10 8v2"></path></svg>`;
+        // Vuexy Orijinal İkonları
+        const iconMoon = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z"></path></svg>`;
+        const iconSun = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 1 0-5.656-5.656a4 4 0 0 0 5.656 5.656zm-8.485 2.829l-1.414 1.414M6.343 6.343L4.929 4.929m12.728 1.414l1.414-1.414m-1.414 12.728l1.414 1.414M4 12H2m10-8V2m8 10h2m-10 8v2"></path></svg>`;
         
         if(localStorage.getItem('nep_theme') === 'dark') {
             htmlEl.setAttribute('data-theme', 'dark');
@@ -283,11 +288,13 @@
             }
         }
 
+        // URL VE ZOOM AYARLARI 
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
         const ENTRY_NAME = "entry.1545633020";
         const ENTRY_LOC = "entry.1443001544";
         const ZOOM_LINK = "https://us06web.zoom.us/j/81331199971?pwd=wEBSZPJcBJg3MbV4FqGMO7ggJ3onM8.1";
         
+        // 2. DÖNEM TAKVİMİ (Tatiller Atlandı, Cuma/Cmt Düzeltildi)
         const LESSONS = [ 
             { id: 1, date: "2026-02-05" },  
             { id: 2, date: "2026-02-12" },  
@@ -306,6 +313,7 @@
             { id: 15, date: "2026-06-04" }  
         ];
         
+        // EKSİKSİZ TAM ÖĞRENCİ LİSTESİ (31 KİŞİ)
         const STUDENTS = [
             { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" },
             { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" },
@@ -399,7 +407,7 @@
                 if (diff <= 3500) { document.querySelectorAll('.circle-box').forEach(box => box.classList.add('final-countdown')); } else { document.querySelectorAll('.circle-box').forEach(box => box.classList.remove('final-countdown')); }
                 
                 if (now >= gatesOpenTime) {
-                    document.getElementById('content-wrapper').classList.add('form-active');
+                    document.getElementById('main-container').classList.add('form-active');
                     if (!isWaiting) { document.getElementById('form-view').style.display = "block"; setTimeout(() => { document.getElementById('form-view').style.opacity = 1; document.getElementById('form-view').style.transform = "translateY(0)"; }, 50); }
                 }
             } else if (now < endTime) {
