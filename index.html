@@ -11,132 +11,160 @@
     <title>NEP DERS PANELİ</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
+        /* MODERN VUE/VUETIFY İLHAMLI CSS TASARIMI */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            background-color: white; 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background-color: #f4f5fa; /* Modern arayüz arka plan rengi */
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             width: 100vw; height: 100vh; 
             overflow: hidden; 
+            color: #4b465c;
         }
 
         .main-container { 
             width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             position: relative;
-            transition: all 0.5s ease;
+        }
+
+        /* PREMIUM KART TASARIMI */
+        .theme-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1);
+            padding: 4vh 4vw;
+            max-width: 900px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         
-        .logo { max-width: 350px; margin-bottom: 3vh; display: block; position: relative; z-index: 2; }
-        .lesson-header { font-size: 4vh; font-weight: 800; color: #2c3e50; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 4vh; }
+        .logo { max-width: 320px; margin-bottom: 2vh; display: block; position: relative; z-index: 2; }
+        .lesson-header { font-size: 3.5vh; font-weight: 800; color: #2c3e50; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 3vh; text-align: center; }
 
         /* CANLI DERS ROZETİ */
         #live-badge {
             display: none;
-            background-color: #27ae60; color: white;
-            padding: 8px 20px; border-radius: 30px;
-            font-weight: 800; font-size: 16px; letter-spacing: 1px;
-            box-shadow: 0 0 20px rgba(39, 174, 96, 0.4);
-            margin-bottom: 20px;
+            background-color: #28c76f; color: white;
+            padding: 6px 18px; border-radius: 30px;
+            font-weight: 700; font-size: 14px; letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(40, 199, 111, 0.4);
+            margin-bottom: 15px;
             text-transform: uppercase;
             animation: pulse-green 2s infinite;
         }
         @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         /* SAYAÇ */
-        .countdown-container { display: flex; justify-content: center; gap: 3vw; width: 100%; transition: all 0.5s ease; }
-        .circle-box { position: relative; width: 25vh; height: 25vh; max-width: 280px; max-height: 280px; transition: all 0.3s ease; }
+        .countdown-container { display: flex; justify-content: center; gap: 2vw; width: 100%; transition: all 0.5s ease; }
+        .circle-box { position: relative; width: 22vh; height: 22vh; max-width: 250px; max-height: 250px; transition: all 0.3s ease; }
         svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .circle-bg { fill: none; stroke: #ecf0f1; stroke-width: 7; }
-        .circle-progress { fill: none; stroke-width: 7; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
+        .circle-bg { fill: none; stroke: #f0f0f0; stroke-width: 8; }
+        .circle-progress { fill: none; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
         
-        .c-day { stroke: #27ae60; } .c-hour { stroke: #c0392b; } .c-min { stroke: #f39c12; } .c-sec { stroke: #2980b9; }
+        .c-day { stroke: #28c76f; } .c-hour { stroke: #ea5455; } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
         
         .inner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
-        .time-number { font-size: 7vh; font-weight: 800; color: #34495e; line-height: 1; transition: color 0.3s; }
-        .time-label { font-size: 1.8vh; color: #7f8c8d; font-weight: 700; text-transform: uppercase; margin-top: 0.8vh; }
+        .time-number { font-size: 6vh; font-weight: 800; color: #4b465c; line-height: 1; transition: color 0.3s; }
+        .time-label { font-size: 1.6vh; color: #a8a3b5; font-weight: 700; text-transform: uppercase; margin-top: 0.8vh; }
         
         /* Son 3 Saniye Kalp Atışı */
-        .final-countdown .time-number { color: #e74c3c !important; }
-        .final-countdown .circle-progress { stroke: #e74c3c !important; }
+        .final-countdown .time-number { color: #ea5455 !important; }
+        .final-countdown .circle-progress { stroke: #ea5455 !important; }
         .final-countdown { animation: heartbeat 1s infinite; }
         @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         /* GİRİŞ FORMU */
-        #form-view { display: none; width: 90%; max-width: 550px; margin-top: 3vh; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        #form-view { display: none; width: 100%; max-width: 500px; margin-top: 2vh; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .main-container.form-active .countdown-container { transform: scale(0.7); margin-bottom: -1vh; gap: 1.5vw; }
-        .main-container.form-active .lesson-header { display: none; }
-        .main-container.form-active .logo { max-width: 250px; margin-bottom: 2vh; }
+        .theme-card.form-active .countdown-container { transform: scale(0.65); margin-bottom: -3vh; gap: 1vw; }
+        .theme-card.form-active .lesson-header { display: none; }
+        .theme-card.form-active .logo { max-width: 220px; margin-bottom: 1vh; }
         
+        /* VUETIFY TARZI INPUT VE BUTON */
         input { 
-            width: 100%; padding: 3vh; margin-bottom: 1.5vh; background: #f7f9fa; 
-            border: 3px solid #e2e6ea; border-radius: 22px; text-align: center; 
-            font-size: 3vh; font-weight: bold; color: #2c3e50;
+            width: 100%; padding: 18px 20px; margin-bottom: 15px; 
+            background: #ffffff; border: 2px solid #dbdade; border-radius: 8px; 
+            text-align: center; font-size: 1.2rem; font-weight: bold; color: #4b465c;
+            transition: all 0.2s ease; outline: none;
         }
-        input:focus { border-color: #3498db; outline: none; background: white; }
+        input:focus { border-color: #7367f0; box-shadow: 0 0 0 4px rgba(115, 103, 240, 0.1); }
         
-        /* Yeşil İsim Teyidi */
         #match-hint {
-            height: 3vh; margin-bottom: 2vh; 
-            font-size: 2vh; font-weight: bold; color: #27ae60;
+            height: 25px; margin-bottom: 15px; 
+            font-size: 1rem; font-weight: 700; color: #28c76f;
             text-transform: uppercase; letter-spacing: 1px;
-            opacity: 0; transition: opacity 0.3s;
+            opacity: 0; transition: opacity 0.3s; text-align: center;
         }
         
-        button { width: 100%; padding: 3vh; background: #e2e6ea; color: #bdc3c7; border: none; border-radius: 22px; font-size: 3vh; font-weight: bold; cursor: not-allowed; transition: 0.3s; }
-        button.active { background: #3498db; color: white; cursor: pointer; box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3); }
+        button { 
+            width: 100%; padding: 18px; background-color: #dbdade; color: #a8a3b5; 
+            border: none; border-radius: 8px; font-size: 1.2rem; font-weight: 700; 
+            cursor: not-allowed; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+        }
+        button.active { 
+            background-color: #7367f0; color: white; cursor: pointer; 
+            box-shadow: 0 4px 14px 0 rgba(115, 103, 240, 0.4); 
+        }
+        button.active:hover { background-color: #655bd3; transform: translateY(-2px); }
 
         /* BEKLEME ODASI */
         #waiting-room { display: none; margin-top: 2vh; text-align: center; animation: fadeIn 0.5s ease; }
-        .success-msg { color: #27ae60; font-size: 4vh; font-weight: 800; margin-top: 1vh; }
-        .sub-msg { color: #7f8c8d; font-size: 2.5vh; margin-top: 1vh; font-weight: 600; }
+        .success-msg { color: #28c76f; font-size: 3.5vh; font-weight: 800; margin-top: 1vh; }
+        .sub-msg { color: #a8a3b5; font-size: 2vh; margin-top: 1vh; font-weight: 600; }
         #end-term-view { display: none; }
 
-        /* MOBİL VE PC UYUMU */
+        /* MOBİL UYUM */
         @media screen and (max-width: 600px) {
-            .logo { max-width: 65vw; margin-bottom: 3vh; }
-            .lesson-header { font-size: 8vw; margin-bottom: 3vh; }
-            .countdown-container { flex-wrap: wrap; gap: 3vw; width: 90%; }
-            .circle-box { width: 42vw; height: 42vw; max-width: none; max-height: none; }
-            .time-number { font-size: 13vw; } .time-label { font-size: 3.5vw; }
-            .main-container.form-active .countdown-container { width: 95%; gap: 2vw; transform: scale(0.85); }
-            input, button { padding: 22px; font-size: 22px; }
-            #form-view p { font-size: 20px; }
-            #match-hint { font-size: 16px; margin-bottom: 20px; }
+            .theme-card { padding: 3vh 5vw; width: 95%; box-shadow: 0 4px 12px 0 rgba(34, 41, 47, 0.08); }
+            .logo { max-width: 60vw; margin-bottom: 2vh; }
+            .lesson-header { font-size: 7vw; margin-bottom: 2vh; }
+            .countdown-container { flex-wrap: wrap; gap: 3vw; width: 100%; }
+            .circle-box { width: 38vw; height: 38vw; max-width: none; max-height: none; }
+            .time-number { font-size: 11vw; } .time-label { font-size: 3vw; }
+            .theme-card.form-active .countdown-container { width: 100%; gap: 2vw; transform: scale(0.80); margin-bottom: 0; }
+            input, button { padding: 16px; font-size: 1.1rem; }
+            #form-view p { font-size: 16px; }
+            #match-hint { font-size: 14px; margin-bottom: 12px; }
         }
-        @media screen and (min-width: 1025px) { .main-container { transform: scale(1.2); } }
+        @media screen and (min-width: 1025px) { .theme-card { transform: scale(1.1); } }
     </style>
 </head>
 <body>
     <div class="main-container" id="main-container">
-        <img src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
-        <div id="live-badge">DERS BAŞLADI</div>
-        <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
+        <div class="theme-card" id="theme-card">
+            <img src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
+            <div id="live-badge">DERS BAŞLADI</div>
+            <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
-        <div id="countdown-view" class="countdown-container">
-            <div class="circle-box" id="box-days"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-days" class="circle-progress c-day" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div></div>
-            <div class="circle-box" id="box-hours"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div></div>
-            <div class="circle-box" id="box-minutes"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div></div>
-            <div class="circle-box" id="box-seconds"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div></div>
+            <div id="countdown-view" class="countdown-container">
+                <div class="circle-box" id="box-days"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-days" class="circle-progress c-day" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div></div>
+                <div class="circle-box" id="box-hours"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div></div>
+                <div class="circle-box" id="box-minutes"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div></div>
+                <div class="circle-box" id="box-seconds"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div></div>
+            </div>
+
+            <div id="form-view">
+                <p style="color:#4b465c; margin-bottom:20px; font-size:1.1rem; text-align:center;">NEP sistemine kayıtlı bilgilerinizi giriniz.</p>
+                <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="AD SOYAD" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
+                <div id="match-hint"></div>
+                <button id="btn" onclick="processEntry()" disabled>SİSTEME GİRİŞ YAP</button>
+            </div>
+
+            <div id="waiting-room">
+                <img src="https://cdn-icons-png.flaticon.com/512/148/148767.png" style="width:10vh; margin:0 auto 1vh; display:block;">
+                <div class="success-msg">KAYIT BAŞARILI</div>
+                <div class="sub-msg">Dersin başlaması bekleniyor...</div>
+            </div>
+
+            <div id="end-term-view"><h1 style="color:#ea5455; font-size:4vh; text-align:center;">TÜM DERSLER TAMAMLANDI</h1></div>
         </div>
-
-        <div id="form-view">
-            <p style="color:#34495e; font-weight:bold; margin-bottom:20px; font-size:2.5vh; text-align:center;">NEP sistemine kayıtlı bilgilerinizi giriniz.</p>
-            <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="AD SOYAD" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
-            <div id="match-hint"></div>
-            <button id="btn" onclick="processEntry()" disabled>GİRİŞ YAP</button>
-        </div>
-
-        <div id="waiting-room">
-            <img src="https://cdn-icons-png.flaticon.com/512/148/148767.png" style="width:12vh; margin:0 auto 1vh; display:block;">
-            <div class="success-msg">KAYIT BAŞARILI</div>
-            <div class="sub-msg">Dersin başlaması bekleniyor...</div>
-        </div>
-
-        <div id="end-term-view"><h1 style="color:#e74c3c; font-size:6vh;">TÜM DERSLER TAMAMLANDI</h1></div>
     </div>
 
     <script>
@@ -147,14 +175,12 @@
         
         // --- 2. DÖNEM DERS PROGRAMI ---
         const LESSONS = [ 
-            { id: 1, date: "2026-02-05" },  // Perşembe 19:00
-            { id: 2, date: "2026-02-12" },  // Perşembe 19:00
-            { id: 3, date: "2026-02-21", time: "10:00" }, // CUMARTESİ 10:00 (ÖZEL)
-            { id: 4, date: "2026-02-28", time: "10:00" }, // CUMARTESİ 10:00 (ÖZEL)
-            { id: 5, date: "2026-03-07", time: "10:00" }, // CUMARTESİ 10:00 (ÖZEL)
-            // 9-15 Mart Yoklamasız (Atlandı)
-            // 16-22 Mart Ara Tatil (Atlandı)
-            { id: 6, date: "2026-03-26" },  // Perşembe 19:00
+            { id: 1, date: "2026-02-05" },  
+            { id: 2, date: "2026-02-12" },  
+            { id: 3, date: "2026-02-21", time: "10:00" }, 
+            { id: 4, date: "2026-02-28", time: "10:00" }, 
+            { id: 5, date: "2026-03-07", time: "10:00" }, 
+            { id: 6, date: "2026-03-26" },  
             { id: 7, date: "2026-04-02" },  
             { id: 8, date: "2026-04-09" },  
             { id: 9, date: "2026-04-16" },  
@@ -163,7 +189,6 @@
             { id: 12, date: "2026-05-07" }, 
             { id: 13, date: "2026-05-14" }, 
             { id: 14, date: "2026-05-21" }, 
-            // 25-31 Mayıs Bayram (Atlandı)
             { id: 15, date: "2026-06-04" }  
         ];
         
@@ -178,16 +203,11 @@
             { n: "MUSAB METİN MUTLU", c: "KONYA" }, { n: "KEREM ALİ ÇAKIR", c: "ERZİNCAN" },
             { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" }, { n: "MUSA BOYACI", c: "İSTANBUL" },
             { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "AHMET AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "YUSUF AĞLAMIŞ", c: "ŞANLIURFA" },
-            { n: "KEREM KÜÇÜK", c: "YENİ KAYIT" },
-            { n: "İBRAHİM SARAYDEMİR", c: "YENİ KAYIT" },
-            { n: "YAHYA SELİM EKŞİ", c: "YENİ KAYIT" },
-            { n: "SEFA METE", c: "YENİ KAYIT" },
-            { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "YENİ KAYIT" },
-            { n: "MUHAMMED ALİ ARAS", c: "YENİ KAYIT" },
-            { n: "MUHAMMED ARİF KURTKAYA", c: "YENİ KAYIT" },
-            { n: "MUHAMMED TAHA SAYIN", c: "YENİ KAYIT" },
-            { n: "FATİH SELİM OCAK", c: "YENİ KAYIT" },
-            { n: "ZÜBEYİR RAHMİ ŞENGÜN", c: "YENİ KAYIT" }
+            { n: "KEREM KÜÇÜK", c: "YENİ KAYIT" }, { n: "İBRAHİM SARAYDEMİR", c: "YENİ KAYIT" },
+            { n: "YAHYA SELİM EKŞİ", c: "YENİ KAYIT" }, { n: "SEFA METE", c: "YENİ KAYIT" },
+            { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "YENİ KAYIT" }, { n: "MUHAMMED ALİ ARAS", c: "YENİ KAYIT" },
+            { n: "MUHAMMED ARİF KURTKAYA", c: "YENİ KAYIT" }, { n: "MUHAMMED TAHA SAYIN", c: "YENİ KAYIT" },
+            { n: "FATİH SELİM OCAK", c: "YENİ KAYIT" }, { n: "ZÜBEYİR RAHMİ ŞENGÜN", c: "YENİ KAYIT" }
         ];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
@@ -202,33 +222,25 @@
 
         function initSystem() {
             const now = new Date();
-            // Sıradaki Dersi Bul
             activeLesson = LESSONS.find(l => {
-                let endH = l.time ? parseInt(l.time.split(':')[0]) + 1 : 20; // Özel saatse +1, yoksa 20:00
+                let endH = l.time ? parseInt(l.time.split(':')[0]) + 1 : 20; 
                 let endT = new Date(l.date + "T" + (endH < 10 ? '0'+endH : endH) + ":00:00+03:00").getTime();
                 return now.getTime() < endT;
             });
             
             if (activeLesson) {
-                // Varsayılan: 19:00 - 20:00
-                let startH = 19;
-                let endH = 20;
-
-                // Özel Saat Ayarı (10:00 gibi)
+                let startH = 19; let endH = 20;
                 if (activeLesson.time) {
                     startH = parseInt(activeLesson.time.split(':')[0]);
-                    endH = startH + 1; // 1 saat sürer
+                    endH = startH + 1;
                 }
-
-                // Zamanları Oluştur
                 startTime = new Date(activeLesson.date + "T" + (startH < 10 ? '0'+startH : startH) + ":00:00+03:00").getTime();
                 endTime = new Date(activeLesson.date + "T" + (endH < 10 ? '0'+endH : endH) + ":00:00+03:00").getTime();
-                gatesOpenTime = startTime - 300000; // 5 dk önce
+                gatesOpenTime = startTime - 300000; 
                 
                 document.getElementById('lesson-title').innerText = activeLesson.id + ". DERS BAŞLIYOR";
                 setInterval(updateTimer, 1000); updateTimer(); 
                 
-                // Beni Hatırla
                 const savedName = localStorage.getItem('NEP_STUDENT_NAME');
                 if (savedName) {
                     const input = document.getElementById('name');
@@ -244,8 +256,6 @@
 
         function updateTimer() {
             const now = new Date().getTime();
-            
-            // OTOMATİK YÖNLENDİRME
             if (isWaiting && now >= startTime) { window.location.href = getZoomLink(); return; }
 
             if (now < startTime) { 
@@ -259,11 +269,10 @@
                 if (diff <= 3500) { document.querySelectorAll('.circle-box').forEach(box => box.classList.add('final-countdown')); } else { document.querySelectorAll('.circle-box').forEach(box => box.classList.remove('final-countdown')); }
                 
                 if (now >= gatesOpenTime) {
-                    document.getElementById('main-container').classList.add('form-active');
+                    document.getElementById('theme-card').classList.add('form-active');
                     if (!isWaiting) { document.getElementById('form-view').style.display = "block"; setTimeout(() => { document.getElementById('form-view').style.opacity = 1; document.getElementById('form-view').style.transform = "translateY(0)"; }, 50); }
                 }
             } else if (now < endTime) {
-                // Ders Başladı
                 if (!isWaiting) { 
                     document.getElementById('countdown-view').style.display = "none"; 
                     const form = document.getElementById('form-view'); form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
