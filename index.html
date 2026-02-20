@@ -41,7 +41,6 @@
             --circle-bg: #2f3349;
             --toggle-bg: #2f3349;
             --toggle-hover: #434968;
-            /* Karanlık modda logo kaybolmasın diye saf beyaza (Monochrome) çevrilir */
             --logo-filter: brightness(0) invert(1) opacity(0.95);
             --ramazan-color: #e5c05c;
         }
@@ -86,6 +85,10 @@
             padding: 20px;
             transition: all 0.4s ease;
         }
+        
+        .content-wrapper {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;
+        }
 
         /* ZARİF RAMAZAN BAŞLIĞI */
         .ramazan-text {
@@ -98,8 +101,12 @@
             text-align: center;
             opacity: 0.9;
             transition: color 0.4s ease;
+            white-space: nowrap; /* Asla alt satıra inmemesi için eklendi */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .ramazan-text i { font-size: 1.1rem; margin: 0 5px; }
         
         .logo { 
             width: auto;
@@ -125,7 +132,7 @@
         }
         @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* SAYAÇ - KOPMA SORUNU ÇÖZÜLMÜŞ KUSURSUZ DAİRELER */
+        /* SAYAÇ */
         .countdown-container { display: flex; justify-content: center; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; transition: all 0.3s ease; }
         svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
@@ -223,13 +230,22 @@
             .theme-toggle { width: 45px; height: 45px; font-size: 24px; }
         }
 
+        /* MOBİL ÖZEL OPTİMİZASYON */
         @media screen and (max-width: 600px) {
-            .ramazan-text { font-size: 1rem; letter-spacing: 2px; }
-            .logo { max-width: 75vw; height: auto; }
-            .main-container.form-active .logo { max-width: 50vw; }
-            .lesson-header { font-size: 24px; letter-spacing: 2px; }
+            .content-wrapper { 
+                /* Telefonlarda klavye vs açıldığında sıkışmaması için bloğu 2 tık yukarı alır */
+                margin-top: -8vh; 
+            }
+            .ramazan-text { 
+                font-size: 4.5vw; /* Ekrana göre esner */
+                letter-spacing: 1px; 
+                margin-bottom: 2vh; 
+            }
+            .logo { max-width: 65vw; height: auto; margin-bottom: 2.5vh; }
+            .main-container.form-active .logo { max-width: 45vw; }
+            .lesson-header { font-size: 22px; letter-spacing: 1px; margin-bottom: 3.5vh; }
             .countdown-container { gap: 4vw; flex-wrap: nowrap; }
-            .circle-box { width: 28vw; height: 28vw; max-width: 120px; max-height: 120px; }
+            .circle-box { width: 28vw; height: 28vw; max-width: 110px; max-height: 110px; }
             .circle-bg, .circle-progress { stroke-width: 7; }
             .time-number { font-size: 9vw; } 
             .time-label { font-size: 3vw; margin-top: 2px; }
@@ -245,54 +261,57 @@
     <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Temayı Değiştir"></button>
 
     <div class="main-container" id="main-container">
-        
-        <div class="ramazan-text"><i class="fas fa-moon"></i> Hoş Geldin Ya Şehr-i Ramazan <i class="fas fa-moon"></i></div>
+        <div class="content-wrapper">
+            
+            <div class="ramazan-text"><i class="fas fa-moon"></i> Hoş Geldin Ya Şehr-i Ramazan <i class="fas fa-moon"></i></div>
 
-        <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
-        
-        <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
-        <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
+            <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
+            
+            <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
+            <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
-        <div id="countdown-view" class="countdown-container">
-            <div class="circle-box" id="box-days">
-                <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-days" class="circle-progress c-day" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
-                <div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div>
+            <div id="countdown-view" class="countdown-container">
+                <div class="circle-box" id="box-days">
+                    <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-days" class="circle-progress c-day" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
+                    <div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div>
+                </div>
+                <div class="circle-box" id="box-hours">
+                    <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
+                    <div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div>
+                </div>
+                <div class="circle-box" id="box-minutes">
+                    <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
+                    <div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div>
+                </div>
+                <div class="circle-box" id="box-seconds">
+                    <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
+                    <div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div>
+                </div>
             </div>
-            <div class="circle-box" id="box-hours">
-                <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
-                <div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div>
-            </div>
-            <div class="circle-box" id="box-minutes">
-                <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
-                <div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div>
-            </div>
-            <div class="circle-box" id="box-seconds">
-                <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
-                <div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div>
-            </div>
-        </div>
 
-        <div id="form-view">
-            <p style="text-align:center; margin-bottom:20px; font-size:1.1rem;"><i class="fas fa-id-card" style="color:var(--primary); margin-right:5px;"></i> Lütfen sisteme kayıtlı bilgilerinizi giriniz.</p>
-            <div class="input-group">
-                <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="Ad Soyad" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
-                <i class="fas fa-user"></i>
+            <div id="form-view">
+                <p style="text-align:center; margin-bottom:20px; font-size:1.1rem;"><i class="fas fa-id-card" style="color:var(--primary); margin-right:5px;"></i> Lütfen sisteme kayıtlı bilgilerinizi giriniz.</p>
+                <div class="input-group">
+                    <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="Ad Soyad" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div id="match-hint"></div>
+                <button class="action-btn" id="btn" onclick="processEntry()" disabled>
+                    Sisteme Giriş Yap <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
-            <div id="match-hint"></div>
-            <button class="action-btn" id="btn" onclick="processEntry()" disabled>
-                Sisteme Giriş Yap <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
 
-        <div id="waiting-room">
-            <i class="fas fa-check-circle success-icon"></i>
-            <div class="success-msg">KAYIT BAŞARILI</div>
-            <div class="sub-msg">Dersin başlaması bekleniyor...</div>
-        </div>
+            <div id="waiting-room">
+                <i class="fas fa-check-circle success-icon"></i>
+                <div class="success-msg">KAYIT BAŞARILI</div>
+                <div class="sub-msg">Dersin başlaması bekleniyor...</div>
+            </div>
 
-        <div id="end-term-view">
-            <i class="fas fa-graduation-cap"></i>
-            <h1 style="color:var(--danger); font-size:4vh; text-transform:uppercase;">Tüm Dersler Tamamlandı</h1>
+            <div id="end-term-view">
+                <i class="fas fa-graduation-cap"></i>
+                <h1 style="color:var(--danger); font-size:4vh; text-transform:uppercase;">Tüm Dersler Tamamlandı</h1>
+            </div>
+            
         </div>
     </div>
 
@@ -384,7 +403,6 @@
         function setCircle(id, current, max) {
             const circle = document.getElementById(id);
             let val = current > max ? max : current;
-            // pathLength="100" yapısı için eksiksiz ve kopmasız (seamless) hesaplama
             const offset = 100 - (val / max) * 100;
             circle.style.strokeDashoffset = offset;
         }
