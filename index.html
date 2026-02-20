@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,31 +9,86 @@
     
     <link rel="icon" type="image/x-icon" href="https://nep.nuregitimprogrami.com/favicon.ico">
     <title>NEP DERS PANELİ</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
-        /* MODERN VUE/VUETIFY İLHAMLI CSS TASARIMI */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* PREMIUM CSS DEĞİŞKENLERİ (DARK/LIGHT MODE İÇİN) */
+        :root {
+            --bg-color: #f8f7fa;
+            --card-bg: #ffffff;
+            --text-main: #4b465c;
+            --text-muted: #a8a3b5;
+            --border-color: #dbdade;
+            --input-bg: #ffffff;
+            --primary: #7367f0;
+            --primary-hover: #655bd3;
+            --success: #28c76f;
+            --danger: #ea5455;
+            --shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.08);
+            --circle-bg: #f0f0f0;
+            --logo-filter: none;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #25293c;
+            --card-bg: #2f3349;
+            --text-main: #cfcce4;
+            --text-muted: #7983a5;
+            --border-color: #434968;
+            --input-bg: #25293c;
+            --shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.4);
+            --circle-bg: #434968;
+            --logo-filter: brightness(0.9) contrast(1.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         
         body { 
-            background-color: #f4f5fa; /* Modern arayüz arka plan rengi */
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main);
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             width: 100vw; height: 100vh; 
             overflow: hidden; 
-            color: #4b465c;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* TEMA DEĞİŞTİRME BUTONU */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .theme-toggle:hover {
+            color: var(--primary);
+            transform: scale(1.1);
         }
 
         .main-container { 
             width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative;
         }
 
         /* PREMIUM KART TASARIMI */
         .theme-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 16px;
-            box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1);
+            box-shadow: var(--shadow);
             padding: 4vh 4vw;
             max-width: 900px;
             width: 90%;
@@ -41,21 +96,27 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.4s ease;
         }
         
-        .logo { max-width: 320px; margin-bottom: 2vh; display: block; position: relative; z-index: 2; }
-        .lesson-header { font-size: 3.5vh; font-weight: 800; color: #2c3e50; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 3vh; text-align: center; }
+        .logo { 
+            max-width: 320px; margin-bottom: 2vh; display: block; 
+            filter: var(--logo-filter); transition: filter 0.4s ease;
+        }
+        
+        .lesson-header { 
+            font-size: 3.5vh; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 3px; margin-bottom: 3vh; text-align: center; 
+        }
 
         /* CANLI DERS ROZETİ */
         #live-badge {
             display: none;
-            background-color: #28c76f; color: white;
-            padding: 6px 18px; border-radius: 30px;
-            font-weight: 700; font-size: 14px; letter-spacing: 1px;
+            background-color: var(--success); color: white;
+            padding: 8px 20px; border-radius: 30px;
+            font-weight: 700; font-size: 15px; letter-spacing: 1px;
             box-shadow: 0 0 15px rgba(40, 199, 111, 0.4);
-            margin-bottom: 15px;
-            text-transform: uppercase;
+            margin-bottom: 15px; text-transform: uppercase;
             animation: pulse-green 2s infinite;
         }
         @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
@@ -64,18 +125,17 @@
         .countdown-container { display: flex; justify-content: center; gap: 2vw; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; width: 22vh; height: 22vh; max-width: 250px; max-height: 250px; transition: all 0.3s ease; }
         svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .circle-bg { fill: none; stroke: #f0f0f0; stroke-width: 8; }
+        .circle-bg { fill: none; stroke: var(--circle-bg); stroke-width: 8; transition: stroke 0.4s ease; }
         .circle-progress { fill: none; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
         
-        .c-day { stroke: #28c76f; } .c-hour { stroke: #ea5455; } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
+        .c-day { stroke: var(--success); } .c-hour { stroke: var(--danger); } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
         
         .inner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
-        .time-number { font-size: 6vh; font-weight: 800; color: #4b465c; line-height: 1; transition: color 0.3s; }
-        .time-label { font-size: 1.6vh; color: #a8a3b5; font-weight: 700; text-transform: uppercase; margin-top: 0.8vh; }
+        .time-number { font-size: 6vh; font-weight: 800; line-height: 1; transition: color 0.3s; }
+        .time-label { font-size: 1.6vh; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 0.8vh; }
         
-        /* Son 3 Saniye Kalp Atışı */
-        .final-countdown .time-number { color: #ea5455 !important; }
-        .final-countdown .circle-progress { stroke: #ea5455 !important; }
+        .final-countdown .time-number { color: var(--danger) !important; }
+        .final-countdown .circle-progress { stroke: var(--danger) !important; }
         .final-countdown { animation: heartbeat 1s infinite; }
         @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
@@ -87,60 +147,71 @@
         .theme-card.form-active .lesson-header { display: none; }
         .theme-card.form-active .logo { max-width: 220px; margin-bottom: 1vh; }
         
-        /* VUETIFY TARZI INPUT VE BUTON */
+        .input-group { position: relative; width: 100%; margin-bottom: 15px; }
+        .input-group i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; }
+        
         input { 
-            width: 100%; padding: 18px 20px; margin-bottom: 15px; 
-            background: #ffffff; border: 2px solid #dbdade; border-radius: 8px; 
-            text-align: center; font-size: 1.2rem; font-weight: bold; color: #4b465c;
-            transition: all 0.2s ease; outline: none;
+            width: 100%; padding: 18px 20px 18px 50px; 
+            background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 8px; 
+            font-size: 1.1rem; font-weight: 600; color: var(--text-main);
+            transition: all 0.3s ease; outline: none;
         }
-        input:focus { border-color: #7367f0; box-shadow: 0 0 0 4px rgba(115, 103, 240, 0.1); }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(115, 103, 240, 0.1); }
+        input:focus + i { color: var(--primary); }
         
         #match-hint {
             height: 25px; margin-bottom: 15px; 
-            font-size: 1rem; font-weight: 700; color: #28c76f;
+            font-size: 1rem; font-weight: 700; color: var(--success);
             text-transform: uppercase; letter-spacing: 1px;
             opacity: 0; transition: opacity 0.3s; text-align: center;
         }
         
         button { 
-            width: 100%; padding: 18px; background-color: #dbdade; color: #a8a3b5; 
-            border: none; border-radius: 8px; font-size: 1.2rem; font-weight: 700; 
+            width: 100%; padding: 18px; background-color: var(--border-color); color: var(--text-muted); 
+            border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; 
             cursor: not-allowed; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        button.active { 
-            background-color: #7367f0; color: white; cursor: pointer; 
-            box-shadow: 0 4px 14px 0 rgba(115, 103, 240, 0.4); 
-        }
-        button.active:hover { background-color: #655bd3; transform: translateY(-2px); }
+        button.active { background-color: var(--primary); color: white; cursor: pointer; box-shadow: 0 4px 14px 0 rgba(115, 103, 240, 0.4); }
+        button.active:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
         /* BEKLEME ODASI */
         #waiting-room { display: none; margin-top: 2vh; text-align: center; animation: fadeIn 0.5s ease; }
-        .success-msg { color: #28c76f; font-size: 3.5vh; font-weight: 800; margin-top: 1vh; }
-        .sub-msg { color: #a8a3b5; font-size: 2vh; margin-top: 1vh; font-weight: 600; }
-        #end-term-view { display: none; }
+        .success-icon { font-size: 8vh; color: var(--success); margin-bottom: 2vh; animation: popIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .success-msg { color: var(--success); font-size: 3.5vh; font-weight: 800; }
+        .sub-msg { color: var(--text-muted); font-size: 2vh; margin-top: 1vh; font-weight: 600; }
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        
+        #end-term-view { display: none; text-align: center; }
+        #end-term-view i { font-size: 8vh; color: var(--danger); margin-bottom: 2vh; }
 
         /* MOBİL UYUM */
         @media screen and (max-width: 600px) {
-            .theme-card { padding: 3vh 5vw; width: 95%; box-shadow: 0 4px 12px 0 rgba(34, 41, 47, 0.08); }
-            .logo { max-width: 60vw; margin-bottom: 2vh; }
-            .lesson-header { font-size: 7vw; margin-bottom: 2vh; }
+            .theme-card { padding: 4vh 5vw; width: 95%; }
+            .logo { max-width: 60vw; }
+            .lesson-header { font-size: 7vw; }
             .countdown-container { flex-wrap: wrap; gap: 3vw; width: 100%; }
             .circle-box { width: 38vw; height: 38vw; max-width: none; max-height: none; }
             .time-number { font-size: 11vw; } .time-label { font-size: 3vw; }
             .theme-card.form-active .countdown-container { width: 100%; gap: 2vw; transform: scale(0.80); margin-bottom: 0; }
-            input, button { padding: 16px; font-size: 1.1rem; }
-            #form-view p { font-size: 16px; }
-            #match-hint { font-size: 14px; margin-bottom: 12px; }
+            input, button { padding: 16px 16px 16px 45px; font-size: 1rem; }
+            .input-group i { left: 15px; }
+            button { padding: 16px; }
+            .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; }
         }
         @media screen and (min-width: 1025px) { .theme-card { transform: scale(1.1); } }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Temayı Değiştir">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <div class="main-container" id="main-container">
         <div class="theme-card" id="theme-card">
             <img src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
-            <div id="live-badge">DERS BAŞLADI</div>
+            
+            <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
             <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
             <div id="countdown-view" class="countdown-container">
@@ -151,23 +222,57 @@
             </div>
 
             <div id="form-view">
-                <p style="color:#4b465c; margin-bottom:20px; font-size:1.1rem; text-align:center;">NEP sistemine kayıtlı bilgilerinizi giriniz.</p>
-                <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="AD SOYAD" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
+                <p style="text-align:center; margin-bottom:15px;"><i class="fas fa-id-card" style="color:var(--primary); margin-right:5px;"></i> Lütfen sisteme kayıtlı bilgilerinizi giriniz.</p>
+                
+                <div class="input-group">
+                    <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="Ad Soyad" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
+                    <i class="fas fa-user"></i>
+                </div>
+                
                 <div id="match-hint"></div>
-                <button id="btn" onclick="processEntry()" disabled>SİSTEME GİRİŞ YAP</button>
+                
+                <button id="btn" onclick="processEntry()" disabled>
+                    Sisteme Giriş Yap <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
 
             <div id="waiting-room">
-                <img src="https://cdn-icons-png.flaticon.com/512/148/148767.png" style="width:10vh; margin:0 auto 1vh; display:block;">
+                <i class="fas fa-check-circle success-icon"></i>
                 <div class="success-msg">KAYIT BAŞARILI</div>
                 <div class="sub-msg">Dersin başlaması bekleniyor...</div>
             </div>
 
-            <div id="end-term-view"><h1 style="color:#ea5455; font-size:4vh; text-align:center;">TÜM DERSLER TAMAMLANDI</h1></div>
+            <div id="end-term-view">
+                <i class="fas fa-graduation-cap"></i>
+                <h1 style="color:var(--danger); font-size:4vh; text-transform:uppercase;">Tüm Dersler Tamamlandı</h1>
+            </div>
         </div>
     </div>
 
     <script>
+        // --- TEMA YÖNETİMİ ---
+        const themeBtn = document.getElementById('theme-btn');
+        const htmlEl = document.documentElement;
+        
+        // Kayıtlı temayı yükle
+        if(localStorage.getItem('nep_theme') === 'dark') {
+            htmlEl.setAttribute('data-theme', 'dark');
+            themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        function toggleTheme() {
+            if (htmlEl.getAttribute('data-theme') === 'light') {
+                htmlEl.setAttribute('data-theme', 'dark');
+                themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('nep_theme', 'dark');
+            } else {
+                htmlEl.setAttribute('data-theme', 'light');
+                themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('nep_theme', 'light');
+            }
+        }
+
+        // --- SISTEM AYARLARI ---
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
         const ENTRY_NAME = "entry.1545633020";
         const ENTRY_LOC = "entry.1443001544";
@@ -177,9 +282,9 @@
         const LESSONS = [ 
             { id: 1, date: "2026-02-05" },  
             { id: 2, date: "2026-02-12" },  
-            { id: 3, date: "2026-02-21", time: "10:00" }, 
-            { id: 4, date: "2026-02-28", time: "10:00" }, 
-            { id: 5, date: "2026-03-07", time: "10:00" }, 
+            { id: 3, date: "2026-02-21", time: "10:00" }, // CUMARTESİ 10:00
+            { id: 4, date: "2026-02-28", time: "10:00" }, // CUMARTESİ 10:00
+            { id: 5, date: "2026-03-07", time: "10:00" }, // CUMARTESİ 10:00
             { id: 6, date: "2026-03-26" },  
             { id: 7, date: "2026-04-02" },  
             { id: 8, date: "2026-04-09" },  
@@ -192,22 +297,39 @@
             { id: 15, date: "2026-06-04" }  
         ];
         
-        // --- GÜNCELLENMİŞ ÖĞRENCİ LİSTESİ ---
+        // --- TAM GÜNCELLENMİŞ ÖĞRENCİ LİSTESİ ---
         const STUDENTS = [
-            { n: "MUHAMMED SAID", c: "İSTANBUL" }, { n: "BÜNYAMİN ÇAĞRI AKBOYUN", c: "BURSA" },
-            { n: "ÖMER EYMEN ÇETİNTAŞ", c: "DİYARBAKIR" }, { n: "MUSTAFA YUSUF ÖZBAKIR", c: "İZMİR" },
-            { n: "ENES EKİZ", c: "KONYA" }, { n: "SALİH KEREM YENER", c: "İZMİR" },
-            { n: "AYBERK YUSUF AKKURT", c: "MARDİN" }, { n: "EYMEN ERDOĞAN KARA", c: "MANİSA" },
-            { n: "SADULLAH YAHYA ÇAVUŞOĞLU", c: "AFYONKARAHİSAR" }, { n: "HAMZA İZCİ", c: "YOZGAT" },
-            { n: "ALPARSLAN ONUR ÖZEREN", c: "İSTANBUL" }, { n: "MUHAMMED YUSUF KARAKUŞ", c: "VAN" },
-            { n: "MUSAB METİN MUTLU", c: "KONYA" }, { n: "KEREM ALİ ÇAKIR", c: "ERZİNCAN" },
-            { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" }, { n: "MUSA BOYACI", c: "İSTANBUL" },
-            { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "AHMET AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "YUSUF AĞLAMIŞ", c: "ŞANLIURFA" },
-            { n: "KEREM KÜÇÜK", c: "YENİ KAYIT" }, { n: "İBRAHİM SARAYDEMİR", c: "YENİ KAYIT" },
-            { n: "YAHYA SELİM EKŞİ", c: "YENİ KAYIT" }, { n: "SEFA METE", c: "YENİ KAYIT" },
-            { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "YENİ KAYIT" }, { n: "MUHAMMED ALİ ARAS", c: "YENİ KAYIT" },
-            { n: "MUHAMMED ARİF KURTKAYA", c: "YENİ KAYIT" }, { n: "MUHAMMED TAHA SAYIN", c: "YENİ KAYIT" },
-            { n: "FATİH SELİM OCAK", c: "YENİ KAYIT" }, { n: "ZÜBEYİR RAHMİ ŞENGÜN", c: "YENİ KAYIT" }
+            { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" },
+            { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" },
+            { n: "AHMET AĞLAMIŞ", c: "ŞANLIURFA" },
+            { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ", c: "ŞANLIURFA" },
+            { n: "ALPARSLAN ONUR ÖZEREN", c: "İSTANBUL" },
+            { n: "AYBERK YUSUF AKKURT", c: "MARDİN" },
+            { n: "BÜNYAMİN ÇAĞRI AKBOYUN", c: "BURSA" },
+            { n: "ENES EKİZ", c: "KONYA" },
+            { n: "EYMEN ERDOĞAN KARA", c: "MANİSA" },
+            { n: "FATİH SELİM OCAK", c: "SİSTEM" },
+            { n: "HAMZA İZCİ", c: "YOZGAT" },
+            { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "SİSTEM" },
+            { n: "İBRAHİM SARAYDEMİR", c: "SİSTEM" },
+            { n: "KEREM ALİ ÇAKIR", c: "ERZİNCAN" },
+            { n: "KEREM KÜÇÜK", c: "SİSTEM" },
+            { n: "MUHAMMED ALİ ARAS", c: "SİSTEM" },
+            { n: "MUHAMMED ARİF KURTKAYA", c: "SİSTEM" },
+            { n: "MUHAMMED SAID", c: "İSTANBUL" },
+            { n: "MUHAMMED TAHA SAYIN", c: "SİSTEM" },
+            { n: "MUHAMMED YASİR SALDIRAN", c: "SİSTEM" },
+            { n: "MUHAMMED YUSUF KARAKUŞ", c: "VAN" },
+            { n: "MUSA BOYACI", c: "İSTANBUL" },
+            { n: "MUSAB METİN MUTLU", c: "KONYA" },
+            { n: "MUSTAFA YUSUF ÖZBAKIR", c: "İZMİR" },
+            { n: "ÖMER EYMEN ÇETİNTAŞ", c: "DİYARBAKIR" },
+            { n: "SADULLAH YAHYA ÇAVUŞOĞLU", c: "AFYONKARAHİSAR" },
+            { n: "SALİH KEREM YENER", c: "İZMİR" },
+            { n: "SEFA METE", c: "SİSTEM" },
+            { n: "YAHYA SELİM EKŞİ", c: "SİSTEM" },
+            { n: "YUSUF AĞLAMIŞ", c: "ŞANLIURFA" },
+            { n: "ZÜBEYİR RAHMİ ŞENGÜN", c: "SİSTEM" }
         ];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
@@ -285,7 +407,9 @@
         
         function processEntry() {
             const btn = document.getElementById('btn'); btn.style.display = "none"; document.getElementById('name').style.display = "none"; document.getElementById('match-hint').style.display = "none";
+            document.querySelector('.input-group').style.display = "none";
             localStorage.setItem('NEP_STUDENT_NAME', finalMatchedName);
+            
             const fd = new FormData(); fd.append("entry.1545633020", finalMatchedName); fd.append("entry.1443001544", "TESPİT EDİLDİ");
             fetch("https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse", { method: "POST", mode: "no-cors", body: fd }).then(() => {
                 if (new Date().getTime() < startTime) { isWaiting = true; document.getElementById('form-view').style.display = "none"; document.getElementById('waiting-room').style.display = "block"; } 
@@ -300,7 +424,13 @@
             let raw = document.getElementById('name').value; let norm = normalizeTR(raw); 
             const hintBox = document.getElementById('match-hint');
             const btn = document.getElementById('btn');
-            if (raw.length < 2) { btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0; return; }
+            
+            if (raw.length < 2) { 
+                btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0; 
+                document.querySelector('.input-group i').style.color = "var(--text-muted)";
+                return; 
+            }
+            
             let match = null; let bestScore = 999;
             for (let s of STUDENTS) {
                 let dbName = normalizeTR(s.n);
@@ -309,7 +439,15 @@
                 let score = levenshtein(norm, dbName);
                 if (score <= tolerance && score < bestScore) { bestScore = score; match = s; }
             }
-            if (match) { finalMatchedName = match.n; btn.disabled = false; btn.className = "active"; hintBox.innerText = "✅ " + match.n; hintBox.style.opacity = 1; } else { btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0; }
+            
+            if (match) { 
+                finalMatchedName = match.n; btn.disabled = false; btn.className = "active"; 
+                hintBox.innerHTML = "<i class='fas fa-check'></i> " + match.n; hintBox.style.opacity = 1; 
+                document.querySelector('.input-group i').style.color = "var(--success)";
+            } else { 
+                btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0; 
+                document.querySelector('.input-group i').style.color = "var(--danger)";
+            }
         }
         initSystem();
     </script>
