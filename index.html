@@ -14,25 +14,22 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* SAF VE PROFESYONEL CSS DEĞİŞKENLERİ */
+        /* SAF VE KUSURSUZ TAM EKRAN (SEAMLESS) DEĞİŞKENLER */
         :root {
-            --bg-color: #ffffff;
+            --bg-color: #f8f7fa;
             --text-main: #4b465c;
             --text-muted: #a8a3b5;
             --border-color: #dbdade;
-            --input-bg: #f8f7fa;
+            --input-bg: #ffffff;
             --primary: #7367f0;
             --primary-hover: #655bd3;
             --success: #28c76f;
             --danger: #ea5455;
-            --circle-bg: #f0f0f0;
-            --toggle-bg: #f8f7fa;
+            --circle-bg: #eae8f0;
+            --toggle-bg: #ffffff;
             --toggle-hover: #e0def0;
             --logo-filter: none;
-            /* Aydınlık modda zarif, mat altın rengi */
-            --mahya-color: #b8860b; 
-            --mahya-glow: 0 0 5px rgba(184, 134, 11, 0.2);
-            --mahya-wire: linear-gradient(90deg, transparent, #dbdade, transparent);
+            --ramazan-color: #b8860b;
         }
 
         [data-theme="dark"] {
@@ -44,11 +41,9 @@
             --circle-bg: #2f3349;
             --toggle-bg: #2f3349;
             --toggle-hover: #434968;
+            /* Karanlık modda logo kaybolmasın diye saf beyaza (Monochrome) çevrilir */
             --logo-filter: brightness(0) invert(1) opacity(0.95);
-            /* Karanlık modda gerçek yanan ampul (neon) efekti */
-            --mahya-color: #ffdf00; 
-            --mahya-glow: 0 0 10px rgba(255, 223, 0, 0.8), 0 0 20px rgba(255, 159, 67, 0.6), 0 0 35px rgba(234, 84, 85, 0.4);
-            --mahya-wire: linear-gradient(90deg, transparent, #7983a5, transparent);
+            --ramazan-color: #e5c05c;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Public Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -57,8 +52,9 @@
             background-color: var(--bg-color); 
             color: var(--text-main);
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            width: 100vw; height: 100vh; 
-            overflow: hidden; 
+            min-height: 100vh; 
+            width: 100vw;
+            overflow-x: hidden; 
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
@@ -82,58 +78,40 @@
         .theme-toggle svg { transition: transform 0.3s ease; }
         .theme-toggle:hover svg { transform: scale(1.1); }
 
-        /* MAHYA TASARIMI (YENİ) */
-        .mahya-container {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 2vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .mahya-wire {
-            width: 50%;
-            height: 2px;
-            background: var(--mahya-wire);
-            margin-bottom: 12px;
-            opacity: 0.6;
-            transition: background 0.4s ease;
-        }
-        .mahya-text {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--mahya-color);
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: var(--mahya-glow);
-            animation: mahyaPulse 4s infinite alternate ease-in-out;
-            transition: color 0.4s ease, text-shadow 0.4s ease;
-        }
-        @keyframes mahyaPulse {
-            0% { opacity: 0.85; transform: scale(0.99); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        /* KUTUSUZ (ADA OLMAYAN) TAM EKRAN İSKELETİ */
+        /* KUTUSUZ TAM EKRAN VE MERKEZLEME */
         .main-container { 
-            width: 100%; max-width: 900px;
+            flex: 1;
+            width: 100%; max-width: 1000px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             padding: 20px;
             transition: all 0.4s ease;
         }
+
+        /* ZARİF RAMAZAN BAŞLIĞI */
+        .ramazan-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--ramazan-color);
+            margin-bottom: 3vh;
+            text-align: center;
+            opacity: 0.9;
+            transition: color 0.4s ease;
+        }
+        .ramazan-text i { font-size: 1.1rem; margin: 0 5px; }
         
         .logo { 
             width: auto;
             display: block; 
-            margin-bottom: 2vh;
+            margin-bottom: 3vh;
             filter: var(--logo-filter);
             transition: filter 0.4s ease, opacity 0.3s ease;
         }
         
         .lesson-header { 
             font-weight: 800; text-transform: uppercase; 
-            letter-spacing: 4px; text-align: center; 
+            letter-spacing: 4px; text-align: center; margin-bottom: 4vh;
         }
 
         #live-badge {
@@ -142,17 +120,22 @@
             padding: 8px 24px; border-radius: 30px;
             font-weight: 700; font-size: 16px; letter-spacing: 1px;
             box-shadow: 0 0 15px rgba(40, 199, 111, 0.4);
-            margin-bottom: 20px; text-transform: uppercase;
+            margin-bottom: 3vh; text-transform: uppercase;
             animation: pulse-green 2s infinite;
         }
         @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* SAYAÇ */
+        /* SAYAÇ - KOPMA SORUNU ÇÖZÜLMÜŞ KUSURSUZ DAİRELER */
         .countdown-container { display: flex; justify-content: center; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; transition: all 0.3s ease; }
         svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
+        
         .circle-bg { fill: none; stroke: var(--circle-bg); transition: stroke 0.4s ease; }
-        .circle-progress { fill: none; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
+        .circle-progress { 
+            fill: none; stroke-linecap: round; 
+            stroke-dasharray: 100; stroke-dashoffset: 100; 
+            transition: stroke-dashoffset 1s linear; 
+        }
         
         .c-day { stroke: var(--success); } .c-hour { stroke: var(--danger); } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
         
@@ -162,14 +145,15 @@
         
         .final-countdown .time-number { color: var(--danger) !important; }
         .final-countdown .circle-progress { stroke: var(--danger) !important; }
+        .final-countdown { animation: heartbeat 1s infinite; }
+        @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         /* GİRİŞ FORMU */
         #form-view { display: none; width: 100%; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
         .main-container.form-active .countdown-container { transform: scale(0.75); margin-bottom: -2vh; }
-        .main-container.form-active .lesson-header { display: none; }
-        .main-container.form-active .mahya-container { display: none; } /* Form açılınca mahya kalabalık yapmasın diye gizlenir */
+        .main-container.form-active .lesson-header, .main-container.form-active .ramazan-text { display: none; }
         
         .input-group { position: relative; width: 100%; margin-bottom: 15px; }
         .input-group i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); transition: 0.3s; }
@@ -208,12 +192,12 @@
 
         /* CİHAZA GÖRE OTOMATİK DİZAYN */
         @media screen and (min-width: 1025px) {
-            .logo { height: 140px; margin-bottom: 4vh; }
+            .logo { height: 130px; }
             .main-container.form-active .logo { height: 90px; }
-            .lesson-header { font-size: 38px; margin-bottom: 5vh; }
+            .lesson-header { font-size: 36px; }
             .countdown-container { gap: 50px; }
-            .circle-box { width: 230px; height: 230px; }
-            .circle-bg, .circle-progress { stroke-width: 12; }
+            .circle-box { width: 220px; height: 220px; }
+            .circle-bg, .circle-progress { stroke-width: 8; }
             .time-number { font-size: 75px; }
             .time-label { font-size: 18px; }
             #form-view { max-width: 500px; margin-top: 4vh; }
@@ -224,12 +208,12 @@
         }
 
         @media screen and (min-width: 601px) and (max-width: 1024px) {
-            .logo { height: 110px; margin-bottom: 4vh; }
+            .logo { height: 100px; }
             .main-container.form-active .logo { height: 75px; }
-            .lesson-header { font-size: 32px; margin-bottom: 4vh; }
+            .lesson-header { font-size: 28px; }
             .countdown-container { gap: 35px; }
-            .circle-box { width: 170px; height: 170px; }
-            .circle-bg, .circle-progress { stroke-width: 10; }
+            .circle-box { width: 160px; height: 160px; }
+            .circle-bg, .circle-progress { stroke-width: 7; }
             .time-number { font-size: 55px; }
             .time-label { font-size: 15px; }
             #form-view { max-width: 450px; margin-top: 3vh; }
@@ -240,16 +224,15 @@
         }
 
         @media screen and (max-width: 600px) {
-            .mahya-wire { width: 80%; }
-            .mahya-text { font-size: 5.5vw; letter-spacing: 3px; }
-            .logo { max-width: 70vw; height: auto; margin-bottom: 3vh; }
+            .ramazan-text { font-size: 1rem; letter-spacing: 2px; }
+            .logo { max-width: 75vw; height: auto; }
             .main-container.form-active .logo { max-width: 50vw; }
-            .lesson-header { font-size: 24px; margin-bottom: 3vh; letter-spacing: 2px; }
-            .countdown-container { gap: 3vw; flex-wrap: nowrap; }
-            .circle-box { width: 28vw; height: 28vw; max-width: 130px; max-height: 130px; }
-            .circle-bg, .circle-progress { stroke-width: 8; }
-            .time-number { font-size: 8vw; } 
-            .time-label { font-size: 2.8vw; }
+            .lesson-header { font-size: 24px; letter-spacing: 2px; }
+            .countdown-container { gap: 4vw; flex-wrap: nowrap; }
+            .circle-box { width: 28vw; height: 28vw; max-width: 120px; max-height: 120px; }
+            .circle-bg, .circle-progress { stroke-width: 7; }
+            .time-number { font-size: 9vw; } 
+            .time-label { font-size: 3vw; margin-top: 2px; }
             #form-view { max-width: 90vw; margin-top: 2vh; }
             input, button.action-btn { font-size: 1rem; padding: 15px 15px 15px 45px; }
             .input-group i { left: 16px; font-size: 1.1rem; }
@@ -263,10 +246,7 @@
 
     <div class="main-container" id="main-container">
         
-        <div class="mahya-container">
-            <div class="mahya-wire"></div>
-            <div class="mahya-text">Hoş Geldin Ya Şehr-i Ramazan</div>
-        </div>
+        <div class="ramazan-text"><i class="fas fa-moon"></i> Hoş Geldin Ya Şehr-i Ramazan <i class="fas fa-moon"></i></div>
 
         <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
         
@@ -274,10 +254,22 @@
         <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
         <div id="countdown-view" class="countdown-container">
-            <div class="circle-box" id="box-days"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-days" class="circle-progress c-day" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div></div>
-            <div class="circle-box" id="box-hours"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div></div>
-            <div class="circle-box" id="box-minutes"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div></div>
-            <div class="circle-box" id="box-seconds"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div></div>
+            <div class="circle-box" id="box-days">
+                <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-days" class="circle-progress c-day" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
+                <div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div>
+            </div>
+            <div class="circle-box" id="box-hours">
+                <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
+                <div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div>
+            </div>
+            <div class="circle-box" id="box-minutes">
+                <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
+                <div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div>
+            </div>
+            <div class="circle-box" id="box-seconds">
+                <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
+                <div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div>
+            </div>
         </div>
 
         <div id="form-view">
@@ -388,12 +380,12 @@
         ];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
-        const FULL_DASH = 283; 
 
         function setCircle(id, current, max) {
             const circle = document.getElementById(id);
             let val = current > max ? max : current;
-            const offset = FULL_DASH - (val / max) * FULL_DASH;
+            // pathLength="100" yapısı için eksiksiz ve kopmasız (seamless) hesaplama
+            const offset = 100 - (val / max) * 100;
             circle.style.strokeDashoffset = offset;
         }
 
@@ -427,6 +419,7 @@
             } else {
                 document.getElementById('countdown-view').style.display = "none"; 
                 document.getElementById('end-term-view').style.display = "block"; 
+                document.querySelector('.ramazan-text').style.display = "none";
                 confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 } });
             }
         }
@@ -439,7 +432,9 @@
                 let diff = startTime - now;
                 const d = Math.floor(diff/86400000); const h = Math.floor((diff%86400000)/3600000); const m = Math.floor((diff%3600000)/60000); const s = Math.floor((diff%60000)/1000);
                 document.getElementById('days').innerText = d; document.getElementById('hours').innerText = h; document.getElementById('minutes').innerText = m; document.getElementById('seconds').innerText = s;
+                
                 setCircle('ring-days', d, 7); setCircle('ring-hours', h, 24); setCircle('ring-minutes', m, 60); setCircle('ring-seconds', s, 60);
+                
                 document.getElementById('box-days').style.display = d > 0 ? "block" : "none";
                 document.getElementById('box-hours').style.display = (d === 0 && h === 0) ? "none" : "block";
                 
@@ -453,7 +448,9 @@
                 if (!isWaiting) { 
                     document.getElementById('countdown-view').style.display = "none"; 
                     const form = document.getElementById('form-view'); form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
-                    document.getElementById('lesson-title').style.display = "none"; document.getElementById('live-badge').style.display = "inline-block";
+                    document.getElementById('lesson-title').style.display = "none"; 
+                    document.querySelector('.ramazan-text').style.display = "none";
+                    document.getElementById('live-badge').style.display = "inline-block";
                 }
             } else { location.reload(); }
         }
