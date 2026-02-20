@@ -26,6 +26,8 @@
             --danger: #ea5455;
             --circle-bg: #eae8f0;
             --toggle-hover: rgba(75, 70, 92, 0.08);
+            /* Aydınlık modda logoda filtre yok */
+            --logo-filter: none; 
         }
 
         [data-theme="dark"] {
@@ -36,6 +38,8 @@
             --input-bg: #2f3349;
             --circle-bg: #2f3349;
             --toggle-hover: rgba(207, 204, 228, 0.08);
+            /* Karanlık modda logoya özel parlama ve belirginleştirme efekti */
+            --logo-filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.7)) brightness(1.1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Public Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -90,7 +94,8 @@
             width: auto;
             margin-bottom: 2vh; 
             display: block; 
-            transition: opacity 0.3s ease;
+            filter: var(--logo-filter);
+            transition: filter 0.4s ease;
         }
         
         .lesson-header { 
@@ -131,7 +136,7 @@
         
         .content-wrapper.form-active .countdown-container { transform: scale(0.65); margin-bottom: -3vh; }
         .content-wrapper.form-active .lesson-header { display: none; }
-        .content-wrapper.form-active .logo { max-width: 200px; margin-bottom: 1vh; }
+        .content-wrapper.form-active .logo { max-width: 250px; margin-bottom: 1vh; }
         
         .input-group { position: relative; width: 100%; margin-bottom: 15px; }
         .input-group i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; }
@@ -254,11 +259,7 @@
 
     <script>
         const themeBtn = document.getElementById('theme-btn');
-        const mainLogo = document.getElementById('main-logo');
         const htmlEl = document.documentElement;
-
-        const lightLogoURL = "https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png";
-        const darkLogoURL = "https://nep.nuregitimprogrami.com/prod/global/assets/media/logos/nep_yazisiz_logo.png";
         
         const iconMoon = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" tag="i" class="v-icon notranslate v-theme--dark iconify iconify--tabler" width="1em" height="1em" viewBox="0 0 24 24" style="font-size: 26px; height: 26px; width: 26px;"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z"></path></svg>`;
         const iconSun = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" tag="i" class="v-icon notranslate v-theme--light iconify iconify--tabler" width="1em" height="1em" viewBox="0 0 24 24" style="font-size: 26px; height: 26px; width: 26px;"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 1 0-5.656-5.656a4 4 0 0 0 5.656 5.656zm-8.485 2.829l-1.414 1.414M6.343 6.343L4.929 4.929m12.728 1.414l1.414-1.414m-1.414 12.728l1.414 1.414M4 12H2m10-8V2m8 10h2m-10 8v2"></path></svg>`;
@@ -266,28 +267,20 @@
         if(localStorage.getItem('nep_theme') === 'dark') {
             htmlEl.setAttribute('data-theme', 'dark');
             themeBtn.innerHTML = iconSun;
-            mainLogo.src = darkLogoURL;
         } else {
             themeBtn.innerHTML = iconMoon;
-            mainLogo.src = lightLogoURL;
         }
 
         function toggleTheme() {
-            mainLogo.style.opacity = 0;
-            setTimeout(() => {
-                if (htmlEl.getAttribute('data-theme') === 'light') {
-                    htmlEl.setAttribute('data-theme', 'dark');
-                    themeBtn.innerHTML = iconSun;
-                    mainLogo.src = darkLogoURL;
-                    localStorage.setItem('nep_theme', 'dark');
-                } else {
-                    htmlEl.setAttribute('data-theme', 'light');
-                    themeBtn.innerHTML = iconMoon;
-                    mainLogo.src = lightLogoURL;
-                    localStorage.setItem('nep_theme', 'light');
-                }
-                mainLogo.style.opacity = 1;
-            }, 150);
+            if (htmlEl.getAttribute('data-theme') === 'light') {
+                htmlEl.setAttribute('data-theme', 'dark');
+                themeBtn.innerHTML = iconSun;
+                localStorage.setItem('nep_theme', 'dark');
+            } else {
+                htmlEl.setAttribute('data-theme', 'light');
+                themeBtn.innerHTML = iconMoon;
+                localStorage.setItem('nep_theme', 'light');
+            }
         }
 
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
