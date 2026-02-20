@@ -14,10 +14,8 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* MODERN VUE/VUETIFY İLHAMLI CSS DEĞİŞKENLERİ */
         :root {
             --bg-color: #f8f7fa;
-            --card-bg: #ffffff;
             --text-main: #4b465c;
             --text-muted: #a8a3b5;
             --border-color: #dbdade;
@@ -26,20 +24,17 @@
             --primary-hover: #655bd3;
             --success: #28c76f;
             --danger: #ea5455;
-            --shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.08);
-            --circle-bg: #f0f0f0;
+            --circle-bg: #eae8f0;
             --toggle-hover: rgba(75, 70, 92, 0.08);
         }
 
         [data-theme="dark"] {
             --bg-color: #25293c;
-            --card-bg: #2f3349;
             --text-main: #cfcce4;
             --text-muted: #7983a5;
             --border-color: #434968;
-            --input-bg: #25293c;
-            --shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.4);
-            --circle-bg: #434968;
+            --input-bg: #2f3349;
+            --circle-bg: #2f3349;
             --toggle-hover: rgba(207, 204, 228, 0.08);
         }
 
@@ -54,7 +49,6 @@
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* ORJİNAL TEMA DEĞİŞTİRME BUTONU */
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -72,48 +66,38 @@
             transition: all 0.3s ease;
             z-index: 100;
         }
-        .theme-toggle:hover {
-            background-color: var(--toggle-hover);
-            color: var(--primary);
-        }
-        .theme-toggle svg {
-            transition: transform 0.3s ease;
-        }
-        .theme-toggle:hover svg {
-            transform: scale(1.1);
-        }
+        .theme-toggle:hover { background-color: var(--toggle-hover); color: var(--primary); }
+        .theme-toggle svg { transition: transform 0.3s ease; }
+        .theme-toggle:hover svg { transform: scale(1.1); }
 
         .main-container { 
             width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* PREMIUM KART */
-        .theme-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            padding: 5vh 4vw;
-            max-width: 900px;
-            width: 90%;
+        .content-wrapper {
+            width: 100%;
+            max-width: 1200px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
             transition: all 0.4s ease;
         }
         
         .logo { 
-            max-width: 320px; margin-bottom: 2vh; display: block; 
+            width: auto;
+            margin-bottom: 2vh; 
+            display: block; 
             transition: opacity 0.3s ease;
         }
         
         .lesson-header { 
-            font-size: 3.5vh; font-weight: 800; text-transform: uppercase; 
-            letter-spacing: 3px; margin-bottom: 3vh; text-align: center; 
+            font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 3px; margin-bottom: 4vh; text-align: center; 
         }
 
-        /* CANLI ROZETİ */
         #live-badge {
             display: none;
             background-color: var(--success); color: white;
@@ -125,31 +109,29 @@
         }
         @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* SAYAÇ */
-        .countdown-container { display: flex; justify-content: center; gap: 2vw; width: 100%; transition: all 0.5s ease; }
-        .circle-box { position: relative; width: 22vh; height: 22vh; max-width: 250px; max-height: 250px; transition: all 0.3s ease; }
+        .countdown-container { display: flex; justify-content: center; width: 100%; transition: all 0.5s ease; }
+        .circle-box { position: relative; transition: all 0.3s ease; }
         svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .circle-bg { fill: none; stroke: var(--circle-bg); stroke-width: 10; transition: stroke 0.4s ease; }
-        .circle-progress { fill: none; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
+        .circle-bg { fill: none; stroke: var(--circle-bg); transition: stroke 0.4s ease; }
+        .circle-progress { fill: none; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
         
         .c-day { stroke: var(--success); } .c-hour { stroke: var(--danger); } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
         
         .inner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
-        .time-number { font-size: 6.5vh; font-weight: 800; line-height: 1.1; transition: color 0.3s; }
-        .time-label { font-size: 1.6vh; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 0.2vh; }
+        .time-number { font-weight: 800; line-height: 1.1; transition: color 0.3s; }
+        .time-label { color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 0.2vh; }
         
         .final-countdown .time-number { color: var(--danger) !important; }
         .final-countdown .circle-progress { stroke: var(--danger) !important; }
         .final-countdown { animation: heartbeat 1s infinite; }
         @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        /* FORMLAR */
-        #form-view { display: none; width: 100%; max-width: 500px; margin-top: 3vh; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        #form-view { display: none; width: 100%; max-width: 450px; margin-top: 3vh; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .theme-card.form-active .countdown-container { transform: scale(0.65); margin-bottom: -3vh; gap: 1vw; }
-        .theme-card.form-active .lesson-header { display: none; }
-        .theme-card.form-active .logo { max-width: 220px; margin-bottom: 1vh; }
+        .content-wrapper.form-active .countdown-container { transform: scale(0.65); margin-bottom: -3vh; }
+        .content-wrapper.form-active .lesson-header { display: none; }
+        .content-wrapper.form-active .logo { max-width: 200px; margin-bottom: 1vh; }
         
         .input-group { position: relative; width: 100%; margin-bottom: 15px; }
         .input-group i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; }
@@ -179,7 +161,6 @@
         button.action-btn.active { background-color: var(--primary); color: white; cursor: pointer; box-shadow: 0 4px 14px 0 rgba(115, 103, 240, 0.4); }
         button.action-btn.active:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
-        /* BEKLEME EKRANI */
         #waiting-room { display: none; margin-top: 2vh; text-align: center; animation: fadeIn 0.5s ease; }
         .success-icon { font-size: 8vh; color: var(--success); margin-bottom: 2vh; animation: popIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
         .success-msg { color: var(--success); font-size: 3.5vh; font-weight: 800; }
@@ -189,29 +170,51 @@
         #end-term-view { display: none; text-align: center; }
         #end-term-view i { font-size: 8vh; color: var(--danger); margin-bottom: 2vh; }
 
-        /* MOBİL UYUM */
+        /* MASAÜSTÜ BÜYÜK EKRANLAR */
+        @media screen and (min-width: 1025px) {
+            .logo { height: 120px; }
+            .lesson-header { font-size: 36px; }
+            .countdown-container { gap: 40px; }
+            .circle-box { width: 200px; height: 200px; }
+            .circle-bg, .circle-progress { stroke-width: 10; }
+            .time-number { font-size: 64px; }
+            .time-label { font-size: 16px; }
+        }
+
+        /* TABLET EKRANLAR */
+        @media screen and (min-width: 601px) and (max-width: 1024px) {
+            .logo { height: 90px; }
+            .lesson-header { font-size: 28px; }
+            .countdown-container { gap: 20px; }
+            .circle-box { width: 150px; height: 150px; }
+            .circle-bg, .circle-progress { stroke-width: 8; }
+            .time-number { font-size: 48px; }
+            .time-label { font-size: 14px; }
+            input, button.action-btn { font-size: 1.1rem; padding: 16px; }
+        }
+
+        /* MOBİL EKRANLAR */
         @media screen and (max-width: 600px) {
-            .theme-card { padding: 4vh 5vw; width: 95%; }
-            .logo { max-width: 60vw; }
-            .lesson-header { font-size: 7vw; }
-            .countdown-container { flex-wrap: wrap; gap: 3vw; width: 100%; }
-            .circle-box { width: 38vw; height: 38vw; max-width: none; max-height: none; }
-            .time-number { font-size: 11vw; } .time-label { font-size: 3vw; }
-            .theme-card.form-active .countdown-container { width: 100%; gap: 2vw; transform: scale(0.80); margin-bottom: 0; }
+            .logo { max-width: 70vw; height: auto; }
+            .lesson-header { font-size: 6vw; margin-bottom: 3vh; }
+            .countdown-container { flex-wrap: wrap; gap: 4vw; }
+            .circle-box { width: 35vw; height: 35vw; }
+            .circle-bg, .circle-progress { stroke-width: 6; }
+            .time-number { font-size: 10vw; } 
+            .time-label { font-size: 3.5vw; }
+            .content-wrapper.form-active .countdown-container { gap: 2vw; transform: scale(0.85); margin-bottom: 0; }
             input, button.action-btn { padding: 16px 16px 16px 45px; font-size: 1rem; }
             .input-group i { left: 15px; }
             button.action-btn { padding: 16px; }
             .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; }
         }
-        @media screen and (min-width: 1025px) { .theme-card { transform: scale(1.1); } }
     </style>
 </head>
 <body>
-    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Temayı Değiştir">
-        </button>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()"></button>
 
     <div class="main-container" id="main-container">
-        <div class="theme-card" id="theme-card">
+        <div class="content-wrapper" id="content-wrapper">
             <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
             
             <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
@@ -226,14 +229,11 @@
 
             <div id="form-view">
                 <p style="text-align:center; margin-bottom:20px; font-size:1.1rem;"><i class="fas fa-id-card" style="color:var(--primary); margin-right:5px;"></i> Lütfen sisteme kayıtlı bilgilerinizi giriniz.</p>
-                
                 <div class="input-group">
                     <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="Ad Soyad" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
                     <i class="fas fa-user"></i>
                 </div>
-                
                 <div id="match-hint"></div>
-                
                 <button class="action-btn" id="btn" onclick="processEntry()" disabled>
                     Sisteme Giriş Yap <i class="fas fa-arrow-right"></i>
                 </button>
@@ -253,7 +253,6 @@
     </div>
 
     <script>
-        // --- TEMA VE LOGO YÖNETİMİ ---
         const themeBtn = document.getElementById('theme-btn');
         const mainLogo = document.getElementById('main-logo');
         const htmlEl = document.documentElement;
@@ -264,7 +263,6 @@
         const iconMoon = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" tag="i" class="v-icon notranslate v-theme--dark iconify iconify--tabler" width="1em" height="1em" viewBox="0 0 24 24" style="font-size: 26px; height: 26px; width: 26px;"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z"></path></svg>`;
         const iconSun = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" tag="i" class="v-icon notranslate v-theme--light iconify iconify--tabler" width="1em" height="1em" viewBox="0 0 24 24" style="font-size: 26px; height: 26px; width: 26px;"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 1 0-5.656-5.656a4 4 0 0 0 5.656 5.656zm-8.485 2.829l-1.414 1.414M6.343 6.343L4.929 4.929m12.728 1.414l1.414-1.414m-1.414 12.728l1.414 1.414M4 12H2m10-8V2m8 10h2m-10 8v2"></path></svg>`;
         
-        // Başlangıç Teması Kontrolü
         if(localStorage.getItem('nep_theme') === 'dark') {
             htmlEl.setAttribute('data-theme', 'dark');
             themeBtn.innerHTML = iconSun;
@@ -275,7 +273,6 @@
         }
 
         function toggleTheme() {
-            // Opaklık efekti ile yumuşak geçiş
             mainLogo.style.opacity = 0;
             setTimeout(() => {
                 if (htmlEl.getAttribute('data-theme') === 'light') {
@@ -293,7 +290,6 @@
             }, 150);
         }
 
-        // --- SİSTEM AYARLARI ---
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
         const ENTRY_NAME = "entry.1545633020";
         const ENTRY_LOC = "entry.1443001544";
@@ -317,7 +313,6 @@
             { id: 15, date: "2026-06-04" }  
         ];
         
-        // --- TÜM ÖĞRENCİLER EKLENDİ ---
         const STUDENTS = [
             { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" },
             { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" },
@@ -411,7 +406,7 @@
                 if (diff <= 3500) { document.querySelectorAll('.circle-box').forEach(box => box.classList.add('final-countdown')); } else { document.querySelectorAll('.circle-box').forEach(box => box.classList.remove('final-countdown')); }
                 
                 if (now >= gatesOpenTime) {
-                    document.getElementById('theme-card').classList.add('form-active');
+                    document.getElementById('content-wrapper').classList.add('form-active');
                     if (!isWaiting) { document.getElementById('form-view').style.display = "block"; setTimeout(() => { document.getElementById('form-view').style.opacity = 1; document.getElementById('form-view').style.transform = "translateY(0)"; }, 50); }
                 }
             } else if (now < endTime) {
