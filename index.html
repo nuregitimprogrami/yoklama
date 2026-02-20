@@ -167,6 +167,7 @@
             { id: 15, date: "2026-06-04" }  
         ];
         
+        // --- GÜNCELLENMİŞ ÖĞRENCİ LİSTESİ ---
         const STUDENTS = [
             { n: "MUHAMMED SAID", c: "İSTANBUL" }, { n: "BÜNYAMİN ÇAĞRI AKBOYUN", c: "BURSA" },
             { n: "ÖMER EYMEN ÇETİNTAŞ", c: "DİYARBAKIR" }, { n: "MUSTAFA YUSUF ÖZBAKIR", c: "İZMİR" },
@@ -183,10 +184,10 @@
             { n: "SEFA METE", c: "YENİ KAYIT" },
             { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "YENİ KAYIT" },
             { n: "MUHAMMED ALİ ARAS", c: "YENİ KAYIT" },
-            // Son Eklenenler
             { n: "MUHAMMED ARİF KURTKAYA", c: "YENİ KAYIT" },
             { n: "MUHAMMED TAHA SAYIN", c: "YENİ KAYIT" },
-            { n: "FATİH SELİM OCAK", c: "YENİ KAYIT" }
+            { n: "FATİH SELİM OCAK", c: "YENİ KAYIT" },
+            { n: "ZÜBEYİR RAHMİ ŞENGÜN", c: "YENİ KAYIT" }
         ];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
@@ -244,6 +245,7 @@
         function updateTimer() {
             const now = new Date().getTime();
             
+            // OTOMATİK YÖNLENDİRME
             if (isWaiting && now >= startTime) { window.location.href = getZoomLink(); return; }
 
             if (now < startTime) { 
@@ -261,6 +263,7 @@
                     if (!isWaiting) { document.getElementById('form-view').style.display = "block"; setTimeout(() => { document.getElementById('form-view').style.opacity = 1; document.getElementById('form-view').style.transform = "translateY(0)"; }, 50); }
                 }
             } else if (now < endTime) {
+                // Ders Başladı
                 if (!isWaiting) { 
                     document.getElementById('countdown-view').style.display = "none"; 
                     const form = document.getElementById('form-view'); form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
@@ -282,7 +285,7 @@
         }
 
         function normalizeTR(str) { return str.replace(/Ğ/g, "G").replace(/ğ/g, "g").replace(/Ü/g, "U").replace(/ü/g, "u").replace(/Ş/g, "S").replace(/ş/g, "s").replace(/İ/g, "I").replace(/ı/g, "i").replace(/Ö/g, "O").replace(/ö/g, "o").replace(/Ç/g, "C").replace(/ç/g, "c").toUpperCase().trim(); }
-        function levenshtein(a, b) { const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j; for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i-1][j-1]+1,m[i-1][j]+1)); return m[b.length][a.length]; }
+        function levenshtein(a, b) { const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j; for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i][j-1]+1,m[i-1][j]+1)); return m[b.length][a.length]; }
 
         function checkLogic() {
             let raw = document.getElementById('name').value; let norm = normalizeTR(raw); 
