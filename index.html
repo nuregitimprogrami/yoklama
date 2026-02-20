@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* PREMIUM CSS DEĞİŞKENLERİ (DARK/LIGHT MODE İÇİN) */
+        /* MODERN VUE/VUETIFY İLHAMLI CSS DEĞİŞKENLERİ */
         :root {
             --bg-color: #f8f7fa;
             --card-bg: #ffffff;
@@ -28,7 +28,7 @@
             --danger: #ea5455;
             --shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.08);
             --circle-bg: #f0f0f0;
-            --logo-filter: none;
+            --toggle-hover: rgba(75, 70, 92, 0.08);
         }
 
         [data-theme="dark"] {
@@ -40,10 +40,10 @@
             --input-bg: #25293c;
             --shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.4);
             --circle-bg: #434968;
-            --logo-filter: brightness(0.9) contrast(1.2);
+            --toggle-hover: rgba(207, 204, 228, 0.08);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Public Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         
         body { 
             background-color: var(--bg-color); 
@@ -54,13 +54,13 @@
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* TEMA DEĞİŞTİRME BUTONU */
+        /* ORJİNAL TEMA DEĞİŞTİRME BUTONU */
         .theme-toggle {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            background: transparent;
+            border: none;
             color: var(--text-main);
             width: 45px;
             height: 45px;
@@ -68,14 +68,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
             cursor: pointer;
-            box-shadow: var(--shadow);
             transition: all 0.3s ease;
             z-index: 100;
         }
         .theme-toggle:hover {
+            background-color: var(--toggle-hover);
             color: var(--primary);
+        }
+        .theme-toggle svg {
+            transition: transform 0.3s ease;
+        }
+        .theme-toggle:hover svg {
             transform: scale(1.1);
         }
 
@@ -84,12 +88,12 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* PREMIUM KART TASARIMI */
+        /* PREMIUM KART */
         .theme-card {
             background: var(--card-bg);
             border-radius: 16px;
             box-shadow: var(--shadow);
-            padding: 4vh 4vw;
+            padding: 5vh 4vw;
             max-width: 900px;
             width: 90%;
             display: flex;
@@ -101,7 +105,7 @@
         
         .logo { 
             max-width: 320px; margin-bottom: 2vh; display: block; 
-            filter: var(--logo-filter); transition: filter 0.4s ease;
+            transition: opacity 0.3s ease;
         }
         
         .lesson-header { 
@@ -109,7 +113,7 @@
             letter-spacing: 3px; margin-bottom: 3vh; text-align: center; 
         }
 
-        /* CANLI DERS ROZETİ */
+        /* CANLI ROZETİ */
         #live-badge {
             display: none;
             background-color: var(--success); color: white;
@@ -124,23 +128,23 @@
         /* SAYAÇ */
         .countdown-container { display: flex; justify-content: center; gap: 2vw; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; width: 22vh; height: 22vh; max-width: 250px; max-height: 250px; transition: all 0.3s ease; }
-        svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .circle-bg { fill: none; stroke: var(--circle-bg); stroke-width: 8; transition: stroke 0.4s ease; }
-        .circle-progress { fill: none; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
+        svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .circle-bg { fill: none; stroke: var(--circle-bg); stroke-width: 10; transition: stroke 0.4s ease; }
+        .circle-progress { fill: none; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
         
         .c-day { stroke: var(--success); } .c-hour { stroke: var(--danger); } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
         
         .inner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
-        .time-number { font-size: 6vh; font-weight: 800; line-height: 1; transition: color 0.3s; }
-        .time-label { font-size: 1.6vh; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 0.8vh; }
+        .time-number { font-size: 6.5vh; font-weight: 800; line-height: 1.1; transition: color 0.3s; }
+        .time-label { font-size: 1.6vh; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 0.2vh; }
         
         .final-countdown .time-number { color: var(--danger) !important; }
         .final-countdown .circle-progress { stroke: var(--danger) !important; }
         .final-countdown { animation: heartbeat 1s infinite; }
         @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        /* GİRİŞ FORMU */
-        #form-view { display: none; width: 100%; max-width: 500px; margin-top: 2vh; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        /* FORMLAR */
+        #form-view { display: none; width: 100%; max-width: 500px; margin-top: 3vh; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
         .theme-card.form-active .countdown-container { transform: scale(0.65); margin-bottom: -3vh; gap: 1vw; }
@@ -166,16 +170,16 @@
             opacity: 0; transition: opacity 0.3s; text-align: center;
         }
         
-        button { 
+        button.action-btn { 
             width: 100%; padding: 18px; background-color: var(--border-color); color: var(--text-muted); 
             border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; 
             cursor: not-allowed; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        button.active { background-color: var(--primary); color: white; cursor: pointer; box-shadow: 0 4px 14px 0 rgba(115, 103, 240, 0.4); }
-        button.active:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        button.action-btn.active { background-color: var(--primary); color: white; cursor: pointer; box-shadow: 0 4px 14px 0 rgba(115, 103, 240, 0.4); }
+        button.action-btn.active:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
-        /* BEKLEME ODASI */
+        /* BEKLEME EKRANI */
         #waiting-room { display: none; margin-top: 2vh; text-align: center; animation: fadeIn 0.5s ease; }
         .success-icon { font-size: 8vh; color: var(--success); margin-bottom: 2vh; animation: popIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
         .success-msg { color: var(--success); font-size: 3.5vh; font-weight: 800; }
@@ -194,9 +198,9 @@
             .circle-box { width: 38vw; height: 38vw; max-width: none; max-height: none; }
             .time-number { font-size: 11vw; } .time-label { font-size: 3vw; }
             .theme-card.form-active .countdown-container { width: 100%; gap: 2vw; transform: scale(0.80); margin-bottom: 0; }
-            input, button { padding: 16px 16px 16px 45px; font-size: 1rem; }
+            input, button.action-btn { padding: 16px 16px 16px 45px; font-size: 1rem; }
             .input-group i { left: 15px; }
-            button { padding: 16px; }
+            button.action-btn { padding: 16px; }
             .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; }
         }
         @media screen and (min-width: 1025px) { .theme-card { transform: scale(1.1); } }
@@ -204,25 +208,24 @@
 </head>
 <body>
     <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Temayı Değiştir">
-        <i class="fas fa-moon"></i>
-    </button>
+        </button>
 
     <div class="main-container" id="main-container">
         <div class="theme-card" id="theme-card">
-            <img src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
+            <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
             
             <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
             <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
             <div id="countdown-view" class="countdown-container">
-                <div class="circle-box" id="box-days"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-days" class="circle-progress c-day" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div></div>
-                <div class="circle-box" id="box-hours"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div></div>
-                <div class="circle-box" id="box-minutes"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div></div>
-                <div class="circle-box" id="box-seconds"><svg><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div></div>
+                <div class="circle-box" id="box-days"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-days" class="circle-progress c-day" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div></div>
+                <div class="circle-box" id="box-hours"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div></div>
+                <div class="circle-box" id="box-minutes"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div></div>
+                <div class="circle-box" id="box-seconds"><svg class="progress-ring"><circle class="circle-bg" cx="50%" cy="50%" r="45%"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50%" cy="50%" r="45%"></circle></svg><div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div></div>
             </div>
 
             <div id="form-view">
-                <p style="text-align:center; margin-bottom:15px;"><i class="fas fa-id-card" style="color:var(--primary); margin-right:5px;"></i> Lütfen sisteme kayıtlı bilgilerinizi giriniz.</p>
+                <p style="text-align:center; margin-bottom:20px; font-size:1.1rem;"><i class="fas fa-id-card" style="color:var(--primary); margin-right:5px;"></i> Lütfen sisteme kayıtlı bilgilerinizi giriniz.</p>
                 
                 <div class="input-group">
                     <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="Ad Soyad" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
@@ -231,7 +234,7 @@
                 
                 <div id="match-hint"></div>
                 
-                <button id="btn" onclick="processEntry()" disabled>
+                <button class="action-btn" id="btn" onclick="processEntry()" disabled>
                     Sisteme Giriş Yap <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -250,41 +253,58 @@
     </div>
 
     <script>
-        // --- TEMA YÖNETİMİ ---
+        // --- TEMA VE LOGO YÖNETİMİ ---
         const themeBtn = document.getElementById('theme-btn');
+        const mainLogo = document.getElementById('main-logo');
         const htmlEl = document.documentElement;
+
+        const lightLogoURL = "https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png";
+        const darkLogoURL = "https://nep.nuregitimprogrami.com/prod/global/assets/media/logos/nep_yazisiz_logo.png";
         
-        // Kayıtlı temayı yükle
+        const iconMoon = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" tag="i" class="v-icon notranslate v-theme--dark iconify iconify--tabler" width="1em" height="1em" viewBox="0 0 24 24" style="font-size: 26px; height: 26px; width: 26px;"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z"></path></svg>`;
+        const iconSun = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" tag="i" class="v-icon notranslate v-theme--light iconify iconify--tabler" width="1em" height="1em" viewBox="0 0 24 24" style="font-size: 26px; height: 26px; width: 26px;"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 1 0-5.656-5.656a4 4 0 0 0 5.656 5.656zm-8.485 2.829l-1.414 1.414M6.343 6.343L4.929 4.929m12.728 1.414l1.414-1.414m-1.414 12.728l1.414 1.414M4 12H2m10-8V2m8 10h2m-10 8v2"></path></svg>`;
+        
+        // Başlangıç Teması Kontrolü
         if(localStorage.getItem('nep_theme') === 'dark') {
             htmlEl.setAttribute('data-theme', 'dark');
-            themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            themeBtn.innerHTML = iconSun;
+            mainLogo.src = darkLogoURL;
+        } else {
+            themeBtn.innerHTML = iconMoon;
+            mainLogo.src = lightLogoURL;
         }
 
         function toggleTheme() {
-            if (htmlEl.getAttribute('data-theme') === 'light') {
-                htmlEl.setAttribute('data-theme', 'dark');
-                themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
-                localStorage.setItem('nep_theme', 'dark');
-            } else {
-                htmlEl.setAttribute('data-theme', 'light');
-                themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
-                localStorage.setItem('nep_theme', 'light');
-            }
+            // Opaklık efekti ile yumuşak geçiş
+            mainLogo.style.opacity = 0;
+            setTimeout(() => {
+                if (htmlEl.getAttribute('data-theme') === 'light') {
+                    htmlEl.setAttribute('data-theme', 'dark');
+                    themeBtn.innerHTML = iconSun;
+                    mainLogo.src = darkLogoURL;
+                    localStorage.setItem('nep_theme', 'dark');
+                } else {
+                    htmlEl.setAttribute('data-theme', 'light');
+                    themeBtn.innerHTML = iconMoon;
+                    mainLogo.src = lightLogoURL;
+                    localStorage.setItem('nep_theme', 'light');
+                }
+                mainLogo.style.opacity = 1;
+            }, 150);
         }
 
-        // --- SISTEM AYARLARI ---
+        // --- SİSTEM AYARLARI ---
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
         const ENTRY_NAME = "entry.1545633020";
         const ENTRY_LOC = "entry.1443001544";
         const ZOOM_LINK = "https://us06web.zoom.us/j/81331199971?pwd=wEBSZPJcBJg3MbV4FqGMO7ggJ3onM8.1";
         
-        // --- 2. DÖNEM DERS PROGRAMI ---
         const LESSONS = [ 
             { id: 1, date: "2026-02-05" },  
             { id: 2, date: "2026-02-12" },  
-            { id: 3, date: "2026-02-21", time: "10:00" }, // CUMARTESİ 10:00
-            { id: 4, date: "2026-02-28", time: "10:00" }, // CUMARTESİ 10:00
-            { id: 5, date: "2026-03-07", time: "10:00" }, // CUMARTESİ 10:00
+            { id: 3, date: "2026-02-21", time: "10:00" }, 
+            { id: 4, date: "2026-02-28", time: "10:00" }, 
+            { id: 5, date: "2026-03-07", time: "10:00" }, 
             { id: 6, date: "2026-03-26" },  
             { id: 7, date: "2026-04-02" },  
             { id: 8, date: "2026-04-09" },  
@@ -297,7 +317,7 @@
             { id: 15, date: "2026-06-04" }  
         ];
         
-        // --- TAM GÜNCELLENMİŞ ÖĞRENCİ LİSTESİ ---
+        // --- TÜM ÖĞRENCİLER EKLENDİ ---
         const STUDENTS = [
             { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" },
             { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" },
@@ -406,8 +426,9 @@
         function getZoomLink() { let link = ZOOM_LINK; if (finalMatchedName) link += "&un=" + btoa(unescape(encodeURIComponent(finalMatchedName))); return link; }
         
         function processEntry() {
-            const btn = document.getElementById('btn'); btn.style.display = "none"; document.getElementById('name').style.display = "none"; document.getElementById('match-hint').style.display = "none";
-            document.querySelector('.input-group').style.display = "none";
+            const btn = document.getElementById('btn'); btn.style.display = "none"; 
+            document.querySelector('.input-group').style.display = "none"; 
+            document.getElementById('match-hint').style.display = "none";
             localStorage.setItem('NEP_STUDENT_NAME', finalMatchedName);
             
             const fd = new FormData(); fd.append("entry.1545633020", finalMatchedName); fd.append("entry.1443001544", "TESPİT EDİLDİ");
@@ -426,7 +447,7 @@
             const btn = document.getElementById('btn');
             
             if (raw.length < 2) { 
-                btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0; 
+                btn.disabled = true; btn.className = "action-btn"; hintBox.style.opacity = 0; 
                 document.querySelector('.input-group i').style.color = "var(--text-muted)";
                 return; 
             }
@@ -441,11 +462,11 @@
             }
             
             if (match) { 
-                finalMatchedName = match.n; btn.disabled = false; btn.className = "active"; 
+                finalMatchedName = match.n; btn.disabled = false; btn.className = "action-btn active"; 
                 hintBox.innerHTML = "<i class='fas fa-check'></i> " + match.n; hintBox.style.opacity = 1; 
                 document.querySelector('.input-group i').style.color = "var(--success)";
             } else { 
-                btn.disabled = true; btn.className = ""; hintBox.style.opacity = 0; 
+                btn.disabled = true; btn.className = "action-btn"; hintBox.style.opacity = 0; 
                 document.querySelector('.input-group i').style.color = "var(--danger)";
             }
         }
