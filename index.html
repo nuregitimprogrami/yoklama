@@ -41,6 +41,7 @@
             --circle-bg: #2f3349;
             --toggle-bg: #2f3349;
             --toggle-hover: #434968;
+            /* Karanlık modda logo kaybolmasın diye saf beyaza (Monochrome) çevrilir */
             --logo-filter: brightness(0) invert(1) opacity(0.95);
             --ramazan-color: #e5c05c;
         }
@@ -132,7 +133,7 @@
         }
         @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* SAYAÇ */
+        /* SAYAÇ - KOPMA SORUNU ÇÖZÜLMÜŞ KUSURSUZ DAİRELER */
         .countdown-container { display: flex; justify-content: center; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; transition: all 0.3s ease; }
         svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
@@ -349,9 +350,9 @@
         const LESSONS = [ 
             { id: 1, date: "2026-02-05" },  
             { id: 2, date: "2026-02-12" },  
-            { id: 3, date: "2026-02-21", time: "10:00" }, 
-            { id: 4, date: "2026-02-28", time: "10:00" }, 
-            { id: 5, date: "2026-03-07", time: "10:00" }, 
+            { id: 3, date: "2026-02-21", time: "10:00" }, // CUMARTESİ 10:00
+            { id: 4, date: "2026-03-01", time: "13:30" }, // PAZAR 13:30 (Güncellendi)
+            { id: 5, date: "2026-03-08", time: "13:30" }, // PAZAR 13:30 (Güncellendi)
             { id: 6, date: "2026-03-26" },  
             { id: 7, date: "2026-04-02" },  
             { id: 8, date: "2026-04-09" },  
@@ -364,6 +365,7 @@
             { id: 15, date: "2026-06-04" }  
         ];
         
+        // --- 4 ÖĞRENCİ ÇIKARILDI ---
         const STUDENTS = [
             { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" },
             { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" },
@@ -372,17 +374,13 @@
             { n: "ALPARSLAN ONUR ÖZEREN", c: "İSTANBUL" },
             { n: "AYBERK YUSUF AKKURT", c: "MARDİN" },
             { n: "BÜNYAMİN ÇAĞRI AKBOYUN", c: "BURSA" },
-            { n: "ENES EKİZ", c: "KONYA" },
-            { n: "EYMEN ERDOĞAN KARA", c: "MANİSA" },
             { n: "FATİH SELİM OCAK", c: "SİSTEM" },
-            { n: "HAMZA İZCİ", c: "YOZGAT" },
             { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "SİSTEM" },
             { n: "İBRAHİM SARAYDEMİR", c: "SİSTEM" },
             { n: "KEREM ALİ ÇAKIR", c: "ERZİNCAN" },
             { n: "KEREM KÜÇÜK", c: "SİSTEM" },
             { n: "MUHAMMED ALİ ARAS", c: "SİSTEM" },
             { n: "MUHAMMED ARİF KURTKAYA", c: "SİSTEM" },
-            { n: "MUHAMMED SAID", c: "İSTANBUL" },
             { n: "MUHAMMED TAHA SAYIN", c: "SİSTEM" },
             { n: "MUHAMMED YASİR SALDIRAN", c: "SİSTEM" },
             { n: "MUHAMMED YUSUF KARAKUŞ", c: "VAN" },
@@ -409,21 +407,42 @@
 
         function initSystem() {
             const now = new Date();
+            
+            // Sıradaki Dersi Bul (Dakika okuma özelliği eklendi)
             activeLesson = LESSONS.find(l => {
-                let endH = l.time ? parseInt(l.time.split(':')[0]) + 1 : 20; 
-                let endT = new Date(l.date + "T" + (endH < 10 ? '0'+endH : endH) + ":00:00+03:00").getTime();
+                let endH = 20, endM = 0; 
+                if (l.time) {
+                    let parts = l.time.split(':');
+                    endH = parseInt(parts[0]) + 1; // 1 saat sürer
+                    endM = parseInt(parts[1]) || 0;
+                }
+                let sH = endH < 10 ? '0'+endH : endH;
+                let sM = endM < 10 ? '0'+endM : endM;
+                let endT = new Date(`${l.date}T${sH}:${sM}:00+03:00`).getTime();
                 return now.getTime() < endT;
             });
             
             if (activeLesson) {
-                let startH = 19; let endH = 20;
+                // Varsayılan saatler: 19:00 - 20:00
+                let startH = 19, startM = 0, endH = 20, endM = 0;
+                
+                // Özel saat ayarı (Örn: 13:30)
                 if (activeLesson.time) {
-                    startH = parseInt(activeLesson.time.split(':')[0]);
+                    let parts = activeLesson.time.split(':');
+                    startH = parseInt(parts[0]);
+                    startM = parseInt(parts[1]) || 0;
                     endH = startH + 1;
+                    endM = startM;
                 }
-                startTime = new Date(activeLesson.date + "T" + (startH < 10 ? '0'+startH : startH) + ":00:00+03:00").getTime();
-                endTime = new Date(activeLesson.date + "T" + (endH < 10 ? '0'+endH : endH) + ":00:00+03:00").getTime();
-                gatesOpenTime = startTime - 300000; 
+
+                let sH_str = startH < 10 ? '0'+startH : startH;
+                let sM_str = startM < 10 ? '0'+startM : startM;
+                let eH_str = endH < 10 ? '0'+endH : endH;
+                let eM_str = endM < 10 ? '0'+endM : endM;
+
+                startTime = new Date(`${activeLesson.date}T${sH_str}:${sM_str}:00+03:00`).getTime();
+                endTime = new Date(`${activeLesson.date}T${eH_str}:${eM_str}:00+03:00`).getTime();
+                gatesOpenTime = startTime - 300000; // 5 dk önce açılır
                 
                 document.getElementById('lesson-title').innerText = activeLesson.id + ". DERS BAŞLIYOR";
                 setInterval(updateTimer, 1000); updateTimer(); 
