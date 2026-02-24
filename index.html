@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr" data-theme="light">
-<head>
+<html lang="tr" data-theme="dark"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -14,25 +13,27 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* SAF VE KUSURSUZ TAM EKRAN (SEAMLESS) DEĞİŞKENLER */
+        /* GÖZ DOSTU & PREMIUM CSS DEĞİŞKENLERİ */
         :root {
-            --bg-color: #f8f7fa;
-            --text-main: #4b465c;
-            --text-muted: #a8a3b5;
-            --border-color: #dbdade;
+            /* Aydınlık Mod: Göz yormayan soft renkler */
+            --bg-color: #f0f2f5; 
+            --text-main: #5c596d;
+            --text-muted: #9592a8;
+            --border-color: #d1d5db;
             --input-bg: #ffffff;
             --primary: #7367f0;
             --primary-hover: #655bd3;
             --success: #28c76f;
             --danger: #ea5455;
-            --circle-bg: #eae8f0;
+            --circle-bg: #e4e6eb;
             --toggle-bg: #ffffff;
-            --toggle-hover: #e0def0;
+            --toggle-hover: #e5e7eb;
             --logo-filter: none;
             --ramazan-color: #b8860b;
         }
 
         [data-theme="dark"] {
+            /* Karanlık Mod */
             --bg-color: #25293c;
             --text-main: #cfcce4;
             --text-muted: #7983a5;
@@ -41,7 +42,7 @@
             --circle-bg: #2f3349;
             --toggle-bg: #2f3349;
             --toggle-hover: #434968;
-            /* Karanlık modda logo kaybolmasın diye saf beyaza (Monochrome) çevrilir */
+            /* Saf Beyaz Logo Efekti */
             --logo-filter: brightness(0) invert(1) opacity(0.95);
             --ramazan-color: #e5c05c;
         }
@@ -78,7 +79,30 @@
         .theme-toggle svg { transition: transform 0.3s ease; }
         .theme-toggle:hover svg { transform: scale(1.1); }
 
-        /* KUTUSUZ TAM EKRAN VE MERKEZLEME */
+        /* AKILLI BİLDİRİM (TOAST) EKRANI */
+        #theme-toast {
+            position: fixed;
+            bottom: 30px;
+            right: -400px;
+            background-color: #2f3349;
+            color: #cfcce4;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-left: 4px solid var(--primary);
+            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999;
+        }
+        #theme-toast.show { right: 30px; }
+        #theme-toast i { font-size: 1.5rem; color: var(--primary); }
+        .toast-content strong { display: block; font-size: 15px; margin-bottom: 3px; color: #fff; }
+        .toast-content span { font-size: 13px; opacity: 0.8; }
+
+        /* MERKEZLEME VE İSKELET */
         .main-container { 
             flex: 1;
             width: 100%; max-width: 1000px;
@@ -91,7 +115,6 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;
         }
 
-        /* ZARİF RAMAZAN BAŞLIĞI */
         .ramazan-text {
             font-size: 1.3rem;
             font-weight: 600;
@@ -102,7 +125,7 @@
             text-align: center;
             opacity: 0.9;
             transition: color 0.4s ease;
-            white-space: nowrap; /* Asla alt satıra inmemesi için eklendi */
+            white-space: nowrap; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -133,17 +156,13 @@
         }
         @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* SAYAÇ - KOPMA SORUNU ÇÖZÜLMÜŞ KUSURSUZ DAİRELER */
+        /* SAYAÇ */
         .countdown-container { display: flex; justify-content: center; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; transition: all 0.3s ease; }
         svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
         
         .circle-bg { fill: none; stroke: var(--circle-bg); transition: stroke 0.4s ease; }
-        .circle-progress { 
-            fill: none; stroke-linecap: round; 
-            stroke-dasharray: 100; stroke-dashoffset: 100; 
-            transition: stroke-dashoffset 1s linear; 
-        }
+        .circle-progress { fill: none; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1s linear; }
         
         .c-day { stroke: var(--success); } .c-hour { stroke: var(--danger); } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
         
@@ -174,16 +193,14 @@
         input:focus + i { color: var(--primary); }
         
         #match-hint {
-            height: 25px; margin-bottom: 15px; 
-            font-size: 1rem; font-weight: 700; color: var(--success);
-            text-transform: uppercase; letter-spacing: 1px;
-            opacity: 0; transition: opacity 0.3s; text-align: center;
+            height: 25px; margin-bottom: 15px; font-size: 1rem; font-weight: 700; color: var(--success);
+            text-transform: uppercase; letter-spacing: 1px; opacity: 0; transition: opacity 0.3s; text-align: center;
         }
         
         button.action-btn { 
             width: 100%; background-color: var(--border-color); color: var(--text-muted); 
-            border: none; border-radius: 8px; font-weight: 700; 
-            cursor: not-allowed; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+            border: none; border-radius: 8px; font-weight: 700; cursor: not-allowed; 
+            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
         button.action-btn.active { background-color: var(--primary); color: white; cursor: pointer; box-shadow: 0 4px 14px 0 rgba(115, 103, 240, 0.4); }
@@ -198,7 +215,7 @@
         #end-term-view { display: none; text-align: center; }
         #end-term-view i { font-size: 8vh; color: var(--danger); margin-bottom: 2vh; }
 
-        /* CİHAZA GÖRE OTOMATİK DİZAYN */
+        /* BİLGİSAYAR */
         @media screen and (min-width: 1025px) {
             .logo { height: 130px; }
             .main-container.form-active .logo { height: 90px; }
@@ -215,6 +232,7 @@
             .theme-toggle { width: 50px; height: 50px; font-size: 26px; }
         }
 
+        /* TABLET */
         @media screen and (min-width: 601px) and (max-width: 1024px) {
             .logo { height: 100px; }
             .main-container.form-active .logo { height: 75px; }
@@ -231,35 +249,48 @@
             .theme-toggle { width: 45px; height: 45px; font-size: 24px; }
         }
 
-        /* MOBİL ÖZEL OPTİMİZASYON */
+        /* TELEFON (Sıkışıklık sorunu çözüldü, ferahlatıldı) */
         @media screen and (max-width: 600px) {
-            .content-wrapper { 
-                /* Telefonlarda klavye vs açıldığında sıkışmaması için bloğu 2 tık yukarı alır */
-                margin-top: -8vh; 
-            }
-            .ramazan-text { 
-                font-size: 4.5vw; /* Ekrana göre esner */
-                letter-spacing: 1px; 
-                margin-bottom: 2vh; 
-            }
+            .content-wrapper { margin-top: -6vh; }
+            .ramazan-text { font-size: 4.5vw; letter-spacing: 1px; margin-bottom: 2vh; }
             .logo { max-width: 65vw; height: auto; margin-bottom: 2.5vh; }
             .main-container.form-active .logo { max-width: 45vw; }
             .lesson-header { font-size: 22px; letter-spacing: 1px; margin-bottom: 3.5vh; }
             .countdown-container { gap: 4vw; flex-wrap: nowrap; }
-            .circle-box { width: 28vw; height: 28vw; max-width: 110px; max-height: 110px; }
-            .circle-bg, .circle-progress { stroke-width: 7; }
-            .time-number { font-size: 9vw; } 
-            .time-label { font-size: 3vw; margin-top: 2px; }
+            
+            /* Daireler küçültüldü, çizgiler inceltildi, yazılar nefes aldı */
+            .circle-box { width: 24vw; height: 24vw; max-width: 90px; max-height: 90px; }
+            .circle-bg, .circle-progress { stroke-width: 6; }
+            .time-number { font-size: 6.5vw; } 
+            .time-label { font-size: 2.5vw; margin-top: 0px; }
+            
             #form-view { max-width: 90vw; margin-top: 2vh; }
             input, button.action-btn { font-size: 1rem; padding: 15px 15px 15px 45px; }
             .input-group i { left: 16px; font-size: 1.1rem; }
             button.action-btn { padding: 15px; }
             .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 22px; }
+
+            /* Mobilde Toast Bildirimi Tam Ortada Çıksın */
+            #theme-toast {
+                right: 0; left: 0; margin: 0 auto;
+                bottom: -100px;
+                width: 90%; max-width: 350px;
+                transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            #theme-toast.show { bottom: 20px; right: 0; }
         }
     </style>
 </head>
 <body>
     <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Temayı Değiştir"></button>
+
+    <div id="theme-toast">
+        <i class="fas fa-eye"></i>
+        <div class="toast-content">
+            <strong>Göz Sağlığı Uyarısı</strong>
+            <span>Karanlık modda kalmanızı öneririz.<br>Açmak için bir daha tıklayın.</span>
+        </div>
+    </div>
 
     <div class="main-container" id="main-container">
         <div class="content-wrapper">
@@ -317,28 +348,52 @@
     </div>
 
     <script>
+        // --- TEMA VE AKILLI UYARI SİSTEMİ ---
         const themeBtn = document.getElementById('theme-btn');
         const htmlEl = document.documentElement;
+        const toast = document.getElementById('theme-toast');
         
         const iconMoon = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z"></path></svg>`;
         const iconSun = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 1 0-5.656-5.656a4 4 0 0 0 5.656 5.656zm-8.485 2.829l-1.414 1.414M6.343 6.343L4.929 4.929m12.728 1.414l1.414-1.414m-1.414 12.728l1.414 1.414M4 12H2m10-8V2m8 10h2m-10 8v2"></path></svg>`;
         
-        if(localStorage.getItem('nep_theme') === 'dark') {
+        let warningActive = false;
+        let warningTimer;
+
+        // Varsayılan olarak hep karanlık açılır (Daha önce light seçmişse hariç)
+        const savedTheme = localStorage.getItem('nep_theme');
+        if(savedTheme === 'light') {
+            htmlEl.setAttribute('data-theme', 'light');
+            themeBtn.innerHTML = iconMoon;
+        } else {
             htmlEl.setAttribute('data-theme', 'dark');
             themeBtn.innerHTML = iconSun;
-        } else {
-            themeBtn.innerHTML = iconMoon;
         }
 
         function toggleTheme() {
-            if (htmlEl.getAttribute('data-theme') === 'light') {
-                htmlEl.setAttribute('data-theme', 'dark');
-                themeBtn.innerHTML = iconSun;
-                localStorage.setItem('nep_theme', 'dark');
-            } else {
+            if (htmlEl.getAttribute('data-theme') === 'dark') {
+                // Karanlıktan aydınlığa geçerken uyarı göster (Çift Tıklama Mantığı)
+                if (!warningActive) {
+                    toast.classList.add('show');
+                    warningActive = true;
+                    clearTimeout(warningTimer);
+                    warningTimer = setTimeout(() => { 
+                        warningActive = false; 
+                        toast.classList.remove('show');
+                    }, 4000);
+                    return; // Temayı değiştirme, bekle.
+                }
+                
+                // Uyarı varken ikinci kez tıkladıysa değiştir
                 htmlEl.setAttribute('data-theme', 'light');
                 themeBtn.innerHTML = iconMoon;
                 localStorage.setItem('nep_theme', 'light');
+                toast.classList.remove('show');
+                warningActive = false;
+            } else {
+                // Aydınlıktan karanlığa direkt geçer
+                htmlEl.setAttribute('data-theme', 'dark');
+                themeBtn.innerHTML = iconSun;
+                localStorage.setItem('nep_theme', 'dark');
             }
         }
 
@@ -347,12 +402,13 @@
         const ENTRY_LOC = "entry.1443001544";
         const ZOOM_LINK = "https://us06web.zoom.us/j/81331199971?pwd=wEBSZPJcBJg3MbV4FqGMO7ggJ3onM8.1";
         
+        // 2. DÖNEM DERS PROGRAMI (Pazar günleri düzeltildi)
         const LESSONS = [ 
             { id: 1, date: "2026-02-05" },  
             { id: 2, date: "2026-02-12" },  
-            { id: 3, date: "2026-02-21", time: "10:00" }, // CUMARTESİ 10:00
-            { id: 4, date: "2026-03-01", time: "13:30" }, // PAZAR 13:30 (Güncellendi)
-            { id: 5, date: "2026-03-08", time: "13:30" }, // PAZAR 13:30 (Güncellendi)
+            { id: 3, date: "2026-02-21", time: "10:00" }, 
+            { id: 4, date: "2026-03-01", time: "13:30" }, // Pazar 13:30
+            { id: 5, date: "2026-03-08", time: "13:30" }, // Pazar 13:30
             { id: 6, date: "2026-03-26" },  
             { id: 7, date: "2026-04-02" },  
             { id: 8, date: "2026-04-09" },  
@@ -365,7 +421,7 @@
             { id: 15, date: "2026-06-04" }  
         ];
         
-        // --- 4 ÖĞRENCİ ÇIKARILDI ---
+        // GÜNCELLENMİŞ ÖĞRENCİ LİSTESİ (4 Kişi Çıkarıldı)
         const STUDENTS = [
             { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" },
             { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" },
@@ -408,12 +464,12 @@
         function initSystem() {
             const now = new Date();
             
-            // Sıradaki Dersi Bul (Dakika okuma özelliği eklendi)
+            // Dakika destekli akıllı ders bulucu
             activeLesson = LESSONS.find(l => {
                 let endH = 20, endM = 0; 
                 if (l.time) {
                     let parts = l.time.split(':');
-                    endH = parseInt(parts[0]) + 1; // 1 saat sürer
+                    endH = parseInt(parts[0]) + 1; 
                     endM = parseInt(parts[1]) || 0;
                 }
                 let sH = endH < 10 ? '0'+endH : endH;
@@ -423,10 +479,8 @@
             });
             
             if (activeLesson) {
-                // Varsayılan saatler: 19:00 - 20:00
                 let startH = 19, startM = 0, endH = 20, endM = 0;
                 
-                // Özel saat ayarı (Örn: 13:30)
                 if (activeLesson.time) {
                     let parts = activeLesson.time.split(':');
                     startH = parseInt(parts[0]);
@@ -442,7 +496,7 @@
 
                 startTime = new Date(`${activeLesson.date}T${sH_str}:${sM_str}:00+03:00`).getTime();
                 endTime = new Date(`${activeLesson.date}T${eH_str}:${eM_str}:00+03:00`).getTime();
-                gatesOpenTime = startTime - 300000; // 5 dk önce açılır
+                gatesOpenTime = startTime - 300000; 
                 
                 document.getElementById('lesson-title').innerText = activeLesson.id + ". DERS BAŞLIYOR";
                 setInterval(updateTimer, 1000); updateTimer(); 
