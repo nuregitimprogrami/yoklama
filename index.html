@@ -14,30 +14,27 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* ==================================================================
-           V91: GERÇEK E-KİTAP (SEPIA) GÖZ KORUMA VE KUSURSUZ TAM EKRAN 
-           (Bu modda saf beyaz renk #ffffff KESİNLİKLE YASAKTIR)
-           ================================================================== */
+        /* TRUE TONE / E-INK GÖZ DOSTU DEĞİŞKENLER */
         :root {
-            /* Aydınlık Mod: Gerçek E-Okuyucu (Sepia) Renkleri */
-            --bg-color: #eaddc5; /* Göz yormayan mat parşömen / kum rengi */
-            --text-main: #3d3527; /* Keskin siyah değil, sıcak koyu gri/kahve */
-            --text-muted: #7d725f;
-            --border-color: #d1c5ad; /* Yumuşak kenarlıklar */
-            --input-bg: #f2e7d3; /* Beyaz değil, çok açık bej */
-            --primary: #6358cc; /* Parlaklığı alınmış mat mor/lacivert */
+            /* Aydınlık Mod: Senin Seçtiğin #F5F5DC (Bej) ve Uyumlu Tonları */
+            --bg-color: #f5f5dc; 
+            --text-main: #4a453a; 
+            --text-muted: #8b8678;
+            --border-color: #e3e3c7; 
+            --input-bg: #fffbf0; 
+            --primary: #6358cc; 
             --primary-hover: #564cb8;
-            --success: #2b9956; /* Parlak yeşil yerine mat zümrüt yeşili */
-            --danger: #d44d4e; /* Parlak kırmızı yerine mat kiremit kırmızısı */
-            --circle-bg: #d8cbae;
-            --toggle-bg: #f2e7d3;
-            --toggle-hover: #dfd2b9;
-            --logo-filter: sepia(0.2) contrast(0.9) opacity(0.9); /* Logo bile hafif matlaşır, kağıda uyum sağlar */
-            --ramazan-color: #8c6600; /* Göz almayan mat altın sarısı */
+            --success: #2b9956; 
+            --danger: #d44d4e; 
+            --circle-bg: #e3e3c7;
+            --toggle-bg: #fffbf0;
+            --toggle-hover: #ebebce;
+            --logo-filter: contrast(0.95) opacity(0.95); 
+            --ramazan-color: #8c6600; 
         }
 
         [data-theme="dark"] {
-            /* Karanlık Mod: Gece Sürüşü (Değişmedi, zaten kusursuzdu) */
+            /* Karanlık Mod */
             --bg-color: #25293c;
             --text-main: #cfcce4;
             --text-muted: #7983a5;
@@ -46,7 +43,7 @@
             --circle-bg: #2f3349;
             --toggle-bg: #2f3349;
             --toggle-hover: #434968;
-            /* Logonun siyah arka planda okunabilmesi için saf beyaz (Monochrome) filtre */
+            /* Saf Beyaz Logo Efekti */
             --logo-filter: brightness(0) invert(1) opacity(0.95);
             --ramazan-color: #e5c05c;
         }
@@ -106,7 +103,7 @@
         .toast-content strong { display: block; font-size: 15px; margin-bottom: 3px; color: #fff; }
         .toast-content span { font-size: 13px; opacity: 0.8; }
 
-        /* KUTUSUZ TAM EKRAN İSKELETİ */
+        /* MERKEZLEME VE İSKELET */
         .main-container { 
             flex: 1;
             width: 100%; max-width: 1000px;
@@ -273,6 +270,7 @@
             button.action-btn { padding: 15px; }
             .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 22px; }
 
+            /* Mobilde Toast Bildirimi Tam Ortada Çıksın */
             #theme-toast {
                 right: 0; left: 0; margin: 0 auto;
                 bottom: -100px;
@@ -350,6 +348,7 @@
     </div>
 
     <script>
+        // --- TEMA VE AKILLI UYARI SİSTEMİ ---
         const themeBtn = document.getElementById('theme-btn');
         const htmlEl = document.documentElement;
         const toast = document.getElementById('theme-toast');
