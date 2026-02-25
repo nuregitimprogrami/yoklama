@@ -14,27 +14,30 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* TRUE TONE / E-INK GÖZ DOSTU DEĞİŞKENLER */
+        /* ==================================================================
+           V91: GERÇEK E-KİTAP (SEPIA) GÖZ KORUMA VE KUSURSUZ TAM EKRAN 
+           (Bu modda saf beyaz renk #ffffff KESİNLİKLE YASAKTIR)
+           ================================================================== */
         :root {
-            /* Aydınlık Mod: Saf beyaz YOK. Tamamen sıcak kağıt/krem tonları (Reader Mode) */
-            --bg-color: #f4f1ea; 
-            --text-main: #4a453a;
-            --text-muted: #8b8678;
-            --border-color: #e0dcd0;
-            --input-bg: #fbf9f4;
-            --primary: #7367f0;
-            --primary-hover: #655bd3;
-            --success: #28c76f;
-            --danger: #e24b4c;
-            --circle-bg: #e8e4d9;
-            --toggle-bg: #fbf9f4;
-            --toggle-hover: #ece9df;
-            --logo-filter: contrast(0.95) opacity(0.95); /* Logodaki parlamayı da hafif kırar */
-            --ramazan-color: #b8860b;
+            /* Aydınlık Mod: Gerçek E-Okuyucu (Sepia) Renkleri */
+            --bg-color: #eaddc5; /* Göz yormayan mat parşömen / kum rengi */
+            --text-main: #3d3527; /* Keskin siyah değil, sıcak koyu gri/kahve */
+            --text-muted: #7d725f;
+            --border-color: #d1c5ad; /* Yumuşak kenarlıklar */
+            --input-bg: #f2e7d3; /* Beyaz değil, çok açık bej */
+            --primary: #6358cc; /* Parlaklığı alınmış mat mor/lacivert */
+            --primary-hover: #564cb8;
+            --success: #2b9956; /* Parlak yeşil yerine mat zümrüt yeşili */
+            --danger: #d44d4e; /* Parlak kırmızı yerine mat kiremit kırmızısı */
+            --circle-bg: #d8cbae;
+            --toggle-bg: #f2e7d3;
+            --toggle-hover: #dfd2b9;
+            --logo-filter: sepia(0.2) contrast(0.9) opacity(0.9); /* Logo bile hafif matlaşır, kağıda uyum sağlar */
+            --ramazan-color: #8c6600; /* Göz almayan mat altın sarısı */
         }
 
         [data-theme="dark"] {
-            /* Karanlık Mod */
+            /* Karanlık Mod: Gece Sürüşü (Değişmedi, zaten kusursuzdu) */
             --bg-color: #25293c;
             --text-main: #cfcce4;
             --text-muted: #7983a5;
@@ -43,7 +46,7 @@
             --circle-bg: #2f3349;
             --toggle-bg: #2f3349;
             --toggle-hover: #434968;
-            /* Saf Beyaz Logo Efekti */
+            /* Logonun siyah arka planda okunabilmesi için saf beyaz (Monochrome) filtre */
             --logo-filter: brightness(0) invert(1) opacity(0.95);
             --ramazan-color: #e5c05c;
         }
@@ -103,7 +106,7 @@
         .toast-content strong { display: block; font-size: 15px; margin-bottom: 3px; color: #fff; }
         .toast-content span { font-size: 13px; opacity: 0.8; }
 
-        /* MERKEZLEME VE İSKELET */
+        /* KUTUSUZ TAM EKRAN İSKELETİ */
         .main-container { 
             flex: 1;
             width: 100%; max-width: 1000px;
@@ -138,7 +141,7 @@
             display: block; 
             margin-bottom: 3vh;
             filter: var(--logo-filter);
-            transition: filter 0.5s ease, opacity 0.3s ease;
+            transition: filter 0.4s ease, opacity 0.3s ease;
         }
         
         .lesson-header { 
@@ -162,14 +165,14 @@
         .circle-box { position: relative; transition: all 0.3s ease; }
         svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
         
-        .circle-bg { fill: none; stroke: var(--circle-bg); transition: stroke 0.5s ease; }
+        .circle-bg { fill: none; stroke: var(--circle-bg); transition: stroke 0.4s ease; }
         .circle-progress { fill: none; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1s linear; }
         
         .c-day { stroke: var(--success); } .c-hour { stroke: var(--danger); } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
         
         .inner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .time-number { font-weight: 800; line-height: 1; transition: color 0.5s; }
-        .time-label { color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 5px; transition: color 0.5s; }
+        .time-number { font-weight: 800; line-height: 1; transition: color 0.3s; }
+        .time-label { color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 5px; }
         
         .final-countdown .time-number { color: var(--danger) !important; }
         .final-countdown .circle-progress { stroke: var(--danger) !important; }
@@ -188,7 +191,7 @@
         
         input { 
             width: 100%; background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 8px; 
-            font-weight: 600; color: var(--text-main); transition: all 0.5s ease; outline: none;
+            font-weight: 600; color: var(--text-main); transition: all 0.3s ease; outline: none;
         }
         input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(115, 103, 240, 0.1); }
         input:focus + i { color: var(--primary); }
@@ -201,7 +204,7 @@
         button.action-btn { 
             width: 100%; background-color: var(--border-color); color: var(--text-muted); 
             border: none; border-radius: 8px; font-weight: 700; cursor: not-allowed; 
-            transition: all 0.5s ease; text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
         button.action-btn.active { background-color: var(--primary); color: white; cursor: pointer; box-shadow: 0 4px 14px 0 rgba(115, 103, 240, 0.4); }
@@ -270,7 +273,6 @@
             button.action-btn { padding: 15px; }
             .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 22px; }
 
-            /* Mobilde Toast Bildirimi Tam Ortada Çıksın */
             #theme-toast {
                 right: 0; left: 0; margin: 0 auto;
                 bottom: -100px;
@@ -348,7 +350,6 @@
     </div>
 
     <script>
-        // --- TEMA VE AKILLI UYARI SİSTEMİ ---
         const themeBtn = document.getElementById('theme-btn');
         const htmlEl = document.documentElement;
         const toast = document.getElementById('theme-toast');
