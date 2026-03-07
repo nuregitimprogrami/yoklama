@@ -16,7 +16,6 @@
     <style>
         /* TRUE TONE / E-INK GÖZ DOSTU DEĞİŞKENLER */
         :root {
-            /* Aydınlık Mod: Senin Seçtiğin #F5F5DC (Bej) ve Uyumlu Tonları */
             --bg-color: #f5f5dc; 
             --text-main: #4a453a; 
             --text-muted: #8b8678;
@@ -34,7 +33,6 @@
         }
 
         [data-theme="dark"] {
-            /* Karanlık Mod */
             --bg-color: #25293c;
             --text-main: #cfcce4;
             --text-muted: #7983a5;
@@ -43,7 +41,6 @@
             --circle-bg: #2f3349;
             --toggle-bg: #2f3349;
             --toggle-hover: #434968;
-            /* Saf Beyaz Logo Efekti */
             --logo-filter: brightness(0) invert(1) opacity(0.95);
             --ramazan-color: #e5c05c;
         }
@@ -60,7 +57,6 @@
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        /* TEMA DEĞİŞTİRME BUTONU */
         .theme-toggle {
             position: absolute;
             top: 25px;
@@ -80,7 +76,6 @@
         .theme-toggle svg { transition: transform 0.3s ease; }
         .theme-toggle:hover svg { transform: scale(1.1); }
 
-        /* AKILLI BİLDİRİM (TOAST) EKRANI */
         #theme-toast {
             position: fixed;
             bottom: 30px;
@@ -103,7 +98,6 @@
         .toast-content strong { display: block; font-size: 15px; margin-bottom: 3px; color: #fff; }
         .toast-content span { font-size: 13px; opacity: 0.8; }
 
-        /* MERKEZLEME VE İSKELET */
         .main-container { 
             flex: 1;
             width: 100%; max-width: 1000px;
@@ -157,12 +151,11 @@
         }
         @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* SAYAÇ */
         .countdown-container { display: flex; justify-content: center; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; transition: all 0.3s ease; }
         svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
         
-        .circle-bg { fill: none; stroke: var(--circle-bg); transition: stroke 0.4s ease; }
+        .circle-bg { fill: none; stroke: var(--circle-bg); transition: stroke 0.5s ease; }
         .circle-progress { fill: none; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1s linear; }
         
         .c-day { stroke: var(--success); } .c-hour { stroke: var(--danger); } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
@@ -176,7 +169,6 @@
         .final-countdown { animation: heartbeat 1s infinite; }
         @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        /* GİRİŞ FORMU */
         #form-view { display: none; width: 100%; animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -189,6 +181,7 @@
         input { 
             width: 100%; background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 8px; 
             font-weight: 600; color: var(--text-main); transition: all 0.3s ease; outline: none;
+            padding: 18px 20px 18px 50px; font-size: 1.1rem;
         }
         input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(115, 103, 240, 0.1); }
         input:focus + i { color: var(--primary); }
@@ -203,6 +196,7 @@
             border: none; border-radius: 8px; font-weight: 700; cursor: not-allowed; 
             transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
             display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 18px; font-size: 1.1rem;
         }
         button.action-btn.active { background-color: var(--primary); color: white; cursor: pointer; box-shadow: 0 4px 14px 0 rgba(115, 103, 240, 0.4); }
         button.action-btn.active:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
@@ -227,9 +221,6 @@
             .time-number { font-size: 75px; }
             .time-label { font-size: 18px; }
             #form-view { max-width: 500px; margin-top: 4vh; }
-            input, button.action-btn { font-size: 1.2rem; padding: 20px 20px 20px 55px; }
-            .input-group i { left: 22px; font-size: 1.3rem; }
-            button.action-btn { padding: 20px; }
             .theme-toggle { width: 50px; height: 50px; font-size: 26px; }
         }
 
@@ -244,9 +235,6 @@
             .time-number { font-size: 55px; }
             .time-label { font-size: 15px; }
             #form-view { max-width: 450px; margin-top: 3vh; }
-            input, button.action-btn { font-size: 1.1rem; padding: 18px 18px 18px 50px; }
-            .input-group i { left: 20px; font-size: 1.2rem; }
-            button.action-btn { padding: 18px; }
             .theme-toggle { width: 45px; height: 45px; font-size: 24px; }
         }
 
@@ -270,7 +258,6 @@
             button.action-btn { padding: 15px; }
             .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 22px; }
 
-            /* Mobilde Toast Bildirimi Tam Ortada Çıksın */
             #theme-toast {
                 right: 0; left: 0; margin: 0 auto;
                 bottom: -100px;
@@ -348,7 +335,6 @@
     </div>
 
     <script>
-        // --- TEMA VE AKILLI UYARI SİSTEMİ ---
         const themeBtn = document.getElementById('theme-btn');
         const htmlEl = document.documentElement;
         const toast = document.getElementById('theme-toast');
@@ -359,7 +345,6 @@
         let warningActive = false;
         let warningTimer;
 
-        // Varsayılan DARK MOD
         const savedTheme = localStorage.getItem('nep_theme');
         if(savedTheme === 'light') {
             htmlEl.setAttribute('data-theme', 'light');
@@ -381,7 +366,6 @@
                     }, 4000);
                     return; 
                 }
-                
                 htmlEl.setAttribute('data-theme', 'light');
                 themeBtn.innerHTML = iconMoon;
                 localStorage.setItem('nep_theme', 'light');
@@ -417,6 +401,7 @@
             { id: 15, date: "2026-06-04" }  
         ];
         
+        // EKSİKSİZ VE HATASIZ LİSTE (30 Kişi)
         const STUDENTS = [
             { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" },
             { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" },
@@ -433,12 +418,14 @@
             { n: "MEHMED EMİN SUCU", c: "SİSTEM" },
             { n: "MUHAMMED ALİ ARAS", c: "SİSTEM" },
             { n: "MUHAMMED ARİF KURTKAYA", c: "SİSTEM" },
+            { n: "MUHAMMED SAID", c: "İSTANBUL" },
             { n: "MUHAMMED TAHA SAYIN", c: "SİSTEM" },
             { n: "MUHAMMED YASİR SALDIRAN", c: "SİSTEM" },
             { n: "MUHAMMED YUSUF KARAKUŞ", c: "VAN" },
             { n: "MUSA BOYACI", c: "İSTANBUL" },
             { n: "MUSAB METİN MUTLU", c: "KONYA" },
             { n: "MUSTAFA YUSUF ÖZBAKIR", c: "İZMİR" },
+            { n: "MUSTAFO NASIMJONOV", c: "SİSTEM" },
             { n: "ÖMER EYMEN ÇETİNTAŞ", c: "DİYARBAKIR" },
             { n: "SADULLAH YAHYA ÇAVUŞOĞLU", c: "AFYONKARAHİSAR" },
             { n: "SALİH KEREM YENER", c: "İZMİR" },
@@ -459,7 +446,6 @@
 
         function initSystem() {
             const now = new Date();
-            
             activeLesson = LESSONS.find(l => {
                 let endH = 20, endM = 0; 
                 if (l.time) {
@@ -556,27 +542,50 @@
             });
         }
 
-        function normalizeTR(str) { return str.replace(/Ğ/g, "G").replace(/ğ/g, "g").replace(/Ü/g, "U").replace(/ü/g, "u").replace(/Ş/g, "S").replace(/ş/g, "s").replace(/İ/g, "I").replace(/ı/g, "i").replace(/Ö/g, "O").replace(/ö/g, "o").replace(/Ç/g, "C").replace(/ç/g, "c").toUpperCase().trim(); }
+        // KUSURSUZ (BULLETPROOF) HARF ÇEVİRME FİLTRESİ
+        function normalizeToEnglish(str) {
+            const charMap = {
+                'ç': 'C', 'Ç': 'C', 'ğ': 'G', 'Ğ': 'G',
+                'ı': 'I', 'İ': 'I', 'i': 'I', 'I': 'I',
+                'ö': 'O', 'Ö': 'O', 'ş': 'S', 'Ş': 'S',
+                'ü': 'U', 'Ü': 'U'
+            };
+            return str.replace(/[çÇğĞıİiIöÖşŞüÜ]/g, match => charMap[match]).toUpperCase().trim();
+        }
+        
         function levenshtein(a, b) { const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j; for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i][j-1]+1,m[i-1][j]+1)); return m[b.length][a.length]; }
 
         function checkLogic() {
-            let raw = document.getElementById('name').value; let norm = normalizeTR(raw); 
+            let raw = document.getElementById('name').value; 
             const hintBox = document.getElementById('match-hint');
             const btn = document.getElementById('btn');
             
-            if (raw.length < 2) { 
+            if (raw.trim().length < 3) { 
                 btn.disabled = true; btn.className = "action-btn"; hintBox.style.opacity = 0; 
                 document.querySelector('.input-group i').style.color = "var(--text-muted)";
                 return; 
             }
+
+            let norm = normalizeToEnglish(raw); 
+            let match = null; 
             
-            let match = null; let bestScore = 999;
+            // 1. TAM VEYA İÇEREN EŞLEŞTİRME (Kısa yazımları ve uzun yazımları yakalar)
             for (let s of STUDENTS) {
-                let dbName = normalizeTR(s.n);
-                if (dbName.startsWith(norm) || dbName.includes(" " + norm)) { match = s; break; }
-                let tolerance = dbName.length > 10 ? 3 : 2; 
-                let score = levenshtein(norm, dbName);
-                if (score <= tolerance && score < bestScore) { bestScore = score; match = s; }
+                let dbName = normalizeToEnglish(s.n);
+                if (dbName === norm || dbName.includes(norm) || norm.includes(dbName)) { 
+                    match = s; break; 
+                }
+            }
+            
+            // 2. YAZIM HATASI TOLERANSI (Levenshtein)
+            if (!match) {
+                let bestScore = 999;
+                for (let s of STUDENTS) {
+                    let dbName = normalizeToEnglish(s.n);
+                    let tolerance = dbName.length > 10 ? 3 : 2; 
+                    let score = levenshtein(norm, dbName);
+                    if (score <= tolerance && score < bestScore) { bestScore = score; match = s; }
+                }
             }
             
             if (match) { 
