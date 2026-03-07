@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
+    <script src='https://meet.jit.si/external_api.js'></script>
+    
     <style>
         /* TRUE TONE / E-INK GÖZ DOSTU DEĞİŞKENLER */
         :root {
@@ -210,6 +212,18 @@
         #end-term-view { display: none; text-align: center; }
         #end-term-view i { font-size: 8vh; color: var(--danger); margin-bottom: 2vh; }
 
+        /* JİTSİ EKRAN ALANI (Gizli başlar, ders saati gelince açılır) */
+        #jitsi-container {
+            display: none;
+            width: 100%;
+            height: 75vh;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-top: 10px;
+            animation: fadeIn 1s ease;
+        }
+
         /* BİLGİSAYAR */
         @media screen and (min-width: 1025px) {
             .logo { height: 130px; }
@@ -330,6 +344,8 @@
                 <i class="fas fa-graduation-cap"></i>
                 <h1 style="color:var(--danger); font-size:4vh; text-transform:uppercase;">Tüm Dersler Tamamlandı</h1>
             </div>
+
+            <div id="jitsi-container"></div>
             
         </div>
     </div>
@@ -383,12 +399,13 @@
         const ENTRY_LOC = "entry.1443001544";
         const ZOOM_LINK = "https://us06web.zoom.us/j/81331199971?pwd=wEBSZPJcBJg3MbV4FqGMO7ggJ3onM8.1";
         
+        // --- HİBRİT DERS PROGRAMI (Sadece 8 Mart Jitsi) ---
         const LESSONS = [ 
             { id: 1, date: "2026-02-05" },  
             { id: 2, date: "2026-02-12" },  
             { id: 3, date: "2026-02-21", time: "10:00" }, 
             { id: 4, date: "2026-03-01", time: "13:30" }, 
-            { id: 5, date: "2026-03-10", time: "17:00" }, // Salı 17:00 olarak güncellendi
+            { id: 5, date: "2026-03-08", time: "14:00", platform: "jitsi" }, // Sadece bu derste Jitsi açılacak (14:00-15:00)
             { id: 6, date: "2026-03-26" },  
             { id: 7, date: "2026-04-02" },  
             { id: 8, date: "2026-04-09" },  
@@ -435,6 +452,8 @@
         ];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
+        let updateInterval;
+        let jitsiStarted = false; // Jitsi'nin birden fazla kez yüklenmesini engeller
 
         function setCircle(id, current, max) {
             const circle = document.getElementById(id);
@@ -480,7 +499,8 @@
                 gatesOpenTime = startTime - 300000; 
                 
                 document.getElementById('lesson-title').innerText = activeLesson.id + ". DERS BAŞLIYOR";
-                setInterval(updateTimer, 1000); updateTimer(); 
+                updateInterval = setInterval(updateTimer, 1000); 
+                updateTimer(); 
                 
                 const savedName = localStorage.getItem('NEP_STUDENT_NAME');
                 if (savedName) {
@@ -498,8 +518,19 @@
 
         function updateTimer() {
             const now = new Date().getTime();
-            if (isWaiting && now >= startTime) { window.location.href = getZoomLink(); return; }
+            
+            // BEKLEME ODASINDAYKEN SÜRE DOLARSA
+            if (isWaiting && now >= startTime) { 
+                if (activeLesson && activeLesson.platform === 'jitsi') {
+                    isWaiting = false;
+                    baslatJitsi(finalMatchedName);
+                } else {
+                    window.location.href = getZoomLink(); 
+                }
+                return; 
+            }
 
+            // SÜRE SAYIMI
             if (now < startTime) { 
                 let diff = startTime - now;
                 const d = Math.floor(diff/86400000); const h = Math.floor((diff%86400000)/3600000); const m = Math.floor((diff%3600000)/60000); const s = Math.floor((diff%60000)/1000);
@@ -514,17 +545,62 @@
                 
                 if (now >= gatesOpenTime) {
                     document.getElementById('main-container').classList.add('form-active');
-                    if (!isWaiting) { document.getElementById('form-view').style.display = "block"; setTimeout(() => { document.getElementById('form-view').style.opacity = 1; document.getElementById('form-view').style.transform = "translateY(0)"; }, 50); }
+                    if (!isWaiting && !jitsiStarted) { 
+                        document.getElementById('form-view').style.display = "block"; 
+                        setTimeout(() => { document.getElementById('form-view').style.opacity = 1; document.getElementById('form-view').style.transform = "translateY(0)"; }, 50); 
+                    }
                 }
-            } else if (now < endTime) {
-                if (!isWaiting) { 
+            } 
+            // DERS BAŞLADIĞINDA SAYFAYI YENİLEYEN BİRİ İÇİN
+            else if (now < endTime) {
+                if (!isWaiting && !jitsiStarted) { 
                     document.getElementById('countdown-view').style.display = "none"; 
-                    const form = document.getElementById('form-view'); form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
+                    const form = document.getElementById('form-view'); 
+                    form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
                     document.getElementById('lesson-title').style.display = "none"; 
                     document.querySelector('.ramazan-text').style.display = "none";
                     document.getElementById('live-badge').style.display = "inline-block";
                 }
             } else { location.reload(); }
+        }
+
+        // --- YENİ EKLENEN JİTSİ BAŞLATMA FONKSİYONU ---
+        function baslatJitsi(userName) {
+            if (jitsiStarted) return;
+            jitsiStarted = true;
+            clearInterval(updateInterval); // Arkada boşuna sayaç çalışmasın
+
+            // Ekranda Jitsi hariç her şeyi temizle
+            document.getElementById('countdown-view').style.display = 'none';
+            document.getElementById('form-view').style.display = 'none';
+            document.getElementById('waiting-room').style.display = 'none';
+            document.getElementById('lesson-title').style.display = 'none';
+            document.querySelector('.ramazan-text').style.display = 'none';
+            document.getElementById('live-badge').style.display = 'inline-block';
+            
+            // Jitsi alanını göster
+            const jitsiContainer = document.getElementById('jitsi-container');
+            jitsiContainer.style.display = 'block';
+
+            const domain = 'meet.jit.si';
+            const options = {
+                roomName: 'Nepders', // Öğretmenin attığı linkin oda adı
+                width: '100%',
+                height: '100%',
+                parentNode: jitsiContainer,
+                userInfo: {
+                    displayName: userName // Formdan gelen ismi toplantıya otomatik basar
+                },
+                configOverwrite: { 
+                    prejoinPageEnabled: false, // Kameranı test et sayfasını atlar
+                    startWithAudioMuted: true, // Herkesin mikrofonu başta kapalıdır
+                    startWithVideoMuted: true  // Kameraları başta kapalı olur
+                },
+                interfaceConfigOverwrite: {
+                    HIDE_INVITE_MORE_HEADER: true
+                }
+            };
+            const api = new JitsiMeetExternalAPI(domain, options);
         }
 
         function getZoomLink() { let link = ZOOM_LINK; if (finalMatchedName) link += "&un=" + btoa(unescape(encodeURIComponent(finalMatchedName))); return link; }
@@ -537,8 +613,21 @@
             
             const fd = new FormData(); fd.append("entry.1545633020", finalMatchedName); fd.append("entry.1443001544", "TESPİT EDİLDİ");
             fetch("https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse", { method: "POST", mode: "no-cors", body: fd }).then(() => {
-                if (new Date().getTime() < startTime) { isWaiting = true; document.getElementById('form-view').style.display = "none"; document.getElementById('waiting-room').style.display = "block"; } 
-                else { window.location.href = getZoomLink(); }
+                
+                // Eğer zaman gelmediyse bekleme odasına al
+                if (new Date().getTime() < startTime) { 
+                    isWaiting = true; 
+                    document.getElementById('form-view').style.display = "none"; 
+                    document.getElementById('waiting-room').style.display = "block"; 
+                } 
+                // Eğer zamanı geldiyse ve ders JİTSİ ise panele göm
+                else if (activeLesson && activeLesson.platform === 'jitsi') {
+                    baslatJitsi(finalMatchedName);
+                } 
+                // Eğer zamanı geldiyse ve ders ZOOM ise (Veya başka bir şeyse) yönlendir
+                else { 
+                    window.location.href = getZoomLink(); 
+                }
             });
         }
 
