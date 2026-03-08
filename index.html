@@ -12,78 +12,47 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
     <script src='https://meet.jit.si/external_api.js'></script>
     
     <style>
         :root {
-            --bg-color: #f5f5dc; 
-            --text-main: #4a453a; 
-            --text-muted: #8b8678;
-            --border-color: #e3e3c7; 
-            --input-bg: #fffbf0; 
-            --primary: #6358cc; 
-            --primary-hover: #564cb8;
-            --success: #2b9956; 
-            --danger: #d44d4e; 
-            --circle-bg: #e3e3c7;
-            --toggle-bg: #fffbf0;
-            --toggle-hover: #ebebce;
-            --logo-filter: contrast(0.95) opacity(0.95); 
-            --ramazan-color: #8c6600; 
+            --bg-color: #f5f5dc; --text-main: #4a453a; --text-muted: #8b8678;
+            --border-color: #e3e3c7; --input-bg: #fffbf0; --primary: #6358cc; 
+            --primary-hover: #564cb8; --success: #2b9956; --danger: #d44d4e; 
+            --circle-bg: #e3e3c7; --toggle-bg: #fffbf0; --toggle-hover: #ebebce;
+            --logo-filter: contrast(0.95) opacity(0.95); --ramazan-color: #8c6600; 
         }
 
         [data-theme="dark"] {
-            --bg-color: #25293c;
-            --text-main: #cfcce4;
-            --text-muted: #7983a5;
-            --border-color: #434968;
-            --input-bg: #2f3349;
-            --circle-bg: #2f3349;
-            --toggle-bg: #2f3349;
-            --toggle-hover: #434968;
-            --logo-filter: brightness(0) invert(1) opacity(0.95);
-            --ramazan-color: #e5c05c;
+            --bg-color: #25293c; --text-main: #cfcce4; --text-muted: #7983a5;
+            --border-color: #434968; --input-bg: #2f3349; --circle-bg: #2f3349;
+            --toggle-bg: #2f3349; --toggle-hover: #434968;
+            --logo-filter: brightness(0) invert(1) opacity(0.95); --ramazan-color: #e5c05c;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Public Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         
         body { 
-            background-color: var(--bg-color); 
-            color: var(--text-main);
+            background-color: var(--bg-color); color: var(--text-main);
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            min-height: 100vh; 
-            width: 100vw;
-            overflow-x: hidden; 
+            min-height: 100vh; width: 100vw; overflow-x: hidden; 
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
         .theme-toggle {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            background: var(--toggle-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 100;
+            position: absolute; top: 25px; right: 25px; background: var(--toggle-bg);
+            border: 1px solid var(--border-color); color: var(--text-main); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            transition: all 0.3s ease; z-index: 100;
         }
         .theme-toggle:hover { background-color: var(--toggle-hover); color: var(--primary); }
         .theme-toggle svg { transition: transform 0.3s ease; }
         .theme-toggle:hover svg { transform: scale(1.1); }
 
         #theme-toast {
-            position: fixed; bottom: 30px; right: -400px;
-            background-color: #2f3349; color: #cfcce4;
-            padding: 16px 24px; border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3); font-size: 14px;
-            display: flex; align-items: center; gap: 15px;
-            border-left: 4px solid var(--primary);
+            position: fixed; bottom: 30px; right: -400px; background-color: #2f3349; color: #cfcce4;
+            padding: 16px 24px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); font-size: 14px;
+            display: flex; align-items: center; gap: 15px; border-left: 4px solid var(--primary);
             transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999;
         }
         #theme-toast.show { right: 30px; }
@@ -96,7 +65,6 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             padding: 20px; transition: all 0.4s ease;
         }
-        
         .content-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
 
         .ramazan-text {
@@ -106,12 +74,15 @@
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         
-        .logo { 
-            width: auto; display: block; margin-bottom: 3vh;
-            filter: var(--logo-filter); transition: filter 0.4s ease, opacity 0.3s ease;
-        }
-        
+        .logo { width: auto; display: block; margin-bottom: 3vh; filter: var(--logo-filter); transition: filter 0.4s ease, opacity 0.3s ease; }
         .lesson-header { font-weight: 800; text-transform: uppercase; letter-spacing: 4px; text-align: center; margin-bottom: 4vh; }
+
+        #live-badge {
+            display: none; background-color: var(--success); color: white; padding: 8px 24px; border-radius: 30px;
+            font-weight: 700; font-size: 16px; letter-spacing: 1px; box-shadow: 0 0 15px rgba(40, 199, 111, 0.4);
+            margin-bottom: 3vh; text-transform: uppercase; animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         .countdown-container { display: flex; justify-content: center; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; transition: all 0.3s ease; }
@@ -146,9 +117,15 @@
         input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(115, 103, 240, 0.1); }
         input:focus + i { color: var(--primary); }
         
+        /* OYUNLAŞTIRMA VE BİLGİ MESAJI ALANI */
+        #personal-msg {
+            color: var(--primary); font-size: 0.95rem; font-weight: 700; text-align: center;
+            margin-bottom: 15px; height: 22px; opacity: 0; transition: opacity 0.4s ease;
+        }
+
         #match-hint {
             height: 25px; margin-bottom: 15px; font-size: 1rem; font-weight: 700; color: var(--success);
-            text-transform: uppercase; letter-spacing: 1px; opacity: 0; transition: opacity 0.3s; text-align: center;
+            text-transform: uppercase; letter-spacing: 1px; opacity: 0; transition: opacity 0.3s; text-align: center; display: none;
         }
         
         button.action-btn { 
@@ -170,32 +147,15 @@
         #end-term-view { display: none; text-align: center; }
         #end-term-view i { font-size: 8vh; color: var(--danger); margin-bottom: 2vh; }
 
-        /* CANLI JİTSİ İSTATİSTİK ÇUBUĞU */
         #jitsi-info-bar {
-            display: none;
-            width: 100%;
-            background-color: var(--input-bg);
-            border: 2px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            font-weight: 700;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            animation: fadeIn 0.5s ease;
+            display: none; width: 100%; background-color: var(--input-bg); border: 2px solid var(--border-color);
+            color: var(--text-main); padding: 10px 20px; border-radius: 12px; margin-bottom: 15px; font-weight: 700;
+            justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); animation: fadeIn 0.5s ease;
         }
         .live-dot { color: var(--danger); animation: heartbeat 1.5s infinite; margin-right: 8px; }
         .participant-count { background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
 
-        /* JİTSİ GÖRÜŞME ALANI */
-        #jitsi-container {
-            display: none; width: 100%; height: 75vh;
-            border-radius: 12px; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: fadeIn 1s ease;
-        }
+        #jitsi-container { display: none; width: 100%; height: 75vh; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 1s ease; }
 
         @media screen and (min-width: 1025px) {
             .logo { height: 130px; } .main-container.form-active .logo { height: 90px; }
@@ -226,8 +186,7 @@
             .input-group i { left: 16px; font-size: 1.1rem; } button.action-btn { padding: 15px; }
             .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 22px; }
             #theme-toast { right: 0; left: 0; margin: 0 auto; bottom: -100px; width: 90%; max-width: 350px; transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-            #theme-toast.show { bottom: 20px; right: 0; }
-            #jitsi-info-bar { font-size: 14px; padding: 10px; }
+            #theme-toast.show { bottom: 20px; right: 0; } #jitsi-info-bar { font-size: 14px; padding: 10px; }
         }
     </style>
 </head>
@@ -247,7 +206,7 @@
             
             <div class="ramazan-text"><i class="fas fa-moon"></i> Hoş Geldin Ya Şehr-i Ramazan <i class="fas fa-moon"></i></div>
             <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
-            
+            <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
             <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
             <div id="countdown-view" class="countdown-container">
@@ -263,7 +222,10 @@
                     <input type="text" id="name" name="nep_student_name" autocomplete="name" placeholder="Ad Soyad" onkeyup="checkLogic()" onchange="checkLogic()" oninput="checkLogic()">
                     <i class="fas fa-user"></i>
                 </div>
+                
+                <div id="personal-msg"></div>
                 <div id="match-hint"></div>
+                
                 <button class="action-btn" id="btn" onclick="processEntry()" disabled>
                     Sisteme Giriş Yap <i class="fas fa-arrow-right"></i>
                 </button>
@@ -284,7 +246,6 @@
                 <div><i class="fas fa-circle live-dot"></i> CANLI DERS</div>
                 <div>Katılımcı: <span class="participant-count" id="jitsi-count">1</span></div>
             </div>
-
             <div id="jitsi-container"></div>
             
         </div>
@@ -320,29 +281,28 @@
         }
 
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
-        const ENTRY_NAME = "entry.1545633020"; const ENTRY_LOC = "entry.1443001544";
         const ZOOM_LINK = "https://us06web.zoom.us/j/81331199971?pwd=wEBSZPJcBJg3MbV4FqGMO7ggJ3onM8.1";
         
         const LESSONS = [ 
             { id: 1, date: "2026-02-05" }, { id: 2, date: "2026-02-12" }, { id: 3, date: "2026-02-21", time: "10:00" }, 
             { id: 4, date: "2026-03-01", time: "13:30" }, 
-            { id: 5, date: "2026-03-08", time: "14:00", platform: "jitsi" }, // JİTSİ GÜNÜ
+            { id: 5, date: "2026-03-08", time: "14:00", platform: "jitsi" }, 
             { id: 6, date: "2026-03-26" }, { id: 7, date: "2026-04-02" }, { id: 8, date: "2026-04-09" }, 
             { id: 9, date: "2026-04-16" }, { id: 10, date: "2026-04-23" }, { id: 11, date: "2026-04-30" }, 
             { id: 12, date: "2026-05-07" }, { id: 13, date: "2026-05-14" }, { id: 14, date: "2026-05-21" }, { id: 15, date: "2026-06-04" }  
         ];
         
         const STUDENTS = [
-            { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" }, { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" }, { n: "AHMET AĞLAMIŞ", c: "ŞANLIURFA" },
-            { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "ALPARSLAN ONUR ÖZEREN", c: "İSTANBUL" }, { n: "AYBERK YUSUF AKKURT", c: "MARDİN" },
-            { n: "BÜNYAMİN ÇAĞRI AKBOYUN", c: "BURSA" }, { n: "FATİH SELİM OCAK", c: "SİSTEM" }, { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "SİSTEM" },
-            { n: "İBRAHİM SARAYDEMİR", c: "SİSTEM" }, { n: "KEREM ALİ ÇAKIR", c: "ERZİNCAN" }, { n: "KEREM KÜÇÜK", c: "SİSTEM" },
-            { n: "MEHMED EMİN SUCU", c: "SİSTEM" }, { n: "MUHAMMED ALİ ARAS", c: "SİSTEM" }, { n: "MUHAMMED ARİF KURTKAYA", c: "SİSTEM" },
-            { n: "MUHAMMED SAID", c: "İSTANBUL" }, { n: "MUHAMMED TAHA SAYIN", c: "SİSTEM" }, { n: "MUHAMMED YASİR SALDIRAN", c: "SİSTEM" },
-            { n: "MUHAMMED YUSUF KARAKUŞ", c: "VAN" }, { n: "MUSA BOYACI", c: "İSTANBUL" }, { n: "MUSAB METİN MUTLU", c: "KONYA" },
-            { n: "MUSTAFA YUSUF ÖZBAKIR", c: "İZMİR" }, { n: "MUSTAFO NASIMJONOV", c: "SİSTEM" }, { n: "ÖMER EYMEN ÇETİNTAŞ", c: "DİYARBAKIR" },
-            { n: "SADULLAH YAHYA ÇAVUŞOĞLU", c: "AFYONKARAHİSAR" }, { n: "SALİH KEREM YENER", c: "İZMİR" }, { n: "SEFA METE", c: "SİSTEM" },
-            { n: "YAHYA SELİM EKŞİ", c: "SİSTEM" }, { n: "YUSUF AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "ZÜBEYİR RAHMİ ŞENGÜN", c: "SİSTEM" }
+            { n: "ABDÜLHAMİD POYRAZ" }, { n: "AHMED ARİF KARAKAPLAN" }, { n: "AHMET AĞLAMIŞ" },
+            { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ" }, { n: "ALPARSLAN ONUR ÖZEREN" }, { n: "AYBERK YUSUF AKKURT" },
+            { n: "BÜNYAMİN ÇAĞRI AKBOYUN" }, { n: "FATİH SELİM OCAK" }, { n: "HASAN FEYZİ ŞİRİNOĞLU" },
+            { n: "İBRAHİM SARAYDEMİR" }, { n: "KEREM ALİ ÇAKIR" }, { n: "KEREM KÜÇÜK" },
+            { n: "MEHMED EMİN SUCU" }, { n: "MUHAMMED ALİ ARAS" }, { n: "MUHAMMED ARİF KURTKAYA" },
+            { n: "MUHAMMED SAID" }, { n: "MUHAMMED TAHA SAYIN" }, { n: "MUHAMMED YASİR SALDIRAN" },
+            { n: "MUHAMMED YUSUF KARAKUŞ" }, { n: "MUSA BOYACI" }, { n: "MUSAB METİN MUTLU" },
+            { n: "MUSTAFA YUSUF ÖZBAKIR" }, { n: "MUSTAFO NASIMJONOV" }, { n: "ÖMER EYMEN ÇETİNTAŞ" },
+            { n: "SADULLAH YAHYA ÇAVUŞOĞLU" }, { n: "SALİH KEREM YENER" }, { n: "SEFA METE" },
+            { n: "YAHYA SELİM EKŞİ" }, { n: "YUSUF AĞLAMIŞ" }, { n: "ZÜBEYİR RAHMİ ŞENGÜN" }
         ];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
@@ -421,70 +381,72 @@
         }
 
         let jitsiApiInstance = null;
-
         function baslatJitsi(userName) {
             if (jitsiStarted) return;
-            jitsiStarted = true;
-            clearInterval(updateInterval);
+            jitsiStarted = true; clearInterval(updateInterval);
 
-            // Ekranı temizle
             document.getElementById('countdown-view').style.display = 'none';
             document.getElementById('form-view').style.display = 'none';
             document.getElementById('waiting-room').style.display = 'none';
             document.getElementById('lesson-title').style.display = 'none';
             document.querySelector('.ramazan-text').style.display = 'none';
             
-            // Jitsi'yi ve Bilgi Çubuğunu Göster
             document.getElementById('jitsi-info-bar').style.display = 'flex';
             document.getElementById('jitsi-container').style.display = 'block';
 
-            const domain = 'meet.jit.si';
             const options = {
-                roomName: 'Nepders', 
-                width: '100%', height: '100%',
+                roomName: 'Nepders', width: '100%', height: '100%',
                 parentNode: document.getElementById('jitsi-container'),
                 userInfo: { displayName: userName },
                 configOverwrite: { prejoinPageEnabled: false, startWithAudioMuted: true, startWithVideoMuted: true },
                 interfaceConfigOverwrite: { HIDE_INVITE_MORE_HEADER: true }
             };
-            
-            jitsiApiInstance = new JitsiMeetExternalAPI(domain, options);
-
-            // CANLI KATILIMCI SAYACI DİNLEYİCİLERİ
+            jitsiApiInstance = new JitsiMeetExternalAPI('meet.jit.si', options);
             jitsiApiInstance.on('videoConferenceJoined', guncelleJitsiSayac);
             jitsiApiInstance.on('participantJoined', guncelleJitsiSayac);
             jitsiApiInstance.on('participantLeft', guncelleJitsiSayac);
         }
 
-        // CANLI SAYAÇ GÜNCELLEME FONKSİYONU
         function guncelleJitsiSayac() {
-            if(jitsiApiInstance) {
-                // getNumberOfParticipants API fonksiyonu ile odadaki anlık sayıyı alır
-                const kisiSayisi = jitsiApiInstance.getNumberOfParticipants();
-                document.getElementById('jitsi-count').innerText = kisiSayisi;
-            }
+            if(jitsiApiInstance) { document.getElementById('jitsi-count').innerText = jitsiApiInstance.getNumberOfParticipants(); }
         }
 
         function getZoomLink() { let link = ZOOM_LINK; if (finalMatchedName) link += "&un=" + btoa(unescape(encodeURIComponent(finalMatchedName))); return link; }
         
-        function processEntry() {
+        // --- OYUNLAŞTIRMA (MOTİVASYON) FONKSİYONLARI ---
+        function getWelcomeMessage(name) {
+            const today = new Date().toDateString();
+            let stats = JSON.parse(localStorage.getItem('NEP_STATS_' + name));
+            
+            if (!stats || !stats.lastDate) { return `Aramıza hoş geldin ${name.split(' ')[0]}! İlk dersin hayırlı olsun. 🎉`; }
+            if (stats.lastDate === today) { return `Bağlantın koptu sanırım ${name.split(' ')[0]}, seni derse geri alıyoruz. ⚡`; }
+            if (stats.streak >= 1) { return `Harika gidiyorsun! Bu aralıksız ${stats.streak + 1}. dersin! 🔥`; }
+            return `Seni tekrar görmek güzel ${name.split(' ')[0]}, arayı açmayalım! 💪`;
+        }
+
+        function updateStatsAndProcess(name) {
+            const today = new Date().toDateString();
+            let stats = JSON.parse(localStorage.getItem('NEP_STATS_' + name)) || { streak: 0, lastDate: null };
+            
+            if (stats.lastDate !== today) { stats.streak += 1; stats.lastDate = today; }
+            localStorage.setItem('NEP_STATS_' + name, JSON.stringify(stats));
+            
+            if (navigator.vibrate) { navigator.vibrate([50, 50, 50]); }
+
             const btn = document.getElementById('btn'); btn.style.display = "none"; 
             document.querySelector('.input-group').style.display = "none"; 
-            document.getElementById('match-hint').style.display = "none";
-            localStorage.setItem('NEP_STUDENT_NAME', finalMatchedName);
+            document.getElementById('personal-msg').style.display = "none";
+            localStorage.setItem('NEP_STUDENT_NAME', name);
             
-            // 1. ADIM: YOKLAMAYI GÖNDER (Kusursuz çalışıyor)
-            const fd = new FormData(); fd.append("entry.1545633020", finalMatchedName); fd.append("entry.1443001544", "TESPİT EDİLDİ");
+            const fd = new FormData(); fd.append("entry.1545633020", name); fd.append("entry.1443001544", "TESPİT EDİLDİ");
             fetch("https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse", { method: "POST", mode: "no-cors", body: fd }).then(() => {
-                
-                // 2. ADIM: YÖNLENDİR (Zaman gelmediyse bekle)
-                if (new Date().getTime() < startTime) { 
-                    isWaiting = true; document.getElementById('form-view').style.display = "none"; document.getElementById('waiting-room').style.display = "block"; 
-                } 
-                else if (activeLesson && activeLesson.platform === 'jitsi') { baslatJitsi(finalMatchedName); } 
+                if (new Date().getTime() < startTime) { isWaiting = true; document.getElementById('form-view').style.display = "none"; document.getElementById('waiting-room').style.display = "block"; } 
+                else if (activeLesson && activeLesson.platform === 'jitsi') { baslatJitsi(name); } 
                 else { window.location.href = getZoomLink(); }
             });
         }
+
+        function processEntry() { updateStatsAndProcess(finalMatchedName); }
 
         function normalizeToEnglish(str) {
             const charMap = { 'ç':'C','Ç':'C','ğ':'G','Ğ':'G','ı':'I','İ':'I','i':'I','I':'I','ö':'O','Ö':'O','ş':'S','Ş':'S','ü':'U','Ü':'U' };
@@ -493,13 +455,27 @@
         function levenshtein(a, b) { const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j; for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i][j-1]+1,m[i-1][j]+1)); return m[b.length][a.length]; }
 
         function checkLogic() {
-            let raw = document.getElementById('name').value; const hintBox = document.getElementById('match-hint'); const btn = document.getElementById('btn');
-            if (raw.trim().length < 3) { btn.disabled = true; btn.className = "action-btn"; hintBox.style.opacity = 0; document.querySelector('.input-group i').style.color = "var(--text-muted)"; return; }
+            let raw = document.getElementById('name').value; 
+            const msgBox = document.getElementById('personal-msg');
+            const btn = document.getElementById('btn');
+            
+            if (raw.trim().length < 3) { 
+                btn.disabled = true; btn.className = "action-btn"; msgBox.style.opacity = 0; 
+                document.querySelector('.input-group i').style.color = "var(--text-muted)"; return; 
+            }
+
             let norm = normalizeToEnglish(raw); let match = null; 
             for (let s of STUDENTS) { let dbName = normalizeToEnglish(s.n); if (dbName === norm || dbName.includes(norm) || norm.includes(dbName)) { match = s; break; } }
             if (!match) { let bestScore = 999; for (let s of STUDENTS) { let dbName = normalizeToEnglish(s.n); let tolerance = dbName.length > 10 ? 3 : 2; let score = levenshtein(norm, dbName); if (score <= tolerance && score < bestScore) { bestScore = score; match = s; } } }
-            if (match) { finalMatchedName = match.n; btn.disabled = false; btn.className = "action-btn active"; hintBox.innerHTML = "<i class='fas fa-check'></i> " + match.n; hintBox.style.opacity = 1; document.querySelector('.input-group i').style.color = "var(--success)"; } 
-            else { btn.disabled = true; btn.className = "action-btn"; hintBox.style.opacity = 0; document.querySelector('.input-group i').style.color = "var(--danger)"; }
+            
+            if (match) { 
+                finalMatchedName = match.n; btn.disabled = false; btn.className = "action-btn active"; 
+                msgBox.innerHTML = getWelcomeMessage(match.n); msgBox.style.opacity = 1; 
+                document.querySelector('.input-group i').style.color = "var(--success)";
+            } else { 
+                btn.disabled = true; btn.className = "action-btn"; msgBox.style.opacity = 0; 
+                document.querySelector('.input-group i').style.color = "var(--danger)";
+            }
         }
         initSystem();
     </script>
