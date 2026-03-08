@@ -16,7 +16,6 @@
     <script src='https://meet.jit.si/external_api.js'></script>
     
     <style>
-        /* TRUE TONE / E-INK GÖZ DOSTU DEĞİŞKENLER */
         :root {
             --bg-color: #f5f5dc; 
             --text-main: #4a453a; 
@@ -79,21 +78,13 @@
         .theme-toggle:hover svg { transform: scale(1.1); }
 
         #theme-toast {
-            position: fixed;
-            bottom: 30px;
-            right: -400px;
-            background-color: #2f3349;
-            color: #cfcce4;
-            padding: 16px 24px;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            position: fixed; bottom: 30px; right: -400px;
+            background-color: #2f3349; color: #cfcce4;
+            padding: 16px 24px; border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3); font-size: 14px;
+            display: flex; align-items: center; gap: 15px;
             border-left: 4px solid var(--primary);
-            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 9999;
+            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999;
         }
         #theme-toast.show { right: 30px; }
         #theme-toast i { font-size: 1.5rem; color: var(--primary); }
@@ -101,65 +92,32 @@
         .toast-content span { font-size: 13px; opacity: 0.8; }
 
         .main-container { 
-            flex: 1;
-            width: 100%; max-width: 1000px;
+            flex: 1; width: 100%; max-width: 1000px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px;
-            transition: all 0.4s ease;
+            padding: 20px; transition: all 0.4s ease;
         }
         
-        .content-wrapper {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;
-        }
+        .content-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
 
         .ramazan-text {
-            font-size: 1.3rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--ramazan-color);
-            margin-bottom: 3vh;
-            text-align: center;
-            opacity: 0.9;
-            transition: color 0.4s ease;
-            white-space: nowrap; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            font-size: 1.3rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--ramazan-color); margin-bottom: 3vh; text-align: center;
+            opacity: 0.9; transition: color 0.4s ease; white-space: nowrap; 
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         
         .logo { 
-            width: auto;
-            display: block; 
-            margin-bottom: 3vh;
-            filter: var(--logo-filter);
-            transition: filter 0.4s ease, opacity 0.3s ease;
+            width: auto; display: block; margin-bottom: 3vh;
+            filter: var(--logo-filter); transition: filter 0.4s ease, opacity 0.3s ease;
         }
         
-        .lesson-header { 
-            font-weight: 800; text-transform: uppercase; 
-            letter-spacing: 4px; text-align: center; margin-bottom: 4vh;
-        }
-
-        #live-badge {
-            display: none;
-            background-color: var(--success); color: white;
-            padding: 8px 24px; border-radius: 30px;
-            font-weight: 700; font-size: 16px; letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(40, 199, 111, 0.4);
-            margin-bottom: 3vh; text-transform: uppercase;
-            animation: pulse-green 2s infinite;
-        }
-        @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .lesson-header { font-weight: 800; text-transform: uppercase; letter-spacing: 4px; text-align: center; margin-bottom: 4vh; }
 
         .countdown-container { display: flex; justify-content: center; width: 100%; transition: all 0.5s ease; }
         .circle-box { position: relative; transition: all 0.3s ease; }
         svg.progress-ring { transform: rotate(-90deg); width: 100%; height: 100%; }
-        
         .circle-bg { fill: none; stroke: var(--circle-bg); transition: stroke 0.5s ease; }
         .circle-progress { fill: none; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1s linear; }
-        
         .c-day { stroke: var(--success); } .c-hour { stroke: var(--danger); } .c-min { stroke: #ff9f43; } .c-sec { stroke: #00cfe8; }
         
         .inner-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -212,47 +170,47 @@
         #end-term-view { display: none; text-align: center; }
         #end-term-view i { font-size: 8vh; color: var(--danger); margin-bottom: 2vh; }
 
-        /* JİTSİ EKRAN ALANI (Gizli başlar, ders saati gelince açılır) */
-        #jitsi-container {
+        /* CANLI JİTSİ İSTATİSTİK ÇUBUĞU */
+        #jitsi-info-bar {
             display: none;
             width: 100%;
-            height: 75vh;
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 20px;
             border-radius: 12px;
-            overflow: hidden;
+            margin-bottom: 15px;
+            font-weight: 700;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+        .live-dot { color: var(--danger); animation: heartbeat 1.5s infinite; margin-right: 8px; }
+        .participant-count { background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
+
+        /* JİTSİ GÖRÜŞME ALANI */
+        #jitsi-container {
+            display: none; width: 100%; height: 75vh;
+            border-radius: 12px; overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            margin-top: 10px;
             animation: fadeIn 1s ease;
         }
 
-        /* BİLGİSAYAR */
         @media screen and (min-width: 1025px) {
-            .logo { height: 130px; }
-            .main-container.form-active .logo { height: 90px; }
-            .lesson-header { font-size: 36px; }
-            .countdown-container { gap: 50px; }
-            .circle-box { width: 220px; height: 220px; }
-            .circle-bg, .circle-progress { stroke-width: 8; }
-            .time-number { font-size: 75px; }
-            .time-label { font-size: 18px; }
-            #form-view { max-width: 500px; margin-top: 4vh; }
-            .theme-toggle { width: 50px; height: 50px; font-size: 26px; }
+            .logo { height: 130px; } .main-container.form-active .logo { height: 90px; }
+            .lesson-header { font-size: 36px; } .countdown-container { gap: 50px; }
+            .circle-box { width: 220px; height: 220px; } .circle-bg, .circle-progress { stroke-width: 8; }
+            .time-number { font-size: 75px; } .time-label { font-size: 18px; }
+            #form-view { max-width: 500px; margin-top: 4vh; } .theme-toggle { width: 50px; height: 50px; font-size: 26px; }
         }
-
-        /* TABLET */
         @media screen and (min-width: 601px) and (max-width: 1024px) {
-            .logo { height: 100px; }
-            .main-container.form-active .logo { height: 75px; }
-            .lesson-header { font-size: 28px; }
-            .countdown-container { gap: 35px; }
-            .circle-box { width: 160px; height: 160px; }
-            .circle-bg, .circle-progress { stroke-width: 7; }
-            .time-number { font-size: 55px; }
-            .time-label { font-size: 15px; }
-            #form-view { max-width: 450px; margin-top: 3vh; }
-            .theme-toggle { width: 45px; height: 45px; font-size: 24px; }
+            .logo { height: 100px; } .main-container.form-active .logo { height: 75px; }
+            .lesson-header { font-size: 28px; } .countdown-container { gap: 35px; }
+            .circle-box { width: 160px; height: 160px; } .circle-bg, .circle-progress { stroke-width: 7; }
+            .time-number { font-size: 55px; } .time-label { font-size: 15px; }
+            #form-view { max-width: 450px; margin-top: 3vh; } .theme-toggle { width: 45px; height: 45px; font-size: 24px; }
         }
-
-        /* TELEFON */
         @media screen and (max-width: 600px) {
             .content-wrapper { margin-top: -6vh; }
             .ramazan-text { font-size: 4.5vw; letter-spacing: 1px; margin-bottom: 2vh; }
@@ -260,25 +218,16 @@
             .main-container.form-active .logo { max-width: 45vw; }
             .lesson-header { font-size: 22px; letter-spacing: 1px; margin-bottom: 3.5vh; }
             .countdown-container { gap: 4vw; flex-wrap: nowrap; }
-            
             .circle-box { width: 24vw; height: 24vw; max-width: 90px; max-height: 90px; }
             .circle-bg, .circle-progress { stroke-width: 6; }
-            .time-number { font-size: 6.5vw; } 
-            .time-label { font-size: 2.5vw; margin-top: 0px; }
-            
+            .time-number { font-size: 6.5vw; } .time-label { font-size: 2.5vw; margin-top: 0px; }
             #form-view { max-width: 90vw; margin-top: 2vh; }
             input, button.action-btn { font-size: 1rem; padding: 15px 15px 15px 45px; }
-            .input-group i { left: 16px; font-size: 1.1rem; }
-            button.action-btn { padding: 15px; }
+            .input-group i { left: 16px; font-size: 1.1rem; } button.action-btn { padding: 15px; }
             .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 22px; }
-
-            #theme-toast {
-                right: 0; left: 0; margin: 0 auto;
-                bottom: -100px;
-                width: 90%; max-width: 350px;
-                transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            }
+            #theme-toast { right: 0; left: 0; margin: 0 auto; bottom: -100px; width: 90%; max-width: 350px; transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
             #theme-toast.show { bottom: 20px; right: 0; }
+            #jitsi-info-bar { font-size: 14px; padding: 10px; }
         }
     </style>
 </head>
@@ -297,29 +246,15 @@
         <div class="content-wrapper">
             
             <div class="ramazan-text"><i class="fas fa-moon"></i> Hoş Geldin Ya Şehr-i Ramazan <i class="fas fa-moon"></i></div>
-
             <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
             
-            <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
             <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
 
             <div id="countdown-view" class="countdown-container">
-                <div class="circle-box" id="box-days">
-                    <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-days" class="circle-progress c-day" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
-                    <div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div>
-                </div>
-                <div class="circle-box" id="box-hours">
-                    <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
-                    <div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div>
-                </div>
-                <div class="circle-box" id="box-minutes">
-                    <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
-                    <div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div>
-                </div>
-                <div class="circle-box" id="box-seconds">
-                    <svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50" cy="50" r="42" pathLength="100"></circle></svg>
-                    <div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div>
-                </div>
+                <div class="circle-box" id="box-days"><svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-days" class="circle-progress c-day" cx="50" cy="50" r="42" pathLength="100"></circle></svg><div class="inner-text"><div class="time-number" id="days">0</div><div class="time-label">GÜN</div></div></div>
+                <div class="circle-box" id="box-hours"><svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-hours" class="circle-progress c-hour" cx="50" cy="50" r="42" pathLength="100"></circle></svg><div class="inner-text"><div class="time-number" id="hours">0</div><div class="time-label">SAAT</div></div></div>
+                <div class="circle-box" id="box-minutes"><svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-minutes" class="circle-progress c-min" cx="50" cy="50" r="42" pathLength="100"></circle></svg><div class="inner-text"><div class="time-number" id="minutes">0</div><div class="time-label">DK</div></div></div>
+                <div class="circle-box" id="box-seconds"><svg class="progress-ring" viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="42" pathLength="100"></circle><circle id="ring-seconds" class="circle-progress c-sec" cx="50" cy="50" r="42" pathLength="100"></circle></svg><div class="inner-text"><div class="time-number" id="seconds">0</div><div class="time-label">SN</div></div></div>
             </div>
 
             <div id="form-view">
@@ -345,12 +280,18 @@
                 <h1 style="color:var(--danger); font-size:4vh; text-transform:uppercase;">Tüm Dersler Tamamlandı</h1>
             </div>
 
+            <div id="jitsi-info-bar">
+                <div><i class="fas fa-circle live-dot"></i> CANLI DERS</div>
+                <div>Katılımcı: <span class="participant-count" id="jitsi-count">1</span></div>
+            </div>
+
             <div id="jitsi-container"></div>
             
         </div>
     </div>
 
     <script>
+        // Tema Sistemi
         const themeBtn = document.getElementById('theme-btn');
         const htmlEl = document.documentElement;
         const toast = document.getElementById('theme-toast');
@@ -358,160 +299,86 @@
         const iconMoon = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z"></path></svg>`;
         const iconSun = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 1 0-5.656-5.656a4 4 0 0 0 5.656 5.656zm-8.485 2.829l-1.414 1.414M6.343 6.343L4.929 4.929m12.728 1.414l1.414-1.414m-1.414 12.728l1.414 1.414M4 12H2m10-8V2m8 10h2m-10 8v2"></path></svg>`;
         
-        let warningActive = false;
-        let warningTimer;
-
+        let warningActive = false, warningTimer;
         const savedTheme = localStorage.getItem('nep_theme');
-        if(savedTheme === 'light') {
-            htmlEl.setAttribute('data-theme', 'light');
-            themeBtn.innerHTML = iconMoon;
-        } else {
-            htmlEl.setAttribute('data-theme', 'dark');
-            themeBtn.innerHTML = iconSun;
-        }
+        if(savedTheme === 'light') { htmlEl.setAttribute('data-theme', 'light'); themeBtn.innerHTML = iconMoon; } 
+        else { htmlEl.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = iconSun; }
 
         function toggleTheme() {
             if (htmlEl.getAttribute('data-theme') === 'dark') {
                 if (!warningActive) {
-                    toast.classList.add('show');
-                    warningActive = true;
+                    toast.classList.add('show'); warningActive = true;
                     clearTimeout(warningTimer);
-                    warningTimer = setTimeout(() => { 
-                        warningActive = false; 
-                        toast.classList.remove('show');
-                    }, 4000);
+                    warningTimer = setTimeout(() => { warningActive = false; toast.classList.remove('show'); }, 4000);
                     return; 
                 }
-                htmlEl.setAttribute('data-theme', 'light');
-                themeBtn.innerHTML = iconMoon;
-                localStorage.setItem('nep_theme', 'light');
-                toast.classList.remove('show');
-                warningActive = false;
+                htmlEl.setAttribute('data-theme', 'light'); themeBtn.innerHTML = iconMoon;
+                localStorage.setItem('nep_theme', 'light'); toast.classList.remove('show'); warningActive = false;
             } else {
-                htmlEl.setAttribute('data-theme', 'dark');
-                themeBtn.innerHTML = iconSun;
-                localStorage.setItem('nep_theme', 'dark');
+                htmlEl.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = iconSun; localStorage.setItem('nep_theme', 'dark');
             }
         }
 
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
-        const ENTRY_NAME = "entry.1545633020";
-        const ENTRY_LOC = "entry.1443001544";
+        const ENTRY_NAME = "entry.1545633020"; const ENTRY_LOC = "entry.1443001544";
         const ZOOM_LINK = "https://us06web.zoom.us/j/81331199971?pwd=wEBSZPJcBJg3MbV4FqGMO7ggJ3onM8.1";
         
-        // --- HİBRİT DERS PROGRAMI (Sadece 8 Mart Jitsi) ---
         const LESSONS = [ 
-            { id: 1, date: "2026-02-05" },  
-            { id: 2, date: "2026-02-12" },  
-            { id: 3, date: "2026-02-21", time: "10:00" }, 
+            { id: 1, date: "2026-02-05" }, { id: 2, date: "2026-02-12" }, { id: 3, date: "2026-02-21", time: "10:00" }, 
             { id: 4, date: "2026-03-01", time: "13:30" }, 
-            { id: 5, date: "2026-03-08", time: "14:00", platform: "jitsi" }, // Sadece bu derste Jitsi açılacak (14:00-15:00)
-            { id: 6, date: "2026-03-26" },  
-            { id: 7, date: "2026-04-02" },  
-            { id: 8, date: "2026-04-09" },  
-            { id: 9, date: "2026-04-16" },  
-            { id: 10, date: "2026-04-23" }, 
-            { id: 11, date: "2026-04-30" }, 
-            { id: 12, date: "2026-05-07" }, 
-            { id: 13, date: "2026-05-14" }, 
-            { id: 14, date: "2026-05-21" }, 
-            { id: 15, date: "2026-06-04" }  
+            { id: 5, date: "2026-03-08", time: "14:00", platform: "jitsi" }, // JİTSİ GÜNÜ
+            { id: 6, date: "2026-03-26" }, { id: 7, date: "2026-04-02" }, { id: 8, date: "2026-04-09" }, 
+            { id: 9, date: "2026-04-16" }, { id: 10, date: "2026-04-23" }, { id: 11, date: "2026-04-30" }, 
+            { id: 12, date: "2026-05-07" }, { id: 13, date: "2026-05-14" }, { id: 14, date: "2026-05-21" }, { id: 15, date: "2026-06-04" }  
         ];
         
         const STUDENTS = [
-            { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" },
-            { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" },
-            { n: "AHMET AĞLAMIŞ", c: "ŞANLIURFA" },
-            { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ", c: "ŞANLIURFA" },
-            { n: "ALPARSLAN ONUR ÖZEREN", c: "İSTANBUL" },
-            { n: "AYBERK YUSUF AKKURT", c: "MARDİN" },
-            { n: "BÜNYAMİN ÇAĞRI AKBOYUN", c: "BURSA" },
-            { n: "FATİH SELİM OCAK", c: "SİSTEM" },
-            { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "SİSTEM" },
-            { n: "İBRAHİM SARAYDEMİR", c: "SİSTEM" },
-            { n: "KEREM ALİ ÇAKIR", c: "ERZİNCAN" },
-            { n: "KEREM KÜÇÜK", c: "SİSTEM" },
-            { n: "MEHMED EMİN SUCU", c: "SİSTEM" },
-            { n: "MUHAMMED ALİ ARAS", c: "SİSTEM" },
-            { n: "MUHAMMED ARİF KURTKAYA", c: "SİSTEM" },
-            { n: "MUHAMMED SAID", c: "İSTANBUL" },
-            { n: "MUHAMMED TAHA SAYIN", c: "SİSTEM" },
-            { n: "MUHAMMED YASİR SALDIRAN", c: "SİSTEM" },
-            { n: "MUHAMMED YUSUF KARAKUŞ", c: "VAN" },
-            { n: "MUSA BOYACI", c: "İSTANBUL" },
-            { n: "MUSAB METİN MUTLU", c: "KONYA" },
-            { n: "MUSTAFA YUSUF ÖZBAKIR", c: "İZMİR" },
-            { n: "MUSTAFO NASIMJONOV", c: "SİSTEM" },
-            { n: "ÖMER EYMEN ÇETİNTAŞ", c: "DİYARBAKIR" },
-            { n: "SADULLAH YAHYA ÇAVUŞOĞLU", c: "AFYONKARAHİSAR" },
-            { n: "SALİH KEREM YENER", c: "İZMİR" },
-            { n: "SEFA METE", c: "SİSTEM" },
-            { n: "YAHYA SELİM EKŞİ", c: "SİSTEM" },
-            { n: "YUSUF AĞLAMIŞ", c: "ŞANLIURFA" },
-            { n: "ZÜBEYİR RAHMİ ŞENGÜN", c: "SİSTEM" }
+            { n: "ABDÜLHAMİD POYRAZ", c: "SİSTEM" }, { n: "AHMED ARİF KARAKAPLAN", c: "SİİRT" }, { n: "AHMET AĞLAMIŞ", c: "ŞANLIURFA" },
+            { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "ALPARSLAN ONUR ÖZEREN", c: "İSTANBUL" }, { n: "AYBERK YUSUF AKKURT", c: "MARDİN" },
+            { n: "BÜNYAMİN ÇAĞRI AKBOYUN", c: "BURSA" }, { n: "FATİH SELİM OCAK", c: "SİSTEM" }, { n: "HASAN FEYZİ ŞİRİNOĞLU", c: "SİSTEM" },
+            { n: "İBRAHİM SARAYDEMİR", c: "SİSTEM" }, { n: "KEREM ALİ ÇAKIR", c: "ERZİNCAN" }, { n: "KEREM KÜÇÜK", c: "SİSTEM" },
+            { n: "MEHMED EMİN SUCU", c: "SİSTEM" }, { n: "MUHAMMED ALİ ARAS", c: "SİSTEM" }, { n: "MUHAMMED ARİF KURTKAYA", c: "SİSTEM" },
+            { n: "MUHAMMED SAID", c: "İSTANBUL" }, { n: "MUHAMMED TAHA SAYIN", c: "SİSTEM" }, { n: "MUHAMMED YASİR SALDIRAN", c: "SİSTEM" },
+            { n: "MUHAMMED YUSUF KARAKUŞ", c: "VAN" }, { n: "MUSA BOYACI", c: "İSTANBUL" }, { n: "MUSAB METİN MUTLU", c: "KONYA" },
+            { n: "MUSTAFA YUSUF ÖZBAKIR", c: "İZMİR" }, { n: "MUSTAFO NASIMJONOV", c: "SİSTEM" }, { n: "ÖMER EYMEN ÇETİNTAŞ", c: "DİYARBAKIR" },
+            { n: "SADULLAH YAHYA ÇAVUŞOĞLU", c: "AFYONKARAHİSAR" }, { n: "SALİH KEREM YENER", c: "İZMİR" }, { n: "SEFA METE", c: "SİSTEM" },
+            { n: "YAHYA SELİM EKŞİ", c: "SİSTEM" }, { n: "YUSUF AĞLAMIŞ", c: "ŞANLIURFA" }, { n: "ZÜBEYİR RAHMİ ŞENGÜN", c: "SİSTEM" }
         ];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
-        let updateInterval;
-        let jitsiStarted = false; // Jitsi'nin birden fazla kez yüklenmesini engeller
+        let updateInterval, jitsiStarted = false;
 
         function setCircle(id, current, max) {
-            const circle = document.getElementById(id);
             let val = current > max ? max : current;
-            const offset = 100 - (val / max) * 100;
-            circle.style.strokeDashoffset = offset;
+            document.getElementById(id).style.strokeDashoffset = 100 - (val / max) * 100;
         }
 
         function initSystem() {
             const now = new Date();
-            
             activeLesson = LESSONS.find(l => {
                 let endH = 20, endM = 0; 
-                if (l.time) {
-                    let parts = l.time.split(':');
-                    endH = parseInt(parts[0]) + 1; 
-                    endM = parseInt(parts[1]) || 0;
-                }
-                let sH = endH < 10 ? '0'+endH : endH;
-                let sM = endM < 10 ? '0'+endM : endM;
-                let endT = new Date(`${l.date}T${sH}:${sM}:00+03:00`).getTime();
-                return now.getTime() < endT;
+                if (l.time) { let parts = l.time.split(':'); endH = parseInt(parts[0]) + 1; endM = parseInt(parts[1]) || 0; }
+                return now.getTime() < new Date(`${l.date}T${endH < 10 ? '0'+endH : endH}:${endM < 10 ? '0'+endM : endM}:00+03:00`).getTime();
             });
             
             if (activeLesson) {
                 let startH = 19, startM = 0, endH = 20, endM = 0;
-                
                 if (activeLesson.time) {
                     let parts = activeLesson.time.split(':');
-                    startH = parseInt(parts[0]);
-                    startM = parseInt(parts[1]) || 0;
-                    endH = startH + 1;
-                    endM = startM;
+                    startH = parseInt(parts[0]); startM = parseInt(parts[1]) || 0; endH = startH + 1; endM = startM;
                 }
-
-                let sH_str = startH < 10 ? '0'+startH : startH;
-                let sM_str = startM < 10 ? '0'+startM : startM;
-                let eH_str = endH < 10 ? '0'+endH : endH;
-                let eM_str = endM < 10 ? '0'+endM : endM;
-
-                startTime = new Date(`${activeLesson.date}T${sH_str}:${sM_str}:00+03:00`).getTime();
-                endTime = new Date(`${activeLesson.date}T${eH_str}:${eM_str}:00+03:00`).getTime();
+                startTime = new Date(`${activeLesson.date}T${startH < 10 ? '0'+startH : startH}:${startM < 10 ? '0'+startM : startM}:00+03:00`).getTime();
+                endTime = new Date(`${activeLesson.date}T${endH < 10 ? '0'+endH : endH}:${endM < 10 ? '0'+endM : endM}:00+03:00`).getTime();
                 gatesOpenTime = startTime - 300000; 
                 
                 document.getElementById('lesson-title').innerText = activeLesson.id + ". DERS BAŞLIYOR";
-                updateInterval = setInterval(updateTimer, 1000); 
-                updateTimer(); 
+                updateInterval = setInterval(updateTimer, 1000); updateTimer(); 
                 
                 const savedName = localStorage.getItem('NEP_STUDENT_NAME');
-                if (savedName) {
-                    const input = document.getElementById('name');
-                    if (!input.value) { input.value = savedName; } 
-                    checkLogic();
-                }
+                if (savedName) { const input = document.getElementById('name'); if (!input.value) input.value = savedName; checkLogic(); }
             } else {
                 document.getElementById('countdown-view').style.display = "none"; 
-                document.getElementById('end-term-view').style.display = "block"; 
-                document.querySelector('.ramazan-text').style.display = "none";
+                document.getElementById('end-term-view').style.display = "block"; document.querySelector('.ramazan-text').style.display = "none";
                 confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 } });
             }
         }
@@ -519,29 +386,23 @@
         function updateTimer() {
             const now = new Date().getTime();
             
-            // BEKLEME ODASINDAYKEN SÜRE DOLARSA
             if (isWaiting && now >= startTime) { 
-                if (activeLesson && activeLesson.platform === 'jitsi') {
-                    isWaiting = false;
-                    baslatJitsi(finalMatchedName);
-                } else {
-                    window.location.href = getZoomLink(); 
-                }
+                if (activeLesson && activeLesson.platform === 'jitsi') { isWaiting = false; baslatJitsi(finalMatchedName); } 
+                else { window.location.href = getZoomLink(); }
                 return; 
             }
 
-            // SÜRE SAYIMI
             if (now < startTime) { 
                 let diff = startTime - now;
                 const d = Math.floor(diff/86400000); const h = Math.floor((diff%86400000)/3600000); const m = Math.floor((diff%3600000)/60000); const s = Math.floor((diff%60000)/1000);
                 document.getElementById('days').innerText = d; document.getElementById('hours').innerText = h; document.getElementById('minutes').innerText = m; document.getElementById('seconds').innerText = s;
-                
                 setCircle('ring-days', d, 7); setCircle('ring-hours', h, 24); setCircle('ring-minutes', m, 60); setCircle('ring-seconds', s, 60);
                 
                 document.getElementById('box-days').style.display = d > 0 ? "block" : "none";
                 document.getElementById('box-hours').style.display = (d === 0 && h === 0) ? "none" : "block";
                 
-                if (diff <= 3500) { document.querySelectorAll('.circle-box').forEach(box => box.classList.add('final-countdown')); } else { document.querySelectorAll('.circle-box').forEach(box => box.classList.remove('final-countdown')); }
+                if (diff <= 3500) { document.querySelectorAll('.circle-box').forEach(box => box.classList.add('final-countdown')); } 
+                else { document.querySelectorAll('.circle-box').forEach(box => box.classList.remove('final-countdown')); }
                 
                 if (now >= gatesOpenTime) {
                     document.getElementById('main-container').classList.add('form-active');
@@ -550,57 +411,58 @@
                         setTimeout(() => { document.getElementById('form-view').style.opacity = 1; document.getElementById('form-view').style.transform = "translateY(0)"; }, 50); 
                     }
                 }
-            } 
-            // DERS BAŞLADIĞINDA SAYFAYI YENİLEYEN BİRİ İÇİN
-            else if (now < endTime) {
+            } else if (now < endTime) {
                 if (!isWaiting && !jitsiStarted) { 
                     document.getElementById('countdown-view').style.display = "none"; 
-                    const form = document.getElementById('form-view'); 
-                    form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
-                    document.getElementById('lesson-title').style.display = "none"; 
-                    document.querySelector('.ramazan-text').style.display = "none";
-                    document.getElementById('live-badge').style.display = "inline-block";
+                    const form = document.getElementById('form-view'); form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
+                    document.getElementById('lesson-title').style.display = "none"; document.querySelector('.ramazan-text').style.display = "none";
                 }
             } else { location.reload(); }
         }
 
-        // --- YENİ EKLENEN JİTSİ BAŞLATMA FONKSİYONU ---
+        let jitsiApiInstance = null;
+
         function baslatJitsi(userName) {
             if (jitsiStarted) return;
             jitsiStarted = true;
-            clearInterval(updateInterval); // Arkada boşuna sayaç çalışmasın
+            clearInterval(updateInterval);
 
-            // Ekranda Jitsi hariç her şeyi temizle
+            // Ekranı temizle
             document.getElementById('countdown-view').style.display = 'none';
             document.getElementById('form-view').style.display = 'none';
             document.getElementById('waiting-room').style.display = 'none';
             document.getElementById('lesson-title').style.display = 'none';
             document.querySelector('.ramazan-text').style.display = 'none';
-            document.getElementById('live-badge').style.display = 'inline-block';
             
-            // Jitsi alanını göster
-            const jitsiContainer = document.getElementById('jitsi-container');
-            jitsiContainer.style.display = 'block';
+            // Jitsi'yi ve Bilgi Çubuğunu Göster
+            document.getElementById('jitsi-info-bar').style.display = 'flex';
+            document.getElementById('jitsi-container').style.display = 'block';
 
             const domain = 'meet.jit.si';
             const options = {
-                roomName: 'Nepders', // Öğretmenin attığı linkin oda adı
-                width: '100%',
-                height: '100%',
-                parentNode: jitsiContainer,
-                userInfo: {
-                    displayName: userName // Formdan gelen ismi toplantıya otomatik basar
-                },
-                configOverwrite: { 
-                    prejoinPageEnabled: false, // Kameranı test et sayfasını atlar
-                    startWithAudioMuted: true, // Herkesin mikrofonu başta kapalıdır
-                    startWithVideoMuted: true  // Kameraları başta kapalı olur
-                },
-                interfaceConfigOverwrite: {
-                    HIDE_INVITE_MORE_HEADER: true
-                }
+                roomName: 'Nepders', 
+                width: '100%', height: '100%',
+                parentNode: document.getElementById('jitsi-container'),
+                userInfo: { displayName: userName },
+                configOverwrite: { prejoinPageEnabled: false, startWithAudioMuted: true, startWithVideoMuted: true },
+                interfaceConfigOverwrite: { HIDE_INVITE_MORE_HEADER: true }
             };
-            const api = new JitsiMeetExternalAPI(domain, options);
+            
+            jitsiApiInstance = new JitsiMeetExternalAPI(domain, options);
+
+            // CANLI KATILIMCI SAYACI DİNLEYİCİLERİ
+            jitsiApiInstance.on('videoConferenceJoined', guncelleJitsiSayac);
+            jitsiApiInstance.on('participantJoined', guncelleJitsiSayac);
+            jitsiApiInstance.on('participantLeft', guncelleJitsiSayac);
+        }
+
+        // CANLI SAYAÇ GÜNCELLEME FONKSİYONU
+        function guncelleJitsiSayac() {
+            if(jitsiApiInstance) {
+                // getNumberOfParticipants API fonksiyonu ile odadaki anlık sayıyı alır
+                const kisiSayisi = jitsiApiInstance.getNumberOfParticipants();
+                document.getElementById('jitsi-count').innerText = kisiSayisi;
+            }
         }
 
         function getZoomLink() { let link = ZOOM_LINK; if (finalMatchedName) link += "&un=" + btoa(unescape(encodeURIComponent(finalMatchedName))); return link; }
@@ -611,77 +473,33 @@
             document.getElementById('match-hint').style.display = "none";
             localStorage.setItem('NEP_STUDENT_NAME', finalMatchedName);
             
+            // 1. ADIM: YOKLAMAYI GÖNDER (Kusursuz çalışıyor)
             const fd = new FormData(); fd.append("entry.1545633020", finalMatchedName); fd.append("entry.1443001544", "TESPİT EDİLDİ");
             fetch("https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse", { method: "POST", mode: "no-cors", body: fd }).then(() => {
                 
-                // Eğer zaman gelmediyse bekleme odasına al
+                // 2. ADIM: YÖNLENDİR (Zaman gelmediyse bekle)
                 if (new Date().getTime() < startTime) { 
-                    isWaiting = true; 
-                    document.getElementById('form-view').style.display = "none"; 
-                    document.getElementById('waiting-room').style.display = "block"; 
+                    isWaiting = true; document.getElementById('form-view').style.display = "none"; document.getElementById('waiting-room').style.display = "block"; 
                 } 
-                // Eğer zamanı geldiyse ve ders JİTSİ ise panele göm
-                else if (activeLesson && activeLesson.platform === 'jitsi') {
-                    baslatJitsi(finalMatchedName);
-                } 
-                // Eğer zamanı geldiyse ve ders ZOOM ise (Veya başka bir şeyse) yönlendir
-                else { 
-                    window.location.href = getZoomLink(); 
-                }
+                else if (activeLesson && activeLesson.platform === 'jitsi') { baslatJitsi(finalMatchedName); } 
+                else { window.location.href = getZoomLink(); }
             });
         }
 
         function normalizeToEnglish(str) {
-            const charMap = {
-                'ç': 'C', 'Ç': 'C', 'ğ': 'G', 'Ğ': 'G',
-                'ı': 'I', 'İ': 'I', 'i': 'I', 'I': 'I',
-                'ö': 'O', 'Ö': 'O', 'ş': 'S', 'Ş': 'S',
-                'ü': 'U', 'Ü': 'U'
-            };
+            const charMap = { 'ç':'C','Ç':'C','ğ':'G','Ğ':'G','ı':'I','İ':'I','i':'I','I':'I','ö':'O','Ö':'O','ş':'S','Ş':'S','ü':'U','Ü':'U' };
             return str.replace(/[çÇğĞıİiIöÖşŞüÜ]/g, match => charMap[match]).toUpperCase().trim();
         }
-        
         function levenshtein(a, b) { const m = []; for(let i=0;i<=b.length;i++)m[i]=[i]; for(let j=0;j<=a.length;j++)m[0][j]=j; for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++) m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,Math.min(m[i][j-1]+1,m[i-1][j]+1)); return m[b.length][a.length]; }
 
         function checkLogic() {
-            let raw = document.getElementById('name').value; 
-            const hintBox = document.getElementById('match-hint');
-            const btn = document.getElementById('btn');
-            
-            if (raw.trim().length < 3) { 
-                btn.disabled = true; btn.className = "action-btn"; hintBox.style.opacity = 0; 
-                document.querySelector('.input-group i').style.color = "var(--text-muted)";
-                return; 
-            }
-
-            let norm = normalizeToEnglish(raw); 
-            let match = null; 
-            
-            for (let s of STUDENTS) {
-                let dbName = normalizeToEnglish(s.n);
-                if (dbName === norm || dbName.includes(norm) || norm.includes(dbName)) { 
-                    match = s; break; 
-                }
-            }
-            
-            if (!match) {
-                let bestScore = 999;
-                for (let s of STUDENTS) {
-                    let dbName = normalizeToEnglish(s.n);
-                    let tolerance = dbName.length > 10 ? 3 : 2; 
-                    let score = levenshtein(norm, dbName);
-                    if (score <= tolerance && score < bestScore) { bestScore = score; match = s; }
-                }
-            }
-            
-            if (match) { 
-                finalMatchedName = match.n; btn.disabled = false; btn.className = "action-btn active"; 
-                hintBox.innerHTML = "<i class='fas fa-check'></i> " + match.n; hintBox.style.opacity = 1; 
-                document.querySelector('.input-group i').style.color = "var(--success)";
-            } else { 
-                btn.disabled = true; btn.className = "action-btn"; hintBox.style.opacity = 0; 
-                document.querySelector('.input-group i').style.color = "var(--danger)";
-            }
+            let raw = document.getElementById('name').value; const hintBox = document.getElementById('match-hint'); const btn = document.getElementById('btn');
+            if (raw.trim().length < 3) { btn.disabled = true; btn.className = "action-btn"; hintBox.style.opacity = 0; document.querySelector('.input-group i').style.color = "var(--text-muted)"; return; }
+            let norm = normalizeToEnglish(raw); let match = null; 
+            for (let s of STUDENTS) { let dbName = normalizeToEnglish(s.n); if (dbName === norm || dbName.includes(norm) || norm.includes(dbName)) { match = s; break; } }
+            if (!match) { let bestScore = 999; for (let s of STUDENTS) { let dbName = normalizeToEnglish(s.n); let tolerance = dbName.length > 10 ? 3 : 2; let score = levenshtein(norm, dbName); if (score <= tolerance && score < bestScore) { bestScore = score; match = s; } } }
+            if (match) { finalMatchedName = match.n; btn.disabled = false; btn.className = "action-btn active"; hintBox.innerHTML = "<i class='fas fa-check'></i> " + match.n; hintBox.style.opacity = 1; document.querySelector('.input-group i').style.color = "var(--success)"; } 
+            else { btn.disabled = true; btn.className = "action-btn"; hintBox.style.opacity = 0; document.querySelector('.input-group i').style.color = "var(--danger)"; }
         }
         initSystem();
     </script>
