@@ -12,7 +12,6 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src='https://meet.jit.si/external_api.js'></script>
     
     <style>
         :root {
@@ -20,14 +19,14 @@
             --border-color: #e3e3c7; --input-bg: #fffbf0; --primary: #6358cc; 
             --primary-hover: #564cb8; --success: #2b9956; --danger: #d44d4e; 
             --circle-bg: #e3e3c7; --toggle-bg: #fffbf0; --toggle-hover: #ebebce;
-            --logo-filter: contrast(0.95) opacity(0.95); --ramazan-color: #8c6600; 
+            --logo-filter: contrast(0.95) opacity(0.95);
         }
 
         [data-theme="dark"] {
             --bg-color: #25293c; --text-main: #cfcce4; --text-muted: #7983a5;
             --border-color: #434968; --input-bg: #2f3349; --circle-bg: #2f3349;
             --toggle-bg: #2f3349; --toggle-hover: #434968;
-            --logo-filter: brightness(0) invert(1) opacity(0.95); --ramazan-color: #e5c05c;
+            --logo-filter: brightness(0) invert(1) opacity(0.95);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Public Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -66,13 +65,6 @@
             padding: 20px; transition: all 0.4s ease;
         }
         .content-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
-
-        .ramazan-text {
-            font-size: 1.3rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
-            color: var(--ramazan-color); margin-bottom: 3vh; text-align: center;
-            opacity: 0.9; transition: color 0.4s ease; white-space: nowrap; 
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
         
         .logo { width: auto; display: block; margin-bottom: 3vh; filter: var(--logo-filter); transition: filter 0.4s ease, opacity 0.3s ease; }
         .lesson-header { font-weight: 800; text-transform: uppercase; letter-spacing: 4px; text-align: center; margin-bottom: 4vh; }
@@ -104,7 +96,7 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
         .main-container.form-active .countdown-container { transform: scale(0.75); margin-bottom: -2vh; }
-        .main-container.form-active .lesson-header, .main-container.form-active .ramazan-text { display: none; }
+        .main-container.form-active .lesson-header { display: none; }
         
         .input-group { position: relative; width: 100%; margin-bottom: 15px; }
         .input-group i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); transition: 0.3s; }
@@ -116,12 +108,6 @@
         }
         input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(115, 103, 240, 0.1); }
         input:focus + i { color: var(--primary); }
-        
-        /* OYUNLAŞTIRMA VE BİLGİ MESAJI ALANI */
-        #personal-msg {
-            color: var(--primary); font-size: 0.95rem; font-weight: 700; text-align: center;
-            margin-bottom: 15px; height: 22px; opacity: 0; transition: opacity 0.4s ease;
-        }
 
         #match-hint {
             height: 25px; margin-bottom: 15px; font-size: 1rem; font-weight: 700; color: var(--success);
@@ -143,19 +129,10 @@
         .success-msg { color: var(--success); font-size: 3.5vh; font-weight: 800; }
         .sub-msg { color: var(--text-muted); font-size: 2vh; margin-top: 1vh; font-weight: 600; }
         @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
         #end-term-view { display: none; text-align: center; }
         #end-term-view i { font-size: 8vh; color: var(--danger); margin-bottom: 2vh; }
-
-        #jitsi-info-bar {
-            display: none; width: 100%; background-color: var(--input-bg); border: 2px solid var(--border-color);
-            color: var(--text-main); padding: 10px 20px; border-radius: 12px; margin-bottom: 15px; font-weight: 700;
-            justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); animation: fadeIn 0.5s ease;
-        }
-        .live-dot { color: var(--danger); animation: heartbeat 1.5s infinite; margin-right: 8px; }
-        .participant-count { background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
-
-        #jitsi-container { display: none; width: 100%; height: 75vh; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 1s ease; }
 
         @media screen and (min-width: 1025px) {
             .logo { height: 130px; } .main-container.form-active .logo { height: 90px; }
@@ -173,7 +150,6 @@
         }
         @media screen and (max-width: 600px) {
             .content-wrapper { margin-top: -6vh; }
-            .ramazan-text { font-size: 4.5vw; letter-spacing: 1px; margin-bottom: 2vh; }
             .logo { max-width: 65vw; height: auto; margin-bottom: 2.5vh; }
             .main-container.form-active .logo { max-width: 45vw; }
             .lesson-header { font-size: 22px; letter-spacing: 1px; margin-bottom: 3.5vh; }
@@ -186,7 +162,7 @@
             .input-group i { left: 16px; font-size: 1.1rem; } button.action-btn { padding: 15px; }
             .theme-toggle { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 22px; }
             #theme-toast { right: 0; left: 0; margin: 0 auto; bottom: -100px; width: 90%; max-width: 350px; transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-            #theme-toast.show { bottom: 20px; right: 0; } #jitsi-info-bar { font-size: 14px; padding: 10px; }
+            #theme-toast.show { bottom: 20px; right: 0; }
         }
     </style>
 </head>
@@ -204,7 +180,6 @@
     <div class="main-container" id="main-container">
         <div class="content-wrapper">
             
-            <div class="ramazan-text"><i class="fas fa-moon"></i> Hoş Geldin Ya Şehr-i Ramazan <i class="fas fa-moon"></i></div>
             <img id="main-logo" src="https://cdn.prod.website-files.com/68b41d250349c9a385b11ecc/68b42031492c916cc2c20789_nep_logo%201.png" alt="NEP Logo" class="logo">
             <div id="live-badge"><i class="fas fa-video"></i> DERS BAŞLADI</div>
             <div class="lesson-header" id="lesson-title">SIRADAKİ DERS</div>
@@ -223,9 +198,6 @@
                     <i class="fas fa-user"></i>
                 </div>
                 
-                <div id="personal-msg"></div>
-                <div id="match-hint"></div>
-                
                 <button class="action-btn" id="btn" onclick="processEntry()" disabled>
                     Sisteme Giriş Yap <i class="fas fa-arrow-right"></i>
                 </button>
@@ -241,12 +213,6 @@
                 <i class="fas fa-graduation-cap"></i>
                 <h1 style="color:var(--danger); font-size:4vh; text-transform:uppercase;">Tüm Dersler Tamamlandı</h1>
             </div>
-
-            <div id="jitsi-info-bar">
-                <div><i class="fas fa-circle live-dot"></i> CANLI DERS</div>
-                <div>Katılımcı: <span class="participant-count" id="jitsi-count">1</span></div>
-            </div>
-            <div id="jitsi-container"></div>
             
         </div>
     </div>
@@ -280,13 +246,12 @@
             }
         }
 
-        const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse";
         const ZOOM_LINK = "https://us06web.zoom.us/j/81331199971?pwd=wEBSZPJcBJg3MbV4FqGMO7ggJ3onM8.1";
         
         const LESSONS = [ 
             { id: 1, date: "2026-02-05" }, { id: 2, date: "2026-02-12" }, { id: 3, date: "2026-02-21", time: "10:00" }, 
             { id: 4, date: "2026-03-01", time: "13:30" }, 
-            { id: 5, date: "2026-03-08", time: "14:00", platform: "jitsi" }, 
+            { id: 5, date: "2026-03-08", time: "14:00" }, 
             { id: 6, date: "2026-03-26" }, { id: 7, date: "2026-04-02" }, { id: 8, date: "2026-04-09" }, 
             { id: 9, date: "2026-04-16" }, { id: 10, date: "2026-04-23" }, { id: 11, date: "2026-04-30" }, 
             { id: 12, date: "2026-05-07" }, { id: 13, date: "2026-05-14" }, { id: 14, date: "2026-05-21" }, { id: 15, date: "2026-06-04" }  
@@ -306,7 +271,7 @@
         ];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
-        let updateInterval, jitsiStarted = false;
+        let updateInterval;
 
         function setCircle(id, current, max) {
             let val = current > max ? max : current;
@@ -338,7 +303,7 @@
                 if (savedName) { const input = document.getElementById('name'); if (!input.value) input.value = savedName; checkLogic(); }
             } else {
                 document.getElementById('countdown-view').style.display = "none"; 
-                document.getElementById('end-term-view').style.display = "block"; document.querySelector('.ramazan-text').style.display = "none";
+                document.getElementById('end-term-view').style.display = "block";
                 confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 } });
             }
         }
@@ -347,8 +312,7 @@
             const now = new Date().getTime();
             
             if (isWaiting && now >= startTime) { 
-                if (activeLesson && activeLesson.platform === 'jitsi') { isWaiting = false; baslatJitsi(finalMatchedName); } 
-                else { window.location.href = getZoomLink(); }
+                window.location.href = getZoomLink();
                 return; 
             }
 
@@ -366,87 +330,49 @@
                 
                 if (now >= gatesOpenTime) {
                     document.getElementById('main-container').classList.add('form-active');
-                    if (!isWaiting && !jitsiStarted) { 
+                    if (!isWaiting) { 
                         document.getElementById('form-view').style.display = "block"; 
                         setTimeout(() => { document.getElementById('form-view').style.opacity = 1; document.getElementById('form-view').style.transform = "translateY(0)"; }, 50); 
                     }
                 }
             } else if (now < endTime) {
-                if (!isWaiting && !jitsiStarted) { 
+                if (!isWaiting) { 
                     document.getElementById('countdown-view').style.display = "none"; 
                     const form = document.getElementById('form-view'); form.style.display = "block"; form.style.opacity = 1; form.style.transform = "translateY(0)";
-                    document.getElementById('lesson-title').style.display = "none"; document.querySelector('.ramazan-text').style.display = "none";
+                    document.getElementById('lesson-title').style.display = "none";
                 }
             } else { location.reload(); }
         }
 
-        let jitsiApiInstance = null;
-        function baslatJitsi(userName) {
-            if (jitsiStarted) return;
-            jitsiStarted = true; clearInterval(updateInterval);
-
-            document.getElementById('countdown-view').style.display = 'none';
-            document.getElementById('form-view').style.display = 'none';
-            document.getElementById('waiting-room').style.display = 'none';
-            document.getElementById('lesson-title').style.display = 'none';
-            document.querySelector('.ramazan-text').style.display = 'none';
-            
-            document.getElementById('jitsi-info-bar').style.display = 'flex';
-            document.getElementById('jitsi-container').style.display = 'block';
-
-            const options = {
-                roomName: 'Nepders', width: '100%', height: '100%',
-                parentNode: document.getElementById('jitsi-container'),
-                userInfo: { displayName: userName },
-                configOverwrite: { prejoinPageEnabled: false, startWithAudioMuted: true, startWithVideoMuted: true },
-                interfaceConfigOverwrite: { HIDE_INVITE_MORE_HEADER: true }
-            };
-            jitsiApiInstance = new JitsiMeetExternalAPI('meet.jit.si', options);
-            jitsiApiInstance.on('videoConferenceJoined', guncelleJitsiSayac);
-            jitsiApiInstance.on('participantJoined', guncelleJitsiSayac);
-            jitsiApiInstance.on('participantLeft', guncelleJitsiSayac);
+        function getZoomLink() { 
+            let link = ZOOM_LINK; 
+            if (finalMatchedName) link += "&un=" + btoa(unescape(encodeURIComponent(finalMatchedName))); 
+            return link; 
         }
 
-        function guncelleJitsiSayac() {
-            if(jitsiApiInstance) { document.getElementById('jitsi-count').innerText = jitsiApiInstance.getNumberOfParticipants(); }
-        }
+        function processEntry() { 
+            const name = finalMatchedName;
+            if (!name) return;
 
-        function getZoomLink() { let link = ZOOM_LINK; if (finalMatchedName) link += "&un=" + btoa(unescape(encodeURIComponent(finalMatchedName))); return link; }
-        
-        // --- OYUNLAŞTIRMA (MOTİVASYON) FONKSİYONLARI ---
-        function getWelcomeMessage(name) {
-            const today = new Date().toDateString();
-            let stats = JSON.parse(localStorage.getItem('NEP_STATS_' + name));
-            
-            if (!stats || !stats.lastDate) { return `Aramıza hoş geldin ${name.split(' ')[0]}! İlk dersin hayırlı olsun. 🎉`; }
-            if (stats.lastDate === today) { return `Bağlantın koptu sanırım ${name.split(' ')[0]}, seni derse geri alıyoruz. ⚡`; }
-            if (stats.streak >= 1) { return `Harika gidiyorsun! Bu aralıksız ${stats.streak + 1}. dersin! 🔥`; }
-            return `Seni tekrar görmek güzel ${name.split(' ')[0]}, arayı açmayalım! 💪`;
-        }
-
-        function updateStatsAndProcess(name) {
-            const today = new Date().toDateString();
-            let stats = JSON.parse(localStorage.getItem('NEP_STATS_' + name)) || { streak: 0, lastDate: null };
-            
-            if (stats.lastDate !== today) { stats.streak += 1; stats.lastDate = today; }
-            localStorage.setItem('NEP_STATS_' + name, JSON.stringify(stats));
-            
             if (navigator.vibrate) { navigator.vibrate([50, 50, 50]); }
 
-            const btn = document.getElementById('btn'); btn.style.display = "none"; 
+            document.getElementById('btn').style.display = "none"; 
             document.querySelector('.input-group').style.display = "none"; 
-            document.getElementById('personal-msg').style.display = "none";
             localStorage.setItem('NEP_STUDENT_NAME', name);
             
-            const fd = new FormData(); fd.append("entry.1545633020", name); fd.append("entry.1443001544", "TESPİT EDİLDİ");
+            const fd = new FormData(); 
+            fd.append("entry.1545633020", name); 
+            fd.append("entry.1443001544", "TESPİT EDİLDİ");
             fetch("https://docs.google.com/forms/d/e/1FAIpQLScfbB_2Bosvt03ugFP6CUfq-tEp-5UpAkoj5Psz40krEVdspQ/formResponse", { method: "POST", mode: "no-cors", body: fd }).then(() => {
-                if (new Date().getTime() < startTime) { isWaiting = true; document.getElementById('form-view').style.display = "none"; document.getElementById('waiting-room').style.display = "block"; } 
-                else if (activeLesson && activeLesson.platform === 'jitsi') { baslatJitsi(name); } 
-                else { window.location.href = getZoomLink(); }
+                if (new Date().getTime() < startTime) { 
+                    isWaiting = true; 
+                    document.getElementById('form-view').style.display = "none"; 
+                    document.getElementById('waiting-room').style.display = "block"; 
+                } else { 
+                    window.location.href = getZoomLink(); 
+                }
             });
         }
-
-        function processEntry() { updateStatsAndProcess(finalMatchedName); }
 
         function normalizeToEnglish(str) {
             const charMap = { 'ç':'C','Ç':'C','ğ':'G','Ğ':'G','ı':'I','İ':'I','i':'I','I':'I','ö':'O','Ö':'O','ş':'S','Ş':'S','ü':'U','Ü':'U' };
@@ -456,11 +382,10 @@
 
         function checkLogic() {
             let raw = document.getElementById('name').value; 
-            const msgBox = document.getElementById('personal-msg');
             const btn = document.getElementById('btn');
             
             if (raw.trim().length < 3) { 
-                btn.disabled = true; btn.className = "action-btn"; msgBox.style.opacity = 0; 
+                btn.disabled = true; btn.className = "action-btn";
                 document.querySelector('.input-group i').style.color = "var(--text-muted)"; return; 
             }
 
@@ -470,10 +395,10 @@
             
             if (match) { 
                 finalMatchedName = match.n; btn.disabled = false; btn.className = "action-btn active"; 
-                msgBox.innerHTML = getWelcomeMessage(match.n); msgBox.style.opacity = 1; 
                 document.querySelector('.input-group i').style.color = "var(--success)";
             } else { 
-                btn.disabled = true; btn.className = "action-btn"; msgBox.style.opacity = 0; 
+                finalMatchedName = "";
+                btn.disabled = true; btn.className = "action-btn";
                 document.querySelector('.input-group i').style.color = "var(--danger)";
             }
         }
