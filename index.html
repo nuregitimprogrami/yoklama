@@ -257,18 +257,21 @@
             { id: 12, date: "2026-05-07" }, { id: 13, date: "2026-05-14" }, { id: 14, date: "2026-05-21" }, { id: 15, date: "2026-06-04" }  
         ];
         
-        const STUDENTS = [
-            { n: "ABDÜLHAMİD POYRAZ" }, { n: "AHMED ARİF KARAKAPLAN" }, { n: "AHMET AĞLAMIŞ" },
-            { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ" }, { n: "ALPARSLAN ONUR ÖZEREN" }, { n: "AYBERK YUSUF AKKURT" },
-            { n: "BÜNYAMİN ÇAĞRI AKBOYUN" }, { n: "FATİH SELİM OCAK" }, { n: "HASAN FEYZİ ŞİRİNOĞLU" },
-            { n: "İBRAHİM SARAYDEMİR" }, { n: "KEREM ALİ ÇAKIR" }, { n: "KEREM KÜÇÜK" },
-            { n: "MEHMED EMİN SUCU" }, { n: "MUHAMMED ALİ ARAS" }, { n: "MUHAMMED ARİF KURTKAYA" },
-            { n: "MUHAMMED SAID" }, { n: "MUHAMMED TAHA SAYIN" }, { n: "MUHAMMED YASİR SALDIRAN" },
-            { n: "MUHAMMED YUSUF KARAKUŞ" }, { n: "MUSA BOYACI" }, { n: "MUSAB METİN MUTLU" },
-            { n: "MUSTAFA YUSUF ÖZBAKIR" }, { n: "MUSTAFO NASIMJONOV" }, { n: "ÖMER EYMEN ÇETİNTAŞ" },
-            { n: "SADULLAH YAHYA ÇAVUŞOĞLU" }, { n: "SALİH KEREM YENER" }, { n: "SEFA METE" },
-            { n: "YAHYA SELİM EKŞİ" }, { n: "YUSUF AĞLAMIŞ" }, { n: "ZÜBEYİR RAHMİ ŞENGÜN" }
-        ];
+       const STUDENTS = [
+    { n: "ABDÜLHAMİD POYRAZ" }, { n: "AHMED ARİF KARAKAPLAN" }, { n: "AHMET AĞLAMIŞ" },
+    { n: "AHMET AĞLAMIŞ & YUSUF AĞLAMIŞ" }, { n: "AHMET SAİD DUYMAZ" }, // <-- Yeni Eklendi
+    { n: "ALPARSLAN ONUR ÖZEREN" }, { n: "AYBERK YUSUF AKKURT" },
+    { n: "BÜNYAMİN ÇAĞRI AKBOYUN" }, { n: "FATİH SELİM OCAK" }, { n: "HASAN FEYZİ ŞİRİNOĞLU" },
+    { n: "İBRAHİM SARAYDEMİR" }, { n: "KEREM ALİ ÇAKIR" }, { n: "KEREM KÜÇÜK" },
+    { n: "MEHMED EMİN SUCU" }, { n: "MUHAMMED ALİ ARAS" }, { n: "MUHAMMED ARİF KURTKAYA" },
+    { n: "MUHAMMED ASAF ŞAHİN" }, // <-- Yeni Eklendi
+    { n: "MUHAMMED ÇAĞRI BİNİCİ" }, // <-- Yeni Eklendi
+    { n: "MUHAMMED SAID" }, { n: "MUHAMMED TAHA SAYIN" }, { n: "MUHAMMED YASİR SALDIRAN" },
+    { n: "MUHAMMED YUSUF KARAKUŞ" }, { n: "MUSA BOYACI" }, { n: "MUSAB METİN MUTLU" },
+    { n: "MUSTAFA YUSUF ÖZBAKIR" }, { n: "MUSTAFO NASIMJONOV" }, { n: "ÖMER EYMEN ÇETİNTAŞ" },
+    { n: "SADULLAH YAHYA ÇAVUŞOĞLU" }, { n: "SALİH KEREM YENER" }, { n: "SEFA METE" },
+    { n: "YAHYA SELİM EKŞİ" }, { n: "YUSUF AĞLAMIŞ" }, { n: "ZÜBEYİR RAHMİ ŞENGÜN" }
+];
         
         let activeLesson = null, startTime = 0, endTime = 0, gatesOpenTime = 0, finalMatchedName = "", isWaiting = false;
         let updateInterval;
